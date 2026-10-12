@@ -24,29 +24,31 @@
 
 ---
 
-## 2. Bảng tổng hợp Test Cases
+## 2. Bảng tổng hợp Test Cases & Tiến độ thực nghiệm
 
-| Mã Test Case | Phương thức | Endpoint | Kỹ thuật kiểm thử | Mục tiêu kiểm thử | Kết quả mong đợi |
-|---|---|---|---|---|---|
-| **TC-TAG-01** | POST | `/api/tags/` | Phân vùng tương đương (Hợp lệ) | Tạo Tag chỉ với trường bắt buộc `name` | 201 Created |
-| **TC-TAG-02** | POST | `/api/tags/` | Phân vùng tương đương (Hợp lệ) | Tạo Tag với đầy đủ tất cả các trường thuộc tính | 201 Created |
-| **TC-TAG-03** | POST | `/api/tags/` | Phân vùng tương đương (Không hợp lệ) | Tạo Tag nhưng thiếu trường bắt buộc `name` | 400 Bad Request |
-| **TC-TAG-04** | POST | `/api/tags/` | Phân tích giá trị biên (BVA) | Tạo Tag với `name` là chuỗi rỗng `""` | 400 Bad Request |
-| **TC-TAG-05** | POST | `/api/tags/` | Phân tích giá trị biên (BVA) | Tạo Tag với `name` đúng 128 ký tự (biên trên hợp lệ) | 201 Created |
-| **TC-TAG-06** | POST | `/api/tags/` | Phân tích giá trị biên (BVA) | Tạo Tag với `name` dài 129 ký tự (vượt biên max_length) | 400 Bad Request |
-| **TC-TAG-07** | POST | `/api/tags/` | Kiểm thử tính duy nhất (Uniqueness) | Tạo Tag trùng tên với Tag đã tồn tại của cùng một chủ sở hữu | 400 Bad Request |
-| **TC-TAG-08** | POST | `/api/tags/` | Kiểm thử giá trị miền (Domain/Choices) | Tạo Tag với `matching_algorithm` không hợp lệ (`99`) | 400 Bad Request |
-| **TC-TAG-09** | POST | `/api/tags/` | Phân tích giá trị biên (BVA - Color) | Tạo Tag với `color` vượt quá 7 ký tự (`#1234567`) | 400 Bad Request |
-| **TC-TAG-10** | POST | `/api/tags/` | Ràng buộc phân cấp cây (Tree Model) | Tạo Tag con trỏ `parent` đến chính ID của nó | 400 Bad Request |
-| **TC-TAG-11** | POST | `/api/tags/` | Error Guessing (Lỗi hệ thống - BUG-01) | Tạo Tag với `set_permissions` chứa `"view": false` | 400 Bad Request (hiện tại 500) |
-| **TC-TAG-12** | GET | `/api/tags/` | Kiểm thử truy vấn (Query/Listing) | Lấy danh sách Tag có phân trang và kiểm tra các trường trả về | 200 OK |
-| **TC-TAG-13** | GET | `/api/tags/` | Kiểm thử lọc (Filter) | Lọc danh sách Tag theo tên (`?name__icontains=...`) | 200 OK |
-| **TC-TAG-14** | GET | `/api/tags/{id}/` | Truy vấn chi tiết (Hợp lệ) | Xem thông tin chi tiết một Tag theo ID tồn tại | 200 OK |
-| **TC-TAG-15** | GET | `/api/tags/{id}/` | Phân vùng tương đương (Không hợp lệ) | Xem thông tin Tag với ID không tồn tại (`999999`) | 404 Not Found |
-| **TC-TAG-16** | PUT | `/api/tags/{id}/` | Cập nhật toàn phần (Full update) | Cập nhật lại toàn bộ thuộc tính của Tag đã có | 200 OK |
-| **TC-TAG-17** | PATCH | `/api/tags/{id}/` | Cập nhật một phần (Partial update) | Chỉ cập nhật màu sắc (`color`) của Tag | 200 OK |
-| **TC-TAG-18** | DELETE | `/api/tags/{id}/` | Xóa tài nguyên (Delete flow) | Xóa một Tag đang tồn tại và xác nhận không còn trong hệ thống | 204 No Content |
-| **TC-TAG-19** | GET | `/api/tags/` | Kiểm thử bảo mật & xác thực (Auth) | Gửi request không kèm Authorization header | 401 Unauthorized |
+> **Ghi chú báo cáo tiến độ:** Nhóm đã hoàn thành thiết kế toàn bộ **19/19 Test Case**. Trong đợt báo cáo tiến độ, TV2 đã thực thi thử nghiệm **8 ca đại diện** (phủ khắp các kỹ thuật: CRUD, Phân vùng tương đương, Giá trị biên, Ràng buộc DB, Bảo mật và Tái hiện Bug). **11 ca còn lại** nằm trong kế hoạch thực thi cho đợt báo cáo chính thức cuối kỳ.
+
+| Mã Test Case | Phương thức | Endpoint | Kỹ thuật kiểm thử | Mục tiêu kiểm thử | Kỳ vọng | Thực tế (Tiến độ) | Đánh giá |
+|---|---|---|---|---|---|---|---|
+| **TC-TAG-01** | POST | `/api/tags/` | Phân vùng tương đương (Hợp lệ) | Tạo Tag chỉ với trường bắt buộc `name` | 201 Created | 201 Created | **PASS** |
+| **TC-TAG-02** | POST | `/api/tags/` | Phân vùng tương đương (Hợp lệ) | Tạo Tag với đầy đủ tất cả các trường thuộc tính | 201 Created | *Chờ thực thi* | *Kế hoạch chính thức* |
+| **TC-TAG-03** | POST | `/api/tags/` | Phân vùng tương đương (Không hợp lệ) | Tạo Tag nhưng thiếu trường bắt buộc `name` | 400 Bad Request | 400 Bad Request | **PASS** |
+| **TC-TAG-04** | POST | `/api/tags/` | Phân tích giá trị biên (BVA) | Tạo Tag với `name` là chuỗi rỗng `""` | 400 Bad Request | 400 Bad Request | **PASS** |
+| **TC-TAG-05** | POST | `/api/tags/` | Phân tích giá trị biên (BVA) | Tạo Tag với `name` đúng 128 ký tự (biên trên hợp lệ) | 201 Created | *Chờ thực thi* | *Kế hoạch chính thức* |
+| **TC-TAG-06** | POST | `/api/tags/` | Phân tích giá trị biên (BVA) | Tạo Tag với `name` dài 129 ký tự (vượt biên max_length) | 400 Bad Request | *Chờ thực thi* | *Kế hoạch chính thức* |
+| **TC-TAG-07** | POST | `/api/tags/` | Kiểm thử tính duy nhất (Uniqueness) | Tạo Tag trùng tên với Tag đã tồn tại của cùng một chủ sở hữu | 400 Bad Request | 400 Bad Request | **PASS** |
+| **TC-TAG-08** | POST | `/api/tags/` | Kiểm thử giá trị miền (Domain/Choices) | Tạo Tag với `matching_algorithm` không hợp lệ (`99`) | 400 Bad Request | *Chờ thực thi* | *Kế hoạch chính thức* |
+| **TC-TAG-09** | POST | `/api/tags/` | Phân tích giá trị biên (BVA - Color) | Tạo Tag với `color` vượt quá 7 ký tự (`#1234567`) | 400 Bad Request | *Chờ thực thi* | *Kế hoạch chính thức* |
+| **TC-TAG-10** | POST | `/api/tags/` | Ràng buộc phân cấp cây (Tree Model) | Tạo Tag con trỏ `parent` đến chính ID của nó | 400 Bad Request | *Chờ thực thi* | *Kế hoạch chính thức* |
+| **TC-TAG-11** | POST | `/api/tags/` | Error Guessing (Tái hiện lỗi mã nguồn) | Tạo Tag với `set_permissions` chứa `"view": false` | 400 Bad Request | 500 Server Error | **BUG-01 (500)** |
+| **TC-TAG-12** | GET | `/api/tags/` | Kiểm thử truy vấn (Query/Listing) | Lấy danh sách Tag có phân trang và kiểm tra các trường trả về | 200 OK | 200 OK | **PASS** |
+| **TC-TAG-13** | GET | `/api/tags/` | Kiểm thử lọc (Filter) | Lọc danh sách Tag theo tên (`?name__icontains=...`) | 200 OK | *Chờ thực thi* | *Kế hoạch chính thức* |
+| **TC-TAG-14** | GET | `/api/tags/{id}/` | Truy vấn chi tiết (Hợp lệ) | Xem thông tin chi tiết một Tag theo ID tồn tại | 200 OK | 200 OK | **PASS** |
+| **TC-TAG-15** | GET | `/api/tags/{id}/` | Phân vùng tương đương (Không hợp lệ) | Xem thông tin Tag với ID không tồn tại (`999999`) | 404 Not Found | *Chờ thực thi* | *Kế hoạch chính thức* |
+| **TC-TAG-16** | PUT | `/api/tags/{id}/` | Cập nhật toàn phần (Full update) | Cập nhật lại toàn bộ thuộc tính của Tag đã có | 200 OK | *Chờ thực thi* | *Kế hoạch chính thức* |
+| **TC-TAG-17** | PATCH | `/api/tags/{id}/` | Cập nhật một phần (Partial update) | Chỉ cập nhật màu sắc (`color`) của Tag | 200 OK | *Chờ thực thi* | *Kế hoạch chính thức* |
+| **TC-TAG-18** | DELETE | `/api/tags/{id}/` | Xóa tài nguyên (Delete flow) | Xóa một Tag đang tồn tại và xác nhận không còn trong hệ thống | 204 No Content | *Chờ thực thi* | *Kế hoạch chính thức* |
+| **TC-TAG-19** | GET | `/api/tags/` | Kiểm thử bảo mật & xác thực (Auth) | Gửi request không kèm Authorization header | 401 Unauthorized | 401 Unauthorized | **PASS** |
 
 ---
 
