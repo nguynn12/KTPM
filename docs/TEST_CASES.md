@@ -24,11 +24,9 @@
 
 ---
 
-## 2. Bảng tổng hợp Test Cases & Tiến độ thực nghiệm
+## 2. Bảng tổng hợp Test Cases
 
-> **Ghi chú báo cáo tiến độ:** Nhóm đã hoàn thành thiết kế toàn bộ **19/19 Test Case**. Trong đợt báo cáo tiến độ, TV2 đã thực thi thử nghiệm **8 ca đại diện** (phủ khắp các kỹ thuật: CRUD, Phân vùng tương đương, Giá trị biên, Ràng buộc DB, Bảo mật và Tái hiện Bug). **11 ca còn lại** nằm trong kế hoạch thực thi cho đợt báo cáo chính thức cuối kỳ.
-
-| Mã Test Case | Phương thức | Endpoint | Kỹ thuật kiểm thử | Mục tiêu kiểm thử | Kỳ vọng | Thực tế (Tiến độ) | Đánh giá |
+| Mã Test Case | Phương thức | Endpoint | Kỹ thuật kiểm thử | Mục tiêu kiểm thử | Kỳ vọng | Thực tế | Đánh giá |
 |---|---|---|---|---|---|---|---|
 | **TC-TAG-01** | POST | `/api/tags/` | Phân vùng tương đương (Hợp lệ) | Tạo Tag chỉ với trường bắt buộc `name` | 201 Created | 201 Created | **PASS** |
 | **TC-TAG-02** | POST | `/api/tags/` | Phân vùng tương đương (Hợp lệ) | Tạo Tag với đầy đủ tất cả các trường thuộc tính | 201 Created | *Chờ thực thi* | *Kế hoạch chính thức* |
