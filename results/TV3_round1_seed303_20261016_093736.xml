@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites errors="0" failures="17" skipped="0" tests="19" time="2.518571">
+  <testsuite name="schemathesis" hostname="WuShun" errors="0" failures="17" skipped="0" tests="19" time="2.518571">
+    <testcase name="GET /api/documents/next_asn/" time="0.773808" />
+    <testcase name="GET /api/correspondents/" time="0.084658">
+      <failure type="failure">1. Test Case ID: cdO5fV
+
+- Response violates schema
+
+    "last_correspondence" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Correspondent:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "last_correspondence",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 1,
+            "id": 12,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "TV2_Bank_202",
+            "owner": 2,
+            "slug": "tv2_bank_202",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"count":3,"next":null,"previous":null,"results":[{"id":12,"slug":"tv2_bank_202","name":"TV2_Bank_202","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":1,"owner":2,"user_can_change":true},{"id":13,"slug":"tv2_supplier_202","name":"TV2_Supplier_202","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":0,"owner":2,"user_can_change":true},{"id":14,"slug":"tv2_university_202","name":"TV2_University_202","match":"","matching_algorithm":1,"is_insensitive":true,"document // Output truncated...`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/correspondents/</failure>
+    </testcase>
+    <testcase name="GET /api/correspondents/{id}/" time="0.067193">
+      <failure type="failure">1. Test Case ID: tj8kJr
+
+- Response violates schema
+
+    "user_can_change" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Correspondent:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "last_correspondence",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 1,
+            "id": 14,
+            "is_insensitive": true,
+            "last_correspondence": "2026-10-16",
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "TV2_University_202",
+            "owner": 2,
+            "permissions": {
+                "change": {
+                    "groups": [],
+                    "users": []
+                },
+                "view": {
+                    "groups": [],
+                    "users": []
+                }
+            },
+            // Output truncated...
+        }
+
+[200] OK:
+
+    `{"id":14,"slug":"tv2_university_202","name":"TV2_University_202","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":1,"last_correspondence":"2026-10-16","owner":2,"permissions":{"view":{"users":[],"groups":[]},"change":{"users":[],"groups":[]}}}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/correspondents/14/?full_perms=true'</failure>
+    </testcase>
+    <testcase name="GET /api/document_types/" time="0.047219">
+      <failure type="failure">1. Test Case ID: nK8Nhl
+
+- Response violates schema
+
+    "permissions" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/DocumentType:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+                },
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 1,
+            "id": 9,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "TV2_DocType_Contract_202",
+            "owner": 2,
+            "slug": "tv2_doctype_contract_202",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"count":3,"next":null,"previous":null,"results":[{"id":9,"slug":"tv2_doctype_contract_202","name":"TV2_DocType_Contract_202","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":1,"owner":2,"user_can_change":true},{"id":7,"slug":"tv2_doctype_invoice_202","name":"TV2_DocType_Invoice_202","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":1,"owner":2,"user_can_change":true},{"id":8,"slug":"tv2_doctype_receipt_202","name":"TV2_DocType_Receipt_202","match":"","matching // Output truncated...`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/document_types/</failure>
+    </testcase>
+    <testcase name="GET /api/document_types/{id}/" time="0.043388">
+      <failure type="failure">1. Test Case ID: xutuHK
+
+- Response violates schema
+
+    "permissions" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/DocumentType:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+                },
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 0,
+            "id": 8,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "TV2_DocType_Receipt_202",
+            "owner": 2,
+            "slug": "tv2_doctype_receipt_202",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"id":8,"slug":"tv2_doctype_receipt_202","name":"TV2_DocType_Receipt_202","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":0,"owner":2,"user_can_change":true}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/document_types/8/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/" time="0.111995">
+      <failure type="failure">1. Test Case ID: 9P7k1p
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"added__date__lte":["Enter a valid date."]}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/documents/?checksum__iendswith=&amp;storage_path__name__iendswith=&amp;created__year=-3.921122052237585e%2B16&amp;added__date__lte=%C3%90%07%F2%98%86%80%C2%A8%C2%9E&amp;added__gt=0195-03-02T11%3A30%3A52.4Z&amp;correspondent__name__iexact=%E5%8A%A5&amp;tags__name__iexact=%C2%B2%C3%AF7&amp;correspondent__id=-2384294762060746465954758656&amp;custom_field_query=%C3%A2%3A%3FXQ&amp;owner__isnull=8'</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/" time="0.046279">
+      <failure type="failure">1. Test Case ID: MEvt8a
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200, 400
+
+[404] Not Found:
+
+    `{"detail":"No Document matches the given query."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/1/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/ai_suggestions/" time="0.057816">
+      <failure type="failure">1. Test Case ID: EiZTvy
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/documents/%C2%B6~/ai_suggestions/'</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/download/" time="0.042481">
+      <failure type="failure">1. Test Case ID: bg6KKy
+
+- Undocumented Content-Type
+
+    Received: text/plain; charset=utf-8
+    Documented: application/json
+
+[200] OK:
+
+    `HOA DON BAN HANG - SO TIEN 202.000 VND - NGUOI BAN: TV2 TA NHAT NGUYEN - DH DA LAT`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/1/download/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/history/" time="0.183357">
+      <failure type="failure">1. Test Case ID: S5jdW3
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/documents/false/history/?page_size=eY%C2%90%2C%C2%8C&amp;page=true'</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/metadata/" time="0.615020" />
+    <testcase name="GET /api/documents/{id}/notes/" time="0.033661">
+      <failure type="failure">1. Test Case ID: T1pfoN
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/documents/false/notes/?id=1'</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/preview/" time="0.038573">
+      <failure type="failure">1. Test Case ID: BF4zUM
+
+- Undocumented Content-Type
+
+    Received: text/plain; charset=utf-8
+    Documented: application/json
+
+[200] OK:
+
+    `HOA DON BAN HANG - SO TIEN 202.000 VND - NGUOI BAN: TV2 TA NHAT NGUYEN - DH DA LAT`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/1/preview/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/root/" time="0.028415">
+      <failure type="failure">1. Test Case ID: YRBm9X
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/68429226/root/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/share_links/" time="0.027179">
+      <failure type="failure">1. Test Case ID: a6SayO
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/%25%C2%BA/share_links/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/suggestions/" time="0.038588">
+      <failure type="failure">1. Test Case ID: 50Iyhs
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/%5C%C2%BDa%C2%96%C3%9Ap%F2%A8%92%9C/suggestions/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/thumb/" time="0.030618">
+      <failure type="failure">1. Test Case ID: D4CvrV
+
+- Undocumented Content-Type
+
+    Received: image/webp
+    Documented: application/json
+
+[200] OK:
+
+    &lt;BINARY&gt;
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/1/thumb/</failure>
+    </testcase>
+    <testcase name="GET /api/tags/" time="0.206202">
+      <failure type="failure">1. Test Case ID: jF1Rny
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Invalid page."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/tags/?id__in=&amp;=p%F4%82%8F%B9%F1%A6%BA%B6%3F%F2%B0%BA%8B%C2%BE%7B9%F3%AA%8E%B3%5C%C2%85%C2%B4%C3%98%F0%A5%97%94%C2%83&amp;is_root=true&amp;page=-35329&amp;page_size=-14407&amp;name__icontains=%C2%A5%F3%A8%86%92%C2%B3%0A%F3%9C%91%98%C2%9DE%06M%C2%91%C2%94t%F2%9A%A5%85%08%C2%BAn%2C%F3%81%9E%AC%C3%91%F1%9F%86%BD%29%F2%BB%A8%BA%EF%86%9F&amp;%F1%AD%AE%B2%C2%8DW%7B%C2%BC%C3%89%C3%9A=%06%F1%B5%84%84%F0%90%BC%A4&amp;%F1%AD%AE%B2%C2%8DW%7B%C2%BC%C3%89%C3%9A=%F1%AB%B2%9E%C2%B2&amp;%F1%AD%AE%B2%C2%8DW%7B%C2%BC%C3%89%C3%9A=%C3%85lb'</failure>
+    </testcase>
+    <testcase name="GET /api/tags/{id}/" time="0.042120">
+      <failure type="failure">1. Test Case ID: M1eaQu
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/tags/%01%C3%B4%C2%9F/?full_perms=-12753873'</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
