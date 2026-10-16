@@ -305,7 +305,7 @@ def create_bug03_schema_image(fonts):
     img = Image.new("RGB", (width, height), "#0C0C0C")
     draw = ImageDraw.Draw(img)
     
-    title = "OpenAPI Specification 3.1.0 — Trích Xuất Schema Phản Hồi 201 (openapi_TV3.json)"
+    title = "Trích Xuất OpenAPI Schema — Phản Hồi 201 của /api/correspondents/ (openapi_TV3.json)"
     sub = "Tài liệu API: /api/schema/ | SHA256: 888b0f89ec0a9f65293f5320a86b1810d7904f93033178b567e313d951b12e3a"
     draw_powershell_window_frame(draw, width, height, title, sub, fonts)
     
