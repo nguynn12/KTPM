@@ -321,9 +321,10 @@
 
 # PHẦN II: BỘ TEST CASE BỔ SUNG — TV3 (NGUYỄN KHIÊM THUẬN · MSSV: 2312764 · SEED 303)
 **Tài nguyên phụ trách bổ sung:** `Correspondents` (`/api/correspondents/`) & `Document Types` (`/api/document_types/`)  
-**Chi tiết đầy đủ:** Xem tại [TEST_CASES_TV3.md](file:///d:/DaiHocDL/KiemThuPhanMem/KTPM/docs/TEST_CASES_TV3.md)
+**Chi tiết đầy đủ 40 ca:** Xem tại [TEST_CASES_TV3.md](TEST_CASES_TV3.md)  
+*(Trong đó: 18 ca thực thi thực tế qua runner: 16 PASS, 2 REPRO-BUG-01; 22 ca còn lại giữ nguyên trạng thái NOT RUN)*
 
-## 1. Bảng tổng hợp Test Cases TV3 (Correspondents & Document Types)
+## 1. Bảng 18 Test Cases TV3 Thực thi Thực tế (Correspondents & Document Types)
 
 | Mã Test Case | Method | Endpoint | Kỹ thuật kiểm thử | Mục tiêu kiểm thử | Kỳ vọng | Thực tế (13/10) | Đánh giá |
 |---|---|---|---|---|---|---|---|

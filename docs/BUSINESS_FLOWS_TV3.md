@@ -77,7 +77,7 @@ H
 
 ### Xác minh Chuyên sâu: Nhận dạng Quang học Thực tế (OCR trên Ảnh Scan)
 - **Mục tiêu:** Chứng minh hệ thống thực hiện OCR hình ảnh thực sự (Tesseract OCR), phân biệt rõ ràng với trích xuất văn bản có sẵn từ file PDF số / file TXT.
-- **Tệp thử nghiệm:** [`scripts/sample_docs/TV3_Sample_Scan_Image_303.png`](file:///d:/DaiHocDL/KiemThuPhanMem/KTPM/scripts/sample_docs/TV3_Sample_Scan_Image_303.png) (tệp ảnh PNG 800x400 chứa chữ vẽ pixel).
+- **Tệp thử nghiệm:** [`scripts/sample_docs/TV3_Sample_Scan_Image_303.png`](../scripts/sample_docs/TV3_Sample_Scan_Image_303.png) (tệp ảnh PNG 800x400 chứa chữ vẽ pixel).
 - **Endpoint gọi:** `POST /api/documents/post_document/` với `files={"document": ("TV3_Sample_Scan_Image_303.png", ..., "image/png")}`.
 - **HTTP Status:** `200 OK`
 - **Task UUID Celery:** `2aee9b15-8383-424b-bded-3b5c4bc5e91c` -> Kết quả: `SUCCESS`.

@@ -16,8 +16,8 @@
 | Redis Broker Image | `redis:7-alpine` |
 | PostgreSQL DB Image | `postgres:16-alpine` |
 | Git Commit nhóm | `62e9a2ffbcb36bec9672c0e0c7a504cab20bf3f8` (nhánh `master`) |
-| OpenAPI Schema Local | Tải từ `http://localhost:8000/api/schema/` |
-| OpenAPI Schema SHA256 | `9e1ed205b10a93961bf66d731e4ac3f64b7bba3ed66c7a1d3c42523116306f5c` |
+| OpenAPI Schema JSON SHA256 | `888b0f89ec0a9f65293f5320a86b1810d7904f93033178b567e313d951b12e3a` (docs/openapi_TV3.json) |
+| OpenAPI Schema YAML SHA256 | `4b56422b2e5bc4190efdefab3444c46336062c06c5c1478a2f44c1d6082785e0` (docs/openapi_TV3.yaml) |
 
 ---
 

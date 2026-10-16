@@ -84,9 +84,9 @@ Bao gồm 4 nhóm tài nguyên quản lý văn bản cốt lõi:
 
 | Vòng | Mục tiêu & Phạm vi | Cấu hình CLI | Điều kiện bắt đầu & Baseline | Bằng chứng kết quả |
 |---|---|---|---|---|
-| **Vòng 1** | Kiểm tra đọc an toàn (Read-only)<br>Allowlist: 4 nhóm tài nguyên | `--include-path-regex "^/api/(tags\|correspondents\|document_types\|documents)/"`<br>`--exclude-method POST,PUT,PATCH,DELETE`<br>`--phases examples,fuzzing`<br>5 checks response cốt lõi | Baseline nhóm sạch, token admin hợp lệ | [results/TV3_round1_seed303_20261016_093736.log](file:///d:/DaiHocDL/KiemThuPhanMem/KTPM/results/TV3_round1_seed303_20261016_093736.log)<br>XML + NDJSON + MD summary |
-| **Vòng 2** | Kiểm tra đọc/ghi kết hợp (CRUD & Stateful)<br>Allowlist: tags, correspondents, document_types | `--include-path-regex "^/api/(tags\|correspondents\|document_types)/"`<br>`--checks all`<br>Phases mặc định (examples, coverage, fuzzing, stateful) | Reset API sạch hết trang, nạp lại baseline, đối chiếu count | [results/TV3_round2_seed303_20261016_093803.log](file:///d:/DaiHocDL/KiemThuPhanMem/KTPM/results/TV3_round2_seed303_20261016_093803.log)<br>XML + NDJSON + MD summary |
-| **Vòng 3** | Toàn diện hệ thống (Full CRUD + Documents)<br>Mở rộng thêm `documents` | `--include-path-regex "^/api/(tags\|correspondents\|document_types\|documents)/"`<br>`--checks all`<br>Phases mặc định (full 4 phases) | Reset API sạch hết trang, nạp lại baseline, đối chiếu count | [results/TV3_round3_seed303_20261016_093930.log](file:///d:/DaiHocDL/KiemThuPhanMem/KTPM/results/TV3_round3_seed303_20261016_093930.log)<br>XML + NDJSON + MD summary |
+| **Vòng 1** | Kiểm tra đọc an toàn (Read-only)<br>Allowlist: 4 nhóm tài nguyên | `--include-path-regex "^/api/(tags\|correspondents\|document_types\|documents)/"`<br>`--exclude-method POST,PUT,PATCH,DELETE`<br>`--phases examples,fuzzing`<br>5 checks response cốt lõi | Baseline nhóm sạch, token admin hợp lệ | [results/TV3_round1_seed303_20261016_093736.log](../results/TV3_round1_seed303_20261016_093736.log)<br>XML + NDJSON + MD summary |
+| **Vòng 2** | Kiểm tra đọc/ghi kết hợp (CRUD & Stateful)<br>Allowlist: tags, correspondents, document_types | `--include-path-regex "^/api/(tags\|correspondents\|document_types)/"`<br>`--checks all`<br>Phases mặc định (examples, coverage, fuzzing, stateful) | Reset API sạch hết trang, nạp lại baseline, đối chiếu count | [results/TV3_round2_seed303_20261016_093803.log](../results/TV3_round2_seed303_20261016_093803.log)<br>XML + NDJSON + MD summary |
+| **Vòng 3** | Toàn diện hệ thống (Full CRUD + Documents)<br>Mở rộng thêm `documents` | `--include-path-regex "^/api/(tags\|correspondents\|document_types\|documents)/"`<br>`--checks all`<br>Phases mặc định (full 4 phases) | Reset API sạch hết trang, nạp lại baseline, đối chiếu count | [results/TV3_round3_seed303_20261016_093930.log](../results/TV3_round3_seed303_20261016_093930.log)<br>XML + NDJSON + MD summary |
 
 ---
 
@@ -104,7 +104,7 @@ Bao gồm 4 nhóm tài nguyên quản lý văn bản cốt lõi:
 
 | Rủi ro | Tác động | Biện pháp giảm thiểu |
 |---|---|---|
-| Fuzzing làm biến đổi / đầy CSDL | Làm sai lệch baseline giữa các vòng | Chạy script [`reset_data_TV3.py`](file:///d:/DaiHocDL/KiemThuPhanMem/KTPM/scripts/reset_data_TV3.py) phân trang dọn sạch và nạp lại baseline trước mỗi vòng |
+| Fuzzing làm biến đổi / đầy CSDL | Làm sai lệch baseline giữa các vòng | Chạy script [`reset_data_TV3.py`](../scripts/reset_data_TV3.py) phân trang dọn sạch và nạp lại baseline trước mỗi vòng |
 | Lộ bí mật trong log / Git | Rò rỉ thông tin xác thực | Bật `--output-sanitize true`, kết hợp hàm lọc regex `[REDACTED]` trong runner TV3 |
-| Trích xuất PDF bị nhầm là OCR ảnh | Bằng chứng không chính xác | Sinh ảnh PNG thô [`TV3_Sample_Scan_Image_303.png`](file:///d:/DaiHocDL/KiemThuPhanMem/KTPM/scripts/sample_docs/TV3_Sample_Scan_Image_303.png) để chứng minh Tesseract OCR thực tế |
-| Xung đột phiên bản Schemathesis | Lỗi syntax CLI và khác biệt kết quả | Ghim cố định `schemathesis==4.30.1` và `hypothesis==6.169.0` trong [PINNED_VERSION_TV3.md](file:///d:/DaiHocDL/KiemThuPhanMem/KTPM/docs/PINNED_VERSION_TV3.md) |
+| Trích xuất PDF bị nhầm là OCR ảnh | Bằng chứng không chính xác | Sinh ảnh PNG thô [`TV3_Sample_Scan_Image_303.png`](../scripts/sample_docs/TV3_Sample_Scan_Image_303.png) để chứng minh Tesseract OCR thực tế |
+| Xung đột phiên bản Schemathesis | Lỗi syntax CLI và khác biệt kết quả | Ghim cố định `schemathesis==4.30.1` và `hypothesis==6.169.0` trong [PINNED_VERSION_TV3.md](PINNED_VERSION_TV3.md) |
