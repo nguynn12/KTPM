@@ -316,3 +316,38 @@
 - **Expected Result:**
   - HTTP Status: `401 Unauthorized`
   - Response Body: `{"detail": "Authentication credentials were not provided."}`
+
+---
+
+# PHẦN II: BỘ TEST CASE BỔ SUNG — TV3 (NGUYỄN KHIÊM THUẬN · MSSV: 2312764 · SEED 303)
+**Tài nguyên phụ trách bổ sung:** `Correspondents` (`/api/correspondents/`) & `Document Types` (`/api/document_types/`)  
+**Chi tiết đầy đủ:** Xem tại [TEST_CASES_TV3.md](file:///d:/DaiHocDL/KiemThuPhanMem/KTPM/docs/TEST_CASES_TV3.md)
+
+## 1. Bảng tổng hợp Test Cases TV3 (Correspondents & Document Types)
+
+| Mã Test Case | Method | Endpoint | Kỹ thuật kiểm thử | Mục tiêu kiểm thử | Kỳ vọng | Thực tế (13/10) | Đánh giá |
+|---|---|---|---|---|---|---|---|
+| **TV3-COR-01** | POST | `/api/correspondents/` | Phân vùng tương đương (Hợp lệ) | Tạo Correspondent hợp lệ với trường `name` duy nhất | 201 Created | 201 Created (28 ms) | **PASS** |
+| **TV3-COR-02** | POST | `/api/correspondents/` | Phân vùng tương đương (Không hợp lệ) | Tạo Correspondent nhưng thiếu trường bắt buộc `name` | 400 Bad Request | 400 Bad Request (17 ms) | **PASS** |
+| **TV3-COR-03** | POST | `/api/correspondents/` | Phân tích giá trị biên (BVA) | Tạo Correspondent với `name` là chuỗi rỗng `""` | 400 Bad Request | 400 Bad Request (18 ms) | **PASS** |
+| **TV3-COR-04** | POST | `/api/correspondents/` | Phân vùng tương đương (Không hợp lệ) | Tạo Correspondent với `name` là `null` | 400 Bad Request | 400 Bad Request (17 ms) | **PASS** |
+| **TV3-COR-05** | POST | `/api/correspondents/` | Kiểm thử tính duy nhất | Tạo Correspondent trùng tên đã tồn tại (`TV2_Bank_202`) | 400 Bad Request | 400 Bad Request (19 ms) | **PASS** |
+| **TV3-COR-06** | POST | `/api/correspondents/` | Phân tích giá trị biên (BVA) | Tạo Correspondent với độ dài tên L-1 (127 ký tự) | 201 Created | 201 Created (27 ms) | **PASS** |
+| **TV3-COR-07** | POST | `/api/correspondents/` | Phân tích giá trị biên (BVA) | Tạo Correspondent với độ dài tên đúng biên L (128 ký tự) | 201 Created | 201 Created (27 ms) | **PASS** |
+| **TV3-COR-08** | POST | `/api/correspondents/` | Phân tích giá trị biên (BVA) | Tạo Correspondent với độ dài tên vượt biên L+1 (129 ký tự) | 400 Bad Request | 400 Bad Request (18 ms) | **PASS** |
+| **TV3-COR-10** | POST | `/api/correspondents/` | Kiểm thử chuỗi ký tự Unicode | Tạo Correspondent với tên tiếng Việt có dấu và emoji | 201 Created | 201 Created (28 ms) | **PASS** |
+| **TV3-COR-17** | GET | `/api/correspondents/` | Bảo mật & Xác thực | Truy vấn danh sách không kèm Authorization token | 401 Unauthorized | 401 Unauthorized (5 ms) | **PASS** |
+| **TV3-COR-18** | GET | `/api/correspondents/` | Bảo mật & Xác thực | Truy vấn danh sách với Authorization token không hợp lệ | 401 Unauthorized | 401 Unauthorized (16 ms) | **PASS** |
+| **TV3-COR-19** | GET | `/api/correspondents/` | Kiểm thử phân trang | Truy vấn danh sách với `?page=1&page_size=1` | 200 OK | 200 OK (29 ms) | **PASS** |
+| **TV3-COR-20** | POST | `/api/correspondents/` | Error Guessing / Hồi quy BUG-01 | Gửi payload `set_permissions` chứa `"view": false` | 400 Bad Request | 500 Server Error (19 ms) | **REPRO-BUG-01 (500)** |
+| **TV3-DT-01** | POST | `/api/document_types/` | Phân vùng tương đương (Hợp lệ) | Tạo DocumentType hợp lệ | 201 Created | 201 Created (26 ms) | **PASS** |
+| **TV3-DT-02** | POST | `/api/document_types/` | Phân vùng tương đương (Không hợp lệ) | Tạo DocumentType thiếu trường `name` | 400 Bad Request | 400 Bad Request (16 ms) | **PASS** |
+| **TV3-DT-03** | POST | `/api/document_types/` | Phân tích giá trị biên (BVA) | Tạo DocumentType với `name` rỗng `""` | 400 Bad Request | 400 Bad Request (16 ms) | **PASS** |
+| **TV3-DT-08** | POST | `/api/document_types/` | Phân tích giá trị biên (BVA) | Tạo DocumentType với độ dài tên vượt biên L+1 (129 ký tự) | 400 Bad Request | 400 Bad Request (18 ms) | **PASS** |
+| **TV3-DT-20** | POST | `/api/document_types/` | Error Guessing / Hồi quy BUG-01 | Gửi payload `set_permissions` chứa `"view": false` | 400 Bad Request | 500 Server Error (19 ms) | **REPRO-BUG-01 (500)** |
+
+## 2. Ba Luồng Nghiệp vụ TV3 Xác thực Thực tế
+- **TV3-FLOW-01:** Upload PDF `TV3_Sample_01_Report_303.pdf` -> Celery Task Success -> GET Document ID 4 trích xuất được 306 ký tự content -> **PASS**.
+- **TV3-FLOW-02:** Tạo Tag (ID 5), Correspondent (ID 4), DocumentType (ID 4) -> PATCH Document ID 4 -> GET đối chiếu metadata khớp 100% -> **PASS**.
+- **TV3-FLOW-03:** Tìm kiếm từ khóa `query=Schemathesis` (2 kết quả) và Lọc theo Tag ID 5 (1 kết quả) đều tìm thấy Document ID 4 -> **PASS**.
+
