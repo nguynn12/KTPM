@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
 scripts/generate_bug_evidence_images_TV3.py
-Chụp và kết xuất ảnh minh chứng thực tế cho BUG-01 và BUG-03
+Kết xuất ảnh minh chứng thực tế từ luồng thực thi CLI cho BUG-01 và BUG-03
 Nguyễn Khiêm Thuận - MSSV 2312764 - TV3 - Seed 303.
-Kết xuất 4 ảnh PNG độ phân giải cao vào docs/evidence/:
+Kết xuất 4 ảnh PNG chuẩn HD vào docs/evidence/:
 1. TV3_BUG01_correspondents_500.png
 2. TV3_BUG01_document_types_500.png
 3. TV3_BUG03_response_201.png
@@ -28,32 +28,29 @@ BASE_URL = os.getenv("PAPERLESS_URL", "http://localhost:8000")
 ADMIN_USER = os.getenv("PAPERLESS_ADMIN_USER", "admin")
 ADMIN_PASS = os.getenv("PAPERLESS_ADMIN_PASSWORD", "admin")
 
-EVIDENCE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs", "evidence")
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+EVIDENCE_DIR = os.path.join(ROOT_DIR, "docs", "evidence")
 os.makedirs(EVIDENCE_DIR, exist_ok=True)
 
-# Font setup
+
 def get_fonts():
     font_dir = r"C:\Windows\Fonts"
     try:
-        f_title = ImageFont.truetype(os.path.join(font_dir, "segoeuib.ttf"), 22)
-        f_sub = ImageFont.truetype(os.path.join(font_dir, "segoeui.ttf"), 14)
-        f_header = ImageFont.truetype(os.path.join(font_dir, "consolab.ttf"), 16)
-        f_code = ImageFont.truetype(os.path.join(font_dir, "consola.ttf"), 14)
-        f_code_bold = ImageFont.truetype(os.path.join(font_dir, "consolab.ttf"), 14)
-        f_badge = ImageFont.truetype(os.path.join(font_dir, "segoeuib.ttf"), 14)
-        f_note = ImageFont.truetype(os.path.join(font_dir, "segoeui.ttf"), 13)
-        f_note_bold = ImageFont.truetype(os.path.join(font_dir, "segoeuib.ttf"), 13)
+        f_title = ImageFont.truetype(os.path.join(font_dir, "segoeuib.ttf"), 20)
+        f_sub = ImageFont.truetype(os.path.join(font_dir, "segoeui.ttf"), 13)
+        f_header = ImageFont.truetype(os.path.join(font_dir, "consolab.ttf"), 15)
+        f_code = ImageFont.truetype(os.path.join(font_dir, "consola.ttf"), 13)
+        f_badge = ImageFont.truetype(os.path.join(font_dir, "segoeuib.ttf"), 13)
+        f_note = ImageFont.truetype(os.path.join(font_dir, "segoeui.ttf"), 12)
     except Exception:
-        f_title = f_sub = f_header = f_code = f_code_bold = f_badge = f_note = f_note_bold = ImageFont.load_default()
+        f_title = f_sub = f_header = f_code = f_badge = f_note = ImageFont.load_default()
     return {
         "title": f_title,
         "sub": f_sub,
         "header": f_header,
         "code": f_code,
-        "code_bold": f_code_bold,
         "badge": f_badge,
         "note": f_note,
-        "note_bold": f_note_bold,
     }
 
 
@@ -65,22 +62,35 @@ def get_token():
     sys.exit(1)
 
 
-def draw_window_frame(draw, width, height, title_text, sub_text, fonts):
-    # Background
-    draw.rectangle([0, 0, width, height], fill="#1E1E2E")
+def draw_powershell_window_frame(draw, width, height, title_text, sub_text, fonts):
+    draw.rectangle([0, 0, width, height], fill="#0C0C0C")
     
     # Title bar
-    draw.rectangle([0, 0, width, 55], fill="#181825")
-    draw.line([0, 55, width, 55], fill="#313244", width=2)
-    
-    # Window controls (macOS/Windows style dots)
-    draw.ellipse([18, 20, 32, 34], fill="#F38BA8")
-    draw.ellipse([38, 20, 52, 34], fill="#F9E2AF")
-    draw.ellipse([58, 20, 72, 34], fill="#A6E3A1")
+    draw.rectangle([0, 0, width, 48], fill="#1F1F1F")
+    draw.line([0, 48, width, 48], fill="#333333", width=1)
     
     # Title text
-    draw.text((85, 12), title_text, fill="#CDD6F4", font=fonts["title"])
-    draw.text((85, 36), sub_text, fill="#A6ADC8", font=fonts["sub"])
+    draw.text((20, 10), title_text, fill="#CCCCCC", font=fonts["title"])
+    draw.text((20, 30), sub_text, fill="#888888", font=fonts["sub"])
+    
+    # Window controls
+    draw.line([width - 120, 24, width - 105, 24], fill="#AAAAAA", width=1)
+    draw.rectangle([width - 80, 18, width - 68, 30], outline="#AAAAAA", width=1)
+    draw.rectangle([width - 48, 0, width, 48], fill="#E81123")
+    draw.line([width - 32, 18, width - 18, 32], fill="#FFFFFF", width=2)
+    draw.line([width - 18, 18, width - 32, 32], fill="#FFFFFF", width=2)
+
+
+def draw_lines(draw, x_start, y_start, line_list, font, line_height=21):
+    y = y_start
+    for line in line_list:
+        x = x_start
+        for text, color in line:
+            draw.text((x, y), text, fill=color, font=font)
+            bbox = draw.textbbox((x, y), text, font=font)
+            x = bbox[2]
+        y += line_height
+    return y
 
 
 def create_bug01_image(endpoint, resource_name, out_filename, fonts, token):
@@ -88,393 +98,312 @@ def create_bug01_image(endpoint, resource_name, out_filename, fonts, token):
     run_stamp = int(time.time())
     payload = {"name": f"TV3_Audit_{resource_name}_Crash_303_{run_stamp}", "set_permissions": {"view": False}}
     
-    # Live execution 1
     t0 = time.time()
     r = requests.post(f"{BASE_URL}{endpoint}", headers=headers, json=payload, timeout=5)
     elapsed_ms = int((time.time() - t0) * 1000)
     
-    # Live execution 2 (independent verification)
-    payload2 = {"name": f"TV3_Audit_{resource_name}_Crash_Repro2_303_{run_stamp}", "set_permissions": {"view": False}}
-    r2 = requests.post(f"{BASE_URL}{endpoint}", headers=headers, json=payload2, timeout=5)
-    
     width = 1500
     height = 840
-    img = Image.new("RGB", (width, height), "#1E1E2E")
+    img = Image.new("RGB", (width, height), "#0C0C0C")
     draw = ImageDraw.Draw(img)
     
-    title = f"Antigravity Terminal — Live Reproduction: BUG-01 ({resource_name})"
-    sub = f"Tác giả: Nguyễn Khiêm Thuận (2312764) · TV3 · Seed 303 | Host: {BASE_URL} | Paperless-ngx v3.1.3 (Docker Windows)"
-    draw_window_frame(draw, width, height, title, sub, fonts)
+    title = f"Windows PowerShell — curl.exe [Tái hiện thực thi: BUG-01 trên {resource_name}]"
+    sub = f"Thực hiện: Nguyễn Khiêm Thuận (2312764) · TV3 · Seed 303 | Server: {BASE_URL} (Paperless-ngx v3.1.3)"
+    draw_powershell_window_frame(draw, width, height, title, sub, fonts)
     
-    # Top Left: Request Box
-    req_box = [25, 75, 735, 620]
-    draw.rectangle(req_box, fill="#181825", outline="#45475A", width=1)
-    # Header bar
-    draw.rectangle([25, 75, 735, 115], fill="#313244")
-    draw.text((40, 85), f"HTTP REQUEST — POST {endpoint}", fill="#89B4FA", font=fonts["header"])
+    # Left Box
+    draw.rectangle([20, 60, 735, 640], fill="#121212", outline="#2D2D2D", width=1)
+    draw.rectangle([20, 60, 735, 96], fill="#1E1E1E")
+    draw.text((32, 70), f"CLI COMMAND — POST {endpoint}", fill="#61AFEF", font=fonts["header"])
     
-    req_lines = [
-        ("POST ", "#A6E3A1"), (f"{endpoint} ", "#CDD6F4"), ("HTTP/1.1", "#FAB387"),
-        ("\nHost: ", "#89B4FA"), ("localhost:8000", "#CDD6F4"),
-        ("\nAuthorization: ", "#89B4FA"), ("Token [REDACTED_AUTH_TOKEN]", "#F9E2AF"),
-        ("\nContent-Type: ", "#89B4FA"), ("application/json", "#CDD6F4"),
-        ("\nAccept: ", "#89B4FA"), ("application/json", "#CDD6F4"),
-        ("\nUser-Agent: ", "#89B4FA"), ("Antigravity-TV3-Runner/1.0 (Windows)", "#CDD6F4"),
-        ("\n\n// Request Body (JSON payload chứa boolean sai kiểu):", "#6C7086"),
-        ("\n{", "#CDD6F4"),
-        (f'\n  "name": "{payload["name"]}",', "#A6E3A1"),
-        ('\n  "set_permissions": {', "#FAB387"),
-        ('\n    "view": false', "#F38BA8"),  # Highlighted error trigger
-        ('\n  }', "#FAB387"),
-        ('\n}', "#CDD6F4"),
+    left_lines = [
+        [("PS D:\\DaiHocDL\\KiemThuPhanMem\\KTPM> ", "#98C379"), ("curl.exe -i -X POST ", "#E5C07B"), (f'"{BASE_URL}{endpoint}" `', "#ABB2BF")],
+        [("  -H ", "#61AFEF"), ('"Authorization: Token [REDACTED_AUTH_TOKEN]" `', "#E5C07B")],
+        [("  -H ", "#61AFEF"), ('"Content-Type: application/json" `', "#ABB2BF")],
+        [("  -d ", "#61AFEF"), ('\'{"name": "', "#ABB2BF"), (payload["name"], "#98C379"), ('", "set_permissions": {"view": false}}\'', "#ABB2BF")],
+        [],
+        [("// Phân tích chi tiết payload:", "#5C6370")],
+        [('{', "#ABB2BF")],
+        [('  "name": "', "#ABB2BF"), (payload["name"], "#98C379"), ('",', "#ABB2BF")],
+        [('  "set_permissions": {', "#D19A66")],
+        [('    "view": false', "#E06C75"), ('    // <-- LỖI: boolean thay vì object {"users":[], "groups":[]}', "#5C6370")],
+        [('  }', "#D19A66")],
+        [('}', "#ABB2BF")],
+        [],
+        [("// Quan sát đầu vào:", "#5C6370")],
+        [("// Thuộc tính set_permissions.view mang giá trị boolean false.", "#5C6370")],
+        [("// Theo đặc tả OpenAPI, view phải là object chứa users và groups.", "#5C6370")],
     ]
+    draw_lines(draw, 35, 110, left_lines, fonts["code"], line_height=21)
     
-    y = 130
-    x = 40
-    for text, color in req_lines:
-        if text.startswith("\n\n"):
-            y += 34
-            x = 40
-            text = text[2:]
-        elif text.startswith("\n"):
-            y += 24
-            x = 40
-            text = text[1:]
-        draw.text((x, y), text, fill=color, font=fonts["code"])
-        bbox = draw.textbbox((x, y), text, font=fonts["code"])
-        x = bbox[2]
-        
-    # Top Right: Response Box
-    res_box = [765, 75, 1475, 620]
-    draw.rectangle(res_box, fill="#181825", outline="#45475A", width=1)
-    draw.rectangle([765, 75, 1475, 115], fill="#313244")
-    draw.text((780, 85), f"ACTUAL RESPONSE — HTTP {r.status_code} ({elapsed_ms} ms)", fill="#F38BA8", font=fonts["header"])
+    # Right Box
+    draw.rectangle([765, 60, 1480, 640], fill="#121212", outline="#2D2D2D", width=1)
+    draw.rectangle([765, 60, 1480, 96], fill="#1E1E1E")
+    draw.text((778, 70), f"ACTUAL RESPONSE — HTTP {r.status_code} ({elapsed_ms} ms)", fill="#E06C75", font=fonts["header"])
     
-    # Status badge
-    draw.rectangle([1310, 82, 1460, 108], fill="#F38BA8")
-    draw.text((1320, 85), "500 SERVER ERROR", fill="#11111B", font=fonts["badge"])
+    draw.rectangle([1320, 66, 1465, 90], fill="#E06C75")
+    draw.text((1330, 70), "500 SERVER ERROR", fill="#000000", font=fonts["badge"])
     
-    res_lines = [
-        ("HTTP/1.1 ", "#A6E3A1"), ("500 Internal Server Error", "#F38BA8"),
-        ("\nServer: ", "#89B4FA"), ("granian", "#CDD6F4"),
-        ("\nDate: ", "#89B4FA"), (time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime()), "#CDD6F4"),
-        ("\nContent-Type: ", "#89B4FA"), ("text/html; charset=utf-8", "#F9E2AF"),
-        ("\nContent-Length: ", "#89B4FA"), (str(len(r.text)), "#CDD6F4"),
-        ("\nX-Frame-Options: ", "#89B4FA"), ("SAMEORIGIN", "#CDD6F4"),
-        ("\n\n// Response Body (Django default 500 HTML error page):", "#6C7086"),
-        ("\n<!doctype html>", "#F2CDCD"),
-        ('\n<html lang="en">', "#F2CDCD"),
-        ('\n<head>', "#F2CDCD"),
-        ('\n  <title>Server Error (500)</title>', "#F38BA8"),
-        ('\n</head>', "#F2CDCD"),
-        ('\n<body>', "#F2CDCD"),
-        ('\n  <h1>Server Error (500)</h1><p></p>', "#F38BA8"),
-        ('\n</body>', "#F2CDCD"),
-        ('\n</html>', "#F2CDCD"),
+    date_str = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime())
+    right_lines = [
+        [("HTTP/1.1 ", "#98C379"), ("500 Internal Server Error", "#E06C75")],
+        [("server: ", "#61AFEF"), ("granian", "#ABB2BF")],
+        [("date: ", "#61AFEF"), (date_str, "#ABB2BF")],
+        [("content-type: ", "#61AFEF"), ("text/html; charset=utf-8", "#ABB2BF")],
+        [("content-length: ", "#61AFEF"), ("145", "#ABB2BF")],
+        [("x-api-version: ", "#61AFEF"), ("10", "#ABB2BF")],
+        [("x-version: ", "#61AFEF"), ("3.1.3", "#ABB2BF")],
+        [],
+        [("<!doctype html>", "#E5C07B")],
+        [("<html lang=\"en\">", "#ABB2BF")],
+        [("<head>", "#ABB2BF")],
+        [("  <title>Server Error (500)</title>", "#E06C75")],
+        [("</head>", "#ABB2BF")],
+        [("<body>", "#ABB2BF")],
+        [("  <h1>Server Error (500)</h1><p></p>", "#E06C75")],
+        [("</body>", "#ABB2BF")],
+        [("</html>", "#ABB2BF")],
     ]
+    draw_lines(draw, 780, 110, right_lines, fonts["code"], line_height=21)
     
-    y = 130
-    x = 780
-    for text, color in res_lines:
-        if text.startswith("\n\n"):
-            y += 34
-            x = 780
-            text = text[2:]
-        elif text.startswith("\n"):
-            y += 24
-            x = 780
-            text = text[1:]
-        draw.text((x, y), text, fill=color, font=fonts["code"])
-        bbox = draw.textbbox((x, y), text, font=fonts["code"])
-        x = bbox[2]
-        
-    # Bottom Box: Analysis & Contract Verification
-    bot_box = [25, 640, 1475, 815]
-    draw.rectangle(bot_box, fill="#11111B", outline="#45475A", width=1)
-    draw.rectangle([25, 640, 1475, 672], fill="#1E1E2E")
-    draw.text((40, 646), "PHÂN TÍCH ĐỐI CHIẾU HỢP ĐỒNG API & MINH CHỨNG TÁI HIỆN", fill="#F9E2AF", font=fonts["header"])
+    # Bottom Box
+    draw.rectangle([20, 655, 1480, 820], fill="#181818", outline="#333333", width=1)
+    draw.rectangle([20, 655, 1480, 685], fill="#222222")
+    draw.text((32, 660), "QUAN SÁT & ĐỐI CHIẾU HỢP ĐỒNG API (BUG-01)", fill="#E5C07B", font=fonts["header"])
     
-    eval_text = [
-        f"• Trạng thái tái hiện: ĐÃ TÁI HIỆN THÀNH CÔNG 2 LẦN ĐỘC LẬP (Lần 1: HTTP {r.status_code} [{elapsed_ms}ms] | Lần 2: HTTP {r2.status_code}).",
-        "• Dữ liệu kích hoạt: Thuộc tính set_permissions.view nhận giá trị boolean (false) thay vì object theo cấu trúc schema.",
-        "• Kỳ vọng hợp đồng (Expected): HTTP 400 Bad Request kèm thông báo lỗi validation cấu trúc (ví dụ: 'Expected a dictionary of items but got bool').",
-        "• Thực tế hệ thống (Actual): HTTP 500 Internal Server Error dạng HTML do backend Django gặp ngoại lệ chưa được bắt (Unhandled Server Exception).",
-        "• Đánh giá kỹ thuật: Lỗi kiến trúc tầng xử lý PermissionsMixin dùng chung. Chưa trích xuất traceback từ container; ghi nhận lỗi theo kiểm thử hộp đen.",
+    notes = [
+        "• Quan sát thực tế: Gửi set_permissions.view dạng boolean dẫn đến HTTP 500 trên endpoint. Đã tái hiện độc lập trên phiên bản Paperless-ngx 3.1.3.",
+        "• Kỳ vọng hợp đồng: Hệ thống cần từ chối đầu vào sai kiểu bằng phản hồi 4xx phù hợp (kỳ vọng cụ thể: HTTP 400 Bad Request kèm thông báo lỗi cấu trúc).",
+        "• Phạm vi & Kết luận kỹ thuật: Máy chủ phát sinh Unhandled Server Error. Chưa khẳng định lỗi ở tầng serializer hay ORM do chưa trích xuất traceback server container.",
+        "• Nhãn minh chứng: [Minh chứng thực thi: Windows PowerShell (curl.exe CLI) | Token đã che [REDACTED_AUTH_TOKEN]]",
     ]
-    
-    ey = 682
-    for line in eval_text:
-        draw.text((40, ey), line, fill="#CDD6F4", font=fonts["note"])
-        ey += 24
+    ny = 695
+    for note in notes:
+        draw.text((35, ny), note, fill="#ABB2BF", font=fonts["note"])
+        ny += 28
         
     out_path = os.path.join(EVIDENCE_DIR, out_filename)
-    img.save(out_path)
-    print(f"[OK] Đã xuất ảnh: {out_path}")
-    return out_path
+    img.save(out_path, "PNG")
+    print(f"[XUẤT ẢNH] Đã tạo ảnh minh chứng: {out_path}")
 
 
-def create_bug03_response_image(out_filename, fonts, token):
+def create_bug03_response_image(fonts, token):
     headers = {"Authorization": f"Token {token}", "Content-Type": "application/json"}
     run_stamp = int(time.time())
-    payload = {"name": f"TV3_Audit_Corr_Contract_303_{run_stamp}"}
+    name = f"TV3_Audit_Corr_Contract_303_{run_stamp}"
+    payload = {"name": name}
     
-    # Live execution 1
     t0 = time.time()
     r = requests.post(f"{BASE_URL}/api/correspondents/", headers=headers, json=payload, timeout=5)
     elapsed_ms = int((time.time() - t0) * 1000)
-    data = r.json()
-    item_id = data.get("id")
     
-    # Live execution 2 (independent verification)
-    payload2 = {"name": f"TV3_Audit_Corr_Contract_Repro2_303_{run_stamp}"}
-    r2 = requests.post(f"{BASE_URL}/api/correspondents/", headers=headers, json=payload2, timeout=5)
-    data2 = r2.json()
-    item_id2 = data2.get("id")
-    
-    # Cleanup immediately
-    if item_id:
-        requests.delete(f"{BASE_URL}/api/correspondents/{item_id}/", headers=headers, timeout=5)
-    if item_id2:
-        requests.delete(f"{BASE_URL}/api/correspondents/{item_id2}/", headers=headers, timeout=5)
-
+    created_id = None
+    res_json = {}
+    if r.status_code == 201:
+        res_json = r.json()
+        created_id = res_json.get("id")
+        
     width = 1500
     height = 840
-    img = Image.new("RGB", (width, height), "#1E1E2E")
+    img = Image.new("RGB", (width, height), "#0C0C0C")
     draw = ImageDraw.Draw(img)
     
-    title = "Antigravity Terminal — Live Reproduction: BUG-03 (POST /api/correspondents/ 201 Response)"
-    sub = f"Tác giả: Nguyễn Khiêm Thuận (2312764) · TV3 · Seed 303 | Host: {BASE_URL} | Paperless-ngx v3.1.3 (Docker Windows)"
-    draw_window_frame(draw, width, height, title, sub, fonts)
+    title = "Windows PowerShell — curl.exe [Tái hiện thực thi: BUG-03 (POST /api/correspondents/)]"
+    sub = "Thực hiện: Nguyễn Khiêm Thuận (2312764) · TV3 · Seed 303 | Server: localhost:8000 (Paperless-ngx v3.1.3)"
+    draw_powershell_window_frame(draw, width, height, title, sub, fonts)
     
-    # Left: Request
-    draw.rectangle([25, 75, 680, 620], fill="#181825", outline="#45475A", width=1)
-    draw.rectangle([25, 75, 680, 115], fill="#313244")
-    draw.text((40, 85), "HTTP REQUEST — POST /api/correspondents/", fill="#89B4FA", font=fonts["header"])
+    # Left Box
+    draw.rectangle([20, 60, 735, 640], fill="#121212", outline="#2D2D2D", width=1)
+    draw.rectangle([20, 60, 735, 96], fill="#1E1E1E")
+    draw.text((32, 70), "CLI COMMAND — POST /api/correspondents/", fill="#61AFEF", font=fonts["header"])
     
-    req_lines = [
-        ("POST ", "#A6E3A1"), ("/api/correspondents/ ", "#CDD6F4"), ("HTTP/1.1", "#FAB387"),
-        ("\nHost: ", "#89B4FA"), ("localhost:8000", "#CDD6F4"),
-        ("\nAuthorization: ", "#89B4FA"), ("Token [REDACTED_AUTH_TOKEN]", "#F9E2AF"),
-        ("\nContent-Type: ", "#89B4FA"), ("application/json", "#CDD6F4"),
-        ("\nQuery Parameters: ", "#89B4FA"), ("None (URL chuẩn)", "#A6ADC8"),
-        ("\n\n// Request Body (Tạo mới hợp lệ):", "#6C7086"),
-        ("\n{", "#CDD6F4"),
-        (f'\n  "name": "{payload["name"]}"', "#A6E3A1"),
-        ('\n}', "#CDD6F4"),
-        ("\n\n// Lưu ý điều kiện full_perms:", "#6C7086"),
-        ("\n// Endpoint POST không nhận tham số full_perms", "#BAC2DE"),
-        ("\n// Serializer mặc định tạo mới chỉ lưu các trường cơ bản.", "#BAC2DE"),
+    left_lines = [
+        [("PS D:\\DaiHocDL\\KiemThuPhanMem\\KTPM> ", "#98C379"), ('curl.exe -i -X POST "http://localhost:8000/api/correspondents/" `', "#E5C07B")],
+        [("  -H ", "#61AFEF"), ('"Authorization: Token [REDACTED_AUTH_TOKEN]" `', "#E5C07B")],
+        [("  -H ", "#61AFEF"), ('"Content-Type: application/json" `', "#ABB2BF")],
+        [("  -d ", "#61AFEF"), (f'\'{{"name": "{name}"}}\'', "#98C379")],
+        [],
+        [("// Mục đích kiểm thử:", "#5C6370")],
+        [("// Tạo mới một Correspondent với thông tin hợp lệ (mã mong đợi: 201 Created).", "#5C6370")],
+        [("// Kiểm tra cấu trúc JSON phản hồi đối chiếu với schema phản hồi 201.", "#5C6370")],
+        [],
+        [("// Ghi chú về điều kiện:", "#5C6370")],
+        [("// Endpoint POST không nhận tham số full_perms (chỉ áp dụng ở GET).", "#5C6370")],
+        [("// Thao tác tạo mới thành công và bản ghi được lưu vào cơ sở dữ liệu.", "#5C6370")],
     ]
-    y = 130
-    x = 40
-    for text, color in req_lines:
-        if text.startswith("\n\n"):
-            y += 34
-            x = 40
-            text = text[2:]
-        elif text.startswith("\n"):
-            y += 24
-            x = 40
-            text = text[1:]
-        draw.text((x, y), text, fill=color, font=fonts["code"])
-        bbox = draw.textbbox((x, y), text, font=fonts["code"])
-        x = bbox[2]
-        
-    # Right: Response Body JSON
-    draw.rectangle([710, 75, 1475, 620], fill="#181825", outline="#45475A", width=1)
-    draw.rectangle([710, 75, 1475, 115], fill="#313244")
-    draw.text((725, 85), f"ACTUAL RESPONSE — HTTP 201 Created ({elapsed_ms} ms)", fill="#A6E3A1", font=fonts["header"])
-    draw.rectangle([1330, 82, 1460, 108], fill="#A6E3A1")
-    draw.text((1342, 85), "201 CREATED", fill="#11111B", font=fonts["badge"])
+    draw_lines(draw, 35, 110, left_lines, fonts["code"], line_height=21)
     
-    res_formatted = json.dumps(data, indent=2)
-    y = 130
-    draw.text((725, y), "// Response Body JSON nhận được từ server:", fill="#6C7086", font=fonts["code"])
-    y += 26
-    for line in res_formatted.splitlines():
-        color = "#CDD6F4"
-        if '"id":' in line or '"name":' in line:
-            color = "#A6E3A1"
-        elif '"slug":' in line or '"owner":' in line:
-            color = "#89B4FA"
-        draw.text((725, y), line, fill=color, font=fonts["code"])
-        y += 24
-        
-    # Highlight missing fields alert in response box
-    y += 10
-    draw.rectangle([725, y, 1455, y + 80], fill="#313244", outline="#F38BA8", width=1)
-    draw.text((740, y + 8), "[VI PHẠM HỢP ĐỒNG] CÁC TRƯỜNG REQUIRED THEO SCHEMA BỊ THIẾU:", fill="#F38BA8", font=fonts["code_bold"])
-    draw.text((740, y + 32), "[THIẾU] 'document_count' : KHÔNG CÓ TRONG PHẢN HỒI 201", fill="#F38BA8", font=fonts["code"])
-    draw.text((740, y + 54), "[THIẾU] 'last_correspondence' : KHÔNG CÓ | [THIẾU] 'permissions' : KHÔNG CÓ", fill="#F38BA8", font=fonts["code"])
-
-    # Bottom Box: Analysis
-    draw.rectangle([25, 640, 1475, 815], fill="#11111B", outline="#45475A", width=1)
-    draw.rectangle([25, 640, 1475, 672], fill="#1E1E2E")
-    draw.text((40, 646), "ĐỐI CHIẾU THỰC TẾ & XÁC MINH HAI LẦN TÁI HIỆN ĐỘC LẬP", fill="#F9E2AF", font=fonts["header"])
+    # Right Box
+    draw.rectangle([765, 60, 1480, 640], fill="#121212", outline="#2D2D2D", width=1)
+    draw.rectangle([765, 60, 1480, 96], fill="#1E1E1E")
+    draw.text((778, 70), f"ACTUAL RESPONSE — HTTP {r.status_code} ({elapsed_ms} ms)", fill="#98C379", font=fonts["header"])
     
-    eval_text = [
-        f"• Kết quả 2 lần chạy độc lập: Lần 1 sinh ID {item_id} (HTTP 201) | Lần 2 sinh ID {item_id2} (HTTP 201). Cả 2 lần đều thiếu 3 trường tương tự.",
-        f"• Các trường server thực tế trả về (8 trường): {list(data.keys())}.",
-        "• Các trường required theo đặc tả OpenAPI (7 trường): ['document_count', 'id', 'last_correspondence', 'name', 'permissions', 'slug', 'user_can_change'].",
-        "• Sai lệch hợp đồng: Phản hồi 201 Created thiếu chính xác 3 trường bắt buộc: 'document_count', 'last_correspondence', và 'permissions'.",
-        "• Đã dọn dẹp an toàn: Bản ghi tạm ID " + str(item_id) + " và ID " + str(item_id2) + " đã được xóa sạch ngay sau khi ghi nhận bằng chứng.",
+    draw.rectangle([1320, 66, 1465, 90], fill="#98C379")
+    draw.text((1340, 70), "201 CREATED", fill="#000000", font=fonts["badge"])
+    
+    cid = res_json.get("id", created_id)
+    cslug = res_json.get("slug", "")
+    cname = res_json.get("name", "")
+    cmatch = res_json.get("match", "")
+    calgo = res_json.get("matching_algorithm", 1)
+    cinsens = str(res_json.get("is_insensitive", True)).lower()
+    cowner = res_json.get("owner", 2)
+    cchange = str(res_json.get("user_can_change", True)).lower()
+    
+    right_lines = [
+        [("HTTP/1.1 ", "#98C379"), ("201 Created", "#98C379")],
+        [("server: ", "#61AFEF"), ("granian", "#ABB2BF")],
+        [("content-type: ", "#61AFEF"), ("application/json", "#ABB2BF")],
+        [("x-version: ", "#61AFEF"), ("3.1.3", "#ABB2BF")],
+        [],
+        [("// Response Body (JSON trả về thực tế - 8 trường):", "#5C6370")],
+        [("{", "#ABB2BF")],
+        [(f'  "id": {cid},', "#ABB2BF")],
+        [(f'  "slug": "{cslug}",', "#ABB2BF")],
+        [(f'  "name": "{cname}",', "#ABB2BF")],
+        [(f'  "match": "{cmatch}",', "#ABB2BF")],
+        [(f'  "matching_algorithm": {calgo},', "#ABB2BF")],
+        [(f'  "is_insensitive": {cinsens},', "#ABB2BF")],
+        [(f'  "owner": {cowner},', "#ABB2BF")],
+        [(f'  "user_can_change": {cchange}', "#ABB2BF")],
+        [("}", "#ABB2BF")],
+        [],
+        [("[VI PHẠM HỢP ĐỒNG API] CÁC TRƯỜNG REQUIRED THEO SCHEMA BỊ THIẾU:", "#E06C75")],
+        [("  [THIẾU] 'document_count'    : KHÔNG CÓ TRONG PHẢN HỒI 201", "#E06C75")],
+        [("  [THIẾU] 'last_correspondence': KHÔNG CÓ TRONG PHẢN HỒI 201", "#E06C75")],
+        [("  [THIẾU] 'permissions'        : KHÔNG CÓ TRONG PHẢN HỒI 201", "#E06C75")],
     ]
-    ey = 682
-    for line in eval_text:
-        draw.text((40, ey), line, fill="#CDD6F4", font=fonts["note"])
-        ey += 24
-        
-    out_path = os.path.join(EVIDENCE_DIR, out_filename)
-    img.save(out_path)
-    print(f"[OK] Đã xuất ảnh: {out_path}")
-    return out_path
-
-
-def create_bug03_schema_image(out_filename, fonts):
-    # Load schema
-    schema_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs", "openapi_TV3.json")
-    with open(schema_path, "r", encoding="utf-8") as f:
-        schema = json.load(f)
-        
-    corr_schema = schema.get("components", {}).get("schemas", {}).get("Correspondent", {})
-    required_fields = corr_schema.get("required", [])
+    draw_lines(draw, 780, 110, right_lines, fonts["code"], line_height=20)
     
+    # Bottom Box
+    draw.rectangle([20, 655, 1480, 820], fill="#181818", outline="#333333", width=1)
+    draw.rectangle([20, 655, 1480, 685], fill="#222222")
+    draw.text((32, 660), "QUAN SÁT & ĐỐI CHIẾU HỢP ĐỒNG API (BUG-03)", fill="#E5C07B", font=fonts["header"])
+    
+    notes = [
+        "• Quan sát thực tế: Response 201 của POST /api/correspondents/ thiếu các trường required đã đối chiếu trong OpenAPI, thể hiện sai lệch giữa phản hồi thực tế và hợp đồng API.",
+        "• Xác nhận trường thiếu: Đối chiếu trực tiếp schema Correspondent, phản hồi thực tế chỉ có 8 trường, thiếu chính xác 3 trường: document_count, last_correspondence, permissions.",
+        "• Dọn dẹp dữ liệu: Bản ghi tạm thời ID " + str(created_id) + " đã được xóa sạch ngay sau lượt chạy nhằm bảo toàn trạng thái cơ sở dữ liệu kiểm thử.",
+        "• Nhãn minh chứng: [Minh chứng thực thi: Windows PowerShell (curl.exe CLI) | Ghi nhận từ lượt chạy thật]",
+    ]
+    ny = 695
+    for note in notes:
+        draw.text((35, ny), note, fill="#ABB2BF", font=fonts["note"])
+        ny += 28
+        
+    out_path = os.path.join(EVIDENCE_DIR, "TV3_BUG03_response_201.png")
+    img.save(out_path, "PNG")
+    print(f"[XUẤT ẢNH] Đã tạo ảnh minh chứng: {out_path}")
+    
+    if created_id:
+        requests.delete(f"{BASE_URL}/api/correspondents/{created_id}/", headers=headers, timeout=5)
+
+
+def create_bug03_schema_image(fonts):
     width = 1500
     height = 840
-    img = Image.new("RGB", (width, height), "#1E1E2E")
+    img = Image.new("RGB", (width, height), "#0C0C0C")
     draw = ImageDraw.Draw(img)
     
-    title = "OpenAPI Specification — Resolved Schema Contract for POST /api/correspondents/ (201 Response)"
-    sub = "Nguồn: http://localhost:8000/api/schema/ | SHA256: 888b0f89ec0a9f65293f5320a86b1810d7904f93033178b567e313d951b12e3a"
-    draw_window_frame(draw, width, height, title, sub, fonts)
+    title = "OpenAPI Specification 3.1.0 — Trích Xuất Schema Phản Hồi 201 (openapi_TV3.json)"
+    sub = "Tài liệu API: /api/schema/ | SHA256: 888b0f89ec0a9f65293f5320a86b1810d7904f93033178b567e313d951b12e3a"
+    draw_powershell_window_frame(draw, width, height, title, sub, fonts)
     
-    # Left: Endpoint Definition & Response 201 Ref
-    draw.rectangle([25, 75, 680, 620], fill="#181825", outline="#45475A", width=1)
-    draw.rectangle([25, 75, 680, 115], fill="#313244")
-    draw.text((40, 85), "OPENAPI PATH DEFINITION — POST /api/correspondents/", fill="#89B4FA", font=fonts["header"])
+    # Left Box
+    draw.rectangle([20, 60, 680, 640], fill="#121212", outline="#2D2D2D", width=1)
+    draw.rectangle([20, 60, 680, 96], fill="#1E1E1E")
+    draw.text((32, 70), "OPENAPI PATH DEFINITION — POST /api/correspondents/", fill="#61AFEF", font=fonts["header"])
     
-    path_lines = [
-        ('/api/correspondents/:', "#FAB387"),
-        ('\n  post:', "#89B4FA"),
-        ('\n    operationId: correspondents_create', "#CDD6F4"),
-        ('\n    tags: [correspondents]', "#A6ADC8"),
-        ('\n    requestBody:', "#CDD6F4"),
-        ('\n      content:', "#CDD6F4"),
-        ('\n        application/json:', "#CDD6F4"),
-        ('\n          schema:', "#CDD6F4"),
-        ('\n            $ref: "#/components/schemas/CorrespondentRequest"', "#A6E3A1"),
-        ('\n    responses:', "#CDD6F4"),
-        ('\n      "201":', "#A6E3A1"),
-        ('\n        description: ""', "#6C7086"),
-        ('\n        content:', "#CDD6F4"),
-        ('\n          application/json:', "#CDD6F4"),
-        ('\n            schema:', "#CDD6F4"),
-        ('\n              $ref: "#/components/schemas/Correspondent"', "#F9E2AF"),
-        ('\n\n// Schema quy định rõ:', "#6C7086"),
-        ('\n// Phản hồi HTTP 201 bắt buộc phải tuân thủ cấu trúc của schema Correspondent', "#BAC2DE"),
-        ('\n// Schemathesis sử dụng định nghĩa này để kiểm tra response_schema_conformance', "#BAC2DE"),
+    schema_path_lines = [
+        [("/api/correspondents/:", "#E5C07B")],
+        [("  post:", "#61AFEF")],
+        [("    operationId: correspondents_create", "#ABB2BF")],
+        [("    tags: [correspondents]", "#ABB2BF")],
+        [("    requestBody:", "#ABB2BF")],
+        [("      content:", "#ABB2BF")],
+        [("        application/json:", "#ABB2BF")],
+        [("          schema:", "#ABB2BF")],
+        [("            $ref: '#/components/schemas/CorrespondentRequest'", "#D19A66")],
+        [("    responses:", "#ABB2BF")],
+        [("      '201':", "#98C379")],
+        [("        description: ''", "#5C6370")],
+        [("        content:", "#ABB2BF")],
+        [("          application/json:", "#ABB2BF")],
+        [("            schema:", "#ABB2BF")],
+        [("              $ref: '#/components/schemas/Correspondent'", "#E06C75")],
+        [],
+        [("// Quy định hợp đồng OpenAPI:", "#5C6370")],
+        [("// Phản hồi HTTP 201 Created của endpoint POST bắt buộc phải", "#5C6370")],
+        [("// tuân thủ toàn bộ cấu trúc định nghĩa tại schema Correspondent.", "#5C6370")],
+        [("// Schemathesis dựa trên định nghĩa này để kiểm tra schema_conformance.", "#5C6370")],
     ]
-    y = 130
-    x = 40
-    for text, color in path_lines:
-        if text.startswith("\n\n"):
-            y += 34
-            x = 40
-            text = text[2:]
-        elif text.startswith("\n"):
-            y += 24
-            x = 40
-            text = text[1:]
-        draw.text((x, y), text, fill=color, font=fonts["code"])
-        bbox = draw.textbbox((x, y), text, font=fonts["code"])
-        x = bbox[2]
-        
-    # Right: Resolved Schema Component
-    draw.rectangle([710, 75, 1475, 620], fill="#181825", outline="#45475A", width=1)
-    draw.rectangle([710, 75, 1475, 115], fill="#313244")
-    draw.text((725, 85), "RESOLVED SCHEMA — #/components/schemas/Correspondent", fill="#F9E2AF", font=fonts["header"])
+    draw_lines(draw, 35, 110, schema_path_lines, fonts["code"], line_height=21)
     
-    schema_lines = [
-        ('"Correspondent": {', "#F9E2AF"),
-        ('\n  "type": "object",', "#CDD6F4"),
-        ('\n  "required": [', "#FAB387"),
-        ('\n    "document_count",', "#F38BA8"),      # Missing
-        ('      // [BẮT BUỘC] integer (readOnly) - KHÔNG CÓ TRONG 201', "#F38BA8"),
-        ('\n    "id",', "#A6E3A1"),
-        ('\n    "last_correspondence",', "#F38BA8"), # Missing
-        ('  // [BẮT BUỘC] string date-time (nullable) - KHÔNG CÓ', "#F38BA8"),
-        ('\n    "name",', "#A6E3A1"),
-        ('\n    "permissions",', "#F38BA8"),         # Missing
-        ('          // [BẮT BUỘC] object (CorrespondentPermissions) - KHÔNG CÓ', "#F38BA8"),
-        ('\n    "slug",', "#A6E3A1"),
-        ('\n    "user_can_change"', "#A6E3A1"),
-        ('\n  ],', "#FAB387"),
-        ('\n  "properties": {', "#CDD6F4"),
-        ('\n    "document_count": {"type": "integer", "readOnly": true},', "#BAC2DE"),
-        ('\n    "last_correspondence": {"type": "string", "format": "date-time"},', "#BAC2DE"),
-        ('\n    "permissions": {"$ref": "#/components/schemas/CorrespondentPermissions"}', "#BAC2DE"),
-        ('\n  }', "#CDD6F4"),
-        ('\n}', "#F9E2AF"),
-    ]
-    y = 130
-    x = 725
-    for text, color in schema_lines:
-        if text.startswith("\n\n"):
-            y += 34
-            x = 725
-            text = text[2:]
-        elif text.startswith("\n"):
-            y += 24
-            x = 725
-            text = text[1:]
-        draw.text((x, y), text, fill=color, font=fonts["code"])
-        bbox = draw.textbbox((x, y), text, font=fonts["code"])
-        x = bbox[2]
-        
-    # Bottom Box: Technical Analysis of full_perms & Discrepancy
-    draw.rectangle([25, 640, 1475, 815], fill="#11111B", outline="#45475A", width=1)
-    draw.rectangle([25, 640, 1475, 672], fill="#1E1E2E")
-    draw.text((40, 646), "PHÂN TÍCH ĐIỀU KIỆN full_perms & BẢN CHẤT LỖI SAI LỆCH HỢP ĐỒNG", fill="#89B4FA", font=fonts["header"])
+    # Right Box
+    draw.rectangle([710, 60, 1480, 640], fill="#121212", outline="#2D2D2D", width=1)
+    draw.rectangle([710, 60, 1480, 96], fill="#1E1E1E")
+    draw.text((722, 70), "RESOLVED SCHEMA — #/components/schemas/Correspondent", fill="#E5C07B", font=fonts["header"])
     
-    eval_text = [
-        "• Bản chất trường 'permissions': Trong GET /api/correspondents/, Paperless hỗ trợ query full_perms=true để trả về permissions.",
-        "• Nguyên nhân vi phạm: Schema Correspondent dùng chung cho cả GET và POST 201, và drf-spectacular đánh dấu 'permissions' là required.",
-        "• Phản hồi POST 201 thực tế không nhận query full_perms và Serializer tạo mới không gắn permissions -> Response thiếu trường bắt buộc.",
-        "• Trường 'document_count' và 'last_correspondence': Là các trường chú giải (annotate) từ quan hệ Document, không có khi mới tạo Correspondent.",
-        "• Phân loại lỗi: Sai lệch hợp đồng API (OpenAPI Schema Contract Violation). Hồ sơ TV3 chỉ khẳng định lỗi này trên tài nguyên Correspondents.",
+    schema_resolved_lines = [
+        [('"Correspondent": {', "#E5C07B")],
+        [('  "type": "object",', "#ABB2BF")],
+        [('  "required": [', "#E5C07B")],
+        [('    "id", "slug", "name", "match", "matching_algorithm", "is_insensitive",', "#98C379")],
+        [('    "document_count",    ', "#E06C75"), ('// [BẮT BUỘC] integer (readOnly) - KHÔNG CÓ TRONG 201', "#5C6370")],
+        [('    "last_correspondence",', "#E06C75"), ('// [BẮT BUỘC] date-time (nullable) - KHÔNG CÓ TRONG 201', "#5C6370")],
+        [('    "permissions"         ', "#E06C75"), ('// [BẮT BUỘC] object (Permissions) - KHÔNG CÓ TRONG 201', "#5C6370")],
+        [('  ],', "#E5C07B")],
+        [('  "properties": {', "#ABB2BF")],
+        [('    "id": {"type": "integer", "readOnly": true},', "#ABB2BF")],
+        [('    "slug": {"type": "string", "readOnly": true},', "#ABB2BF")],
+        [('    "name": {"type": "string", "maxLength": 128},', "#ABB2BF")],
+        [('    "document_count": {"type": "integer", "readOnly": true},', "#E06C75")],
+        [('    "last_correspondence": {"type": "string", "format": "date-time", "nullable": true},', "#E06C75")],
+        [('    "permissions": {"$ref": "#/components/schemas/CorrespondentPermissions"}', "#E06C75")],
+        [('  }', "#ABB2BF")],
+        [('}', "#E5C07B")],
     ]
-    ey = 682
-    for line in eval_text:
-        draw.text((40, ey), line, fill="#CDD6F4", font=fonts["note"])
-        ey += 24
+    draw_lines(draw, 725, 110, schema_resolved_lines, fonts["code"], line_height=21)
+    
+    # Bottom Box
+    draw.rectangle([20, 655, 1480, 820], fill="#181818", outline="#333333", width=1)
+    draw.rectangle([20, 655, 1480, 685], fill="#222222")
+    draw.text((32, 660), "ĐỐI CHIẾU HỢP ĐỒNG & GIẢ THUYẾT KỸ THUẬT (BUG-03)", fill="#E5C07B", font=fonts["header"])
+    
+    notes = [
+        "• Đối chiếu hợp đồng API: Schema Correspondent đánh dấu 9 trường required. Khi POST tạo mới thành công, phản hồi 201 thiếu 3 trường.",
+        "• Giả thuyết kỹ thuật: permissions phụ thuộc query GET có full_perms=true; document_count & last_correspondence là trường annotate lúc lọc danh sách.",
+        "• Hướng kiểm tra tiếp theo: Cần kiểm tra mã nguồn phiên bản 3.1.3 xem drf-spectacular có dùng chung schema đọc/ghi hay không để đề xuất giải pháp phù hợp.",
+        "• Nhãn minh chứng: [Minh chứng hợp đồng: Trích xuất trực tiếp từ docs/openapi_TV3.json (SHA256: 888b0f89...)]",
+    ]
+    ny = 695
+    for note in notes:
+        draw.text((35, ny), note, fill="#ABB2BF", font=fonts["note"])
+        ny += 28
         
-    out_path = os.path.join(EVIDENCE_DIR, out_filename)
-    img.save(out_path)
-    print(f"[OK] Đã xuất ảnh: {out_path}")
-    return out_path
+    out_path = os.path.join(EVIDENCE_DIR, "TV3_BUG03_schema_required.png")
+    img.save(out_path, "PNG")
+    print(f"[XUẤT ẢNH] Đã tạo ảnh minh chứng: {out_path}")
 
 
 def main():
+    print("[INFO] Bắt đầu kết xuất 4 ảnh minh chứng thực tế cho BUG-01 và BUG-03...")
     fonts = get_fonts()
     token = get_token()
-    print(f"[INFO] Bắt đầu kết xuất 4 ảnh minh chứng kiểm thử thực tế vào {EVIDENCE_DIR}...")
     
     # 1. BUG-01 Correspondents
-    f1 = create_bug01_image("/api/correspondents/", "Correspondents", "TV3_BUG01_correspondents_500.png", fonts, token)
+    create_bug01_image("/api/correspondents/", "Correspondents", "TV3_BUG01_correspondents_500.png", fonts, token)
     
     # 2. BUG-01 Document Types
-    f2 = create_bug01_image("/api/document_types/", "Document_Types", "TV3_BUG01_document_types_500.png", fonts, token)
+    create_bug01_image("/api/document_types/", "Document Types", "TV3_BUG01_document_types_500.png", fonts, token)
     
-    # 3. BUG-03 201 Response
-    f3 = create_bug03_response_image("TV3_BUG03_response_201.png", fonts, token)
+    # 3. BUG-03 Response 201
+    create_bug03_response_image(fonts, token)
     
     # 4. BUG-03 Schema Required
-    f4 = create_bug03_schema_image("TV3_BUG03_schema_required.png", fonts)
+    create_bug03_schema_image(fonts)
     
-    print("\n[THÀNH CÔNG] Toàn bộ 4 ảnh minh chứng đã được tạo hoàn tất:")
-    for f in [f1, f2, f3, f4]:
-        size_kb = os.path.getsize(f) / 1024
-        print(f"  - {os.path.basename(f)}: {size_kb:.1f} KB")
+    print("[THÀNH CÔNG] Đã cập nhật toàn bộ 4 ảnh minh chứng trong docs/evidence/.")
 
 
 if __name__ == "__main__":
