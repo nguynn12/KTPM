@@ -21,7 +21,11 @@ media/
 export/
 pgdata/
 redisdata/
+consume/
 *.log
+
+# Cache của Schemathesis (sinh khi chạy st run)
+.schemathesis/
 
 # API tokens / result tokens phải không commit
 results/*.token

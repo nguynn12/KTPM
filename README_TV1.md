@@ -11,7 +11,8 @@ Nhóm: 5 người, môn Kiểm thử phần mềm, Trường Đại học Đà L
 | 3 luồng nghiệp vụ chạy được (kèm lệnh API) | `docs/BUSINESS_FLOWS_TV1.md` |
 | Bộ seed chung 6 PDF + script tạo metadata | `docs/SEED_DATA_TV1.md`, `scripts/sample_docs/TV1_Sample_*.pdf` |
 | Pin tag / commit SHA / phiên bản công cụ | `docs/PINNED_VERSION_TV1.md`, `docker/docker-compose.pinned.yml` |
-| Kết quả chạy thật + biên bản dựng hệ thống | `results/TV1_deploy_13-10.md`, `results/TV1_seed101_mau.md` |
+| Kết quả chạy thật (3 vòng seed 101) + báo cáo lỗi | `results/TV1_ketqua_seed101.md`, `docs/bugs/BUG-04.md` → `BUG-06.md` |
+| Biên bản dựng hệ thống | `results/TV1_deploy_13-10.md` |
 | Kiểm tra môi trường trước khi cài | `scripts/check_env_TV1.ps1`, `scripts/check_env_TV1.sh` |
 | Ảnh bằng chứng (tự chụp) | `docs/evidence/` |
 
@@ -45,16 +46,22 @@ D:\KTPM/
 │   ├── SEED_DATA_TV1.md           (TV1: mô tả bộ seed chung)
 │   ├── FILL_IN.md                 (TV2: file tổng hợp số liệu thực tế)
 │   ├── ARCHITECTURE_NOTES.md, TEST_CASES.md, PRESENTATION_NOTES.md,
-│   │   DEFENSE_CHEAT_SHEET.md, TODO_TV2.md, bugs/BUG-0{1,2,3}.md   (TV2)
+│   │   DEFENSE_CHEAT_SHEET.md, TODO_TV2.md                        (TV2)
+│   ├── bugs/BUG-0{1,2,3}.md      (TV2: lỗi của nhóm, TV1 không sửa)
+│   ├── bugs/BUG-0{4,5,6}.md      (TV1: lỗi do TV1 phát hiện, seed 101)
 │   └── evidence/                  (TV1: ảnh bằng chứng TV1_*.png)
 ├── results/
 │   ├── TV1_deploy_13-10.md        (TV1: biên bản dựng hệ thống 13/10)
-│   ├── TV1_seed101_mau.md         (TV1: mẫu bảng kết quả seed 101)
+│   ├── TV1_ketqua_seed101.md      (TV1: bảng kết quả thật 3 vòng + phân loại lỗi)
+│   ├── TV1_round{1,2,3}_seed101.{log,xml,ndjson}  (TV1: log, JUnit, NDJSON thô)
+│   ├── TV1_round{1,2,3}_seed101_summary.md        (TV1: tóm tắt tự động mỗi vòng)
 │   └── TV2_round{1,2,3}_seed202*  (TV2: log 3 vòng Schemathesis)
 └── scripts/
     ├── check_env_TV1.ps1, check_env_TV1.sh          (TV1)
     ├── generate_sample_pdfs_TV1.py/.ps1             (TV1: sinh lại 6 PDF)
     ├── seed_and_verify_flows_TV1.py                 (TV1: tạo tag/corr/doctype)
+    ├── prepare_baseline_TV1.py                      (TV1: reset + seed + xác nhận baseline)
+    ├── run_round_TV1.py, run_round_TV1.ps1          (TV1: chạy từng vòng Schemathesis, seed 101)
     ├── sample_docs/TV1_Sample_0*.pdf                (TV1: 6 PDF mẫu, seed 101)
     ├── sample_docs/TV2_Sample_*.txt                 (TV2)
     └── seed_data.py, reset_data.py, reset_system.ps1, run_manual_tests.py   (TV2)
@@ -77,8 +84,12 @@ D:\KTPM/
 4. `docker compose up -d` → chờ 3 container `webserver/db/broker` Up.
 5. Tạo admin: `docker compose run --rm webserver createsuperuser` (hoặc để hệ thống tự tạo từ `.env`).
 6. Kiểm tra http://localhost:8000 + Swagger http://localhost:8000/api/schema/view/.
-7. Seed: `cp scripts/sample_docs/TV1_Sample_*.pdf consume/` rồi `python3 scripts/seed_and_verify_flows_TV1.py`.
-8. Cài Schemathesis: `pip install "schemathesis==4.30.1"`.
+7. Dựng lại dữ liệu seed (quy trình nhóm: reset → seed → xác nhận baseline):
+   `.\.venv\Scripts\python.exe scripts\prepare_baseline_TV1.py`
+8. Cài Schemathesis: cần **Python 3.11–3.13** (Python 3.15 hiện lỗi build `pyyaml`) →
+   `py -3.13 -m venv .venv` rồi `.\.venv\Scripts\python.exe -m pip install "schemathesis==4.30.1"`.
+9. Chạy 3 vòng seed 101: `.\.venv\Scripts\python.exe scripts\run_round_TV1.py --round 1|2|3`
+   (chạy lại bước 7 trước vòng 2 và vòng 3 vì fuzzing có tạo/xoá dữ liệu).
 
 Chi tiết từng bước (kèm xử lý sự cố): `docs/ONBOARDING_TV1.md`.
 

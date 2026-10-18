@@ -142,13 +142,59 @@ Script dùng chung của nhóm: `scripts/reset_system.ps1` (script duy nhất đ
 
 ## 10. Cài Schemathesis (bản nhóm dùng chung)
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate      # Windows (WSL): vẫn lệnh này; PowerShell: .venv\Scripts\activate
-pip install "schemathesis==4.30.1"
-schemathesis --version         # phải ra 4.30.1 trên cả 5 máy
-schemathesis run --help | head -50   # đọc kỹ: tên option khác nhau giữa bản 3 và 4 (TV3 chốt lệnh chuẩn)
+**Phải dùng Python 3.11–3.13.** Python 3.14/3.15 hiện chưa có wheel của `pyyaml` (phụ thuộc của
+Schemathesis) nên `pip` sẽ cố tự biên dịch và báo `Microsoft Visual C++ 14.0 or greater is required`.
+Trên máy TV1 đã gặp đúng lỗi này với Python 3.15 → cài thêm Python 3.13
+(`winget install -e --id Python.Python.3.13`) rồi tạo venv bằng `py -3.13`.
+
+```powershell
+py -3.13 -m venv .venv                                   # PowerShell (Windows)
+.\.venv\Scripts\python.exe -m pip install "schemathesis==4.30.1"
+.\.venv\Scripts\schemathesis.exe --version               # phải ra 4.30.1 trên cả 5 máy
+.\.venv\Scripts\schemathesis.exe run --help              # đọc kỹ trước khi chạy
 ```
+
+```bash
+# WSL / Ubuntu / macOS
+python3 -m venv .venv && source .venv/bin/activate
+pip install "schemathesis==4.30.1" && schemathesis --version
+```
+
+### Chạy 3 vòng (seed 101) bằng runner của TV1
+
+`scripts/run_round_TV1.py` dùng đúng phạm vi/checks của nhóm, tự lấy token (không in ra màn hình),
+tự làm sạch token trong log, và ghi kết quả vào `results/`.
+
+Trước mỗi vòng, dựng lại dữ liệu seed theo quy trình nhóm (reset → seed → xác nhận baseline) — vòng 2 và
+vòng 3 có method thay đổi dữ liệu nên bắt buộc phải làm lại bước này:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\prepare_baseline_TV1.py
+```
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\run_round_TV1.ps1 -Round 1
+powershell -ExecutionPolicy Bypass -File scripts\run_round_TV1.ps1 -Round 2
+powershell -ExecutionPolicy Bypass -File scripts\run_round_TV1.ps1 -Round 3
+```
+
+Mỗi vòng sinh 4 file: `results/TV1_round<N>_seed101.log`, `.xml` (JUnit), `.ndjson` (sự kiện thô)
+và `_summary.md` (bảng số liệu đọc từ chính các file đó) — đúng quy ước tên file của nhóm (giống TV2/TV3).
+
+Phạm vi từng vòng và **cách lọc đúng** của Schemathesis 4.30.1 (đã đo thực nghiệm, không đoán):
+
+| Vòng | Lọc | Số operation |
+|---|---|---|
+| 1 | `--include-path-regex '^/api/(tags\|correspondents\|document_types\|documents)/'` + lặp `--exclude-method` cho POST, PUT, PATCH, DELETE | 19 |
+| 2 | `--include-path-regex '^/api/(tags\|correspondents\|document_types)/'` | 18 |
+| 3 | `--include-path-regex '^/api/(tags\|correspondents\|document_types\|documents)/'` | 53 |
+
+> **Cẩn thận:** nhiều cờ `--include-*` bị Schemathesis ghép **OR**, nên
+> `--include-path-regex X --include-method GET` **không** cho ra "chỉ GET trong X" mà là
+> "X ∪ toàn bộ GET của cả schema" (đo được: 53 ∪ 65 = 99 operation — đúng bằng con số 99 mà
+> `docs/CLI_STANDARD_TV3.md` ghi cho vòng 1). `--exclude-method` cũng chỉ nhận **một** giá trị mỗi cờ,
+> truyền danh sách CSV vào một cờ sẽ không có tác dụng; phải lặp cờ.
+> Nhờ vậy runner tự đếm lại operation từ `/api/schema/` và so với NDJSON để phát hiện lọc sai.
 
 ## 11. Lệnh hay dùng
 
@@ -173,6 +219,7 @@ schemathesis run --help | head -50   # đọc kỹ: tên option khác nhau giữ
 | Token 400/403, 401 khi gọi API | Sai username/password, thiếu header | Lấy lại token (mục 6), header đúng dạng `Authorization: Token <token>` |
 | `webserver` restart liên tục | `.env` sai hoặc DB chưa sẵn sàng | `docker compose logs webserver`, chờ thêm 2 phút |
 | Lệnh `set_password` / `create_api_token` báo `Unknown command` | Hai lệnh này không tồn tại trong Paperless-ngx | Dùng mục 5–6 ở trên |
+| `pip install schemathesis` lỗi build `pyyaml`, báo `Microsoft Visual C++ 14.0 or greater is required` | Python quá mới (3.14/3.15) chưa có wheel `pyyaml` | Cài Python 3.11–3.13 rồi tạo venv bằng bản đó: `py -3.13 -m venv .venv` |
 | WSL hết dung lượng | Image + volume phình | `docker system prune -a --volumes` (xóa hết rồi làm lại từ bước 5) |
 
 ## 13. Checklist TV1
@@ -184,4 +231,5 @@ schemathesis run --help | head -50   # đọc kỹ: tên option khác nhau giữ
 - [x] Hướng dẫn 3 luồng nghiệp vụ (`docs/BUSINESS_FLOWS_TV1.md`)
 - [x] Dựng thành công trên máy TV1 (13/10/2026) + biên bản `results/TV1_deploy_13-10.md`
 - [ ] Chụp ảnh bằng chứng và lưu vào `docs/evidence/`
-- [ ] Chạy Vòng 1–3 với seed 101, điền `results/TV1_seed101_mau.md`
+- [x] Chạy Vòng 1–3 với seed 101, điền `results/TV1_ketqua_seed101.md` (18/10/2026: 19/18/53 operation; 20/58/136 lỗi khác nhau)
+- [x] Báo cáo lỗi do TV1 phát hiện: `docs/bugs/BUG-04.md` (500 khi `{id}` không phải số), `BUG-05.md`, `BUG-06.md`

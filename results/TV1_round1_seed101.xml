@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites errors="0" failures="16" skipped="0" tests="19" time="8.419114">
+  <testsuite name="schemathesis" hostname="MSI" errors="0" failures="16" skipped="0" tests="19" time="8.419114">
+    <testcase name="GET /api/documents/next_asn/" time="2.412513" />
+    <testcase name="GET /api/correspondents/" time="0.129057">
+      <failure type="failure">1. Test Case ID: HRip4b
+
+- Response violates schema
+
+    "last_correspondence" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Correspondent:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "last_correspondence",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 1,
+            "id": 4,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "Dien Luc Da Lat",
+            "owner": 2,
+            "slug": "dien-luc-da-lat",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"count":2,"next":null,"previous":null,"results":[{"id":4,"slug":"dien-luc-da-lat","name":"Dien Luc Da Lat","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":1,"owner":2,"user_can_change":true},{"id":5,"slug":"phong-ke-toan","name":"Phong Ke Toan","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":0,"owner":2,"user_can_change":true}]}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/correspondents/</failure>
+    </testcase>
+    <testcase name="GET /api/correspondents/{id}/" time="0.102487">
+      <failure type="failure">1. Test Case ID: oC5H53
+
+- Response violates schema
+
+    "permissions" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Correspondent:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "last_correspondence",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 1,
+            "id": 4,
+            "is_insensitive": true,
+            "last_correspondence": "2026-10-18",
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "Dien Luc Da Lat",
+            "owner": 2,
+            "slug": "dien-luc-da-lat",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"id":4,"slug":"dien-luc-da-lat","name":"Dien Luc Da Lat","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":1,"last_correspondence":"2026-10-18","owner":2,"user_can_change":true}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/correspondents/4/</failure>
+    </testcase>
+    <testcase name="GET /api/document_types/" time="0.084993">
+      <failure type="failure">1. Test Case ID: Ymv9RX
+
+- Response violates schema
+
+    "permissions" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/DocumentType:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+                },
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 0,
+            "id": 5,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "Bao cao",
+            "owner": 2,
+            "slug": "bao-cao",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"count":2,"next":null,"previous":null,"results":[{"id":5,"slug":"bao-cao","name":"Bao cao","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":0,"owner":2,"user_can_change":true},{"id":4,"slug":"hoa-don","name":"Hoa don","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":1,"owner":2,"user_can_change":true}]}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/document_types/</failure>
+    </testcase>
+    <testcase name="GET /api/document_types/{id}/" time="0.090266">
+      <failure type="failure">1. Test Case ID: q5ofu9
+
+- Response violates schema
+
+    "permissions" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/DocumentType:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+                },
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 0,
+            "id": 5,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "Bao cao",
+            "owner": 2,
+            "slug": "bao-cao",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"id":5,"slug":"bao-cao","name":"Bao cao","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":0,"owner":2,"user_can_change":true}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/document_types/5/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/" time="0.144075">
+      <failure type="failure">1. Test Case ID: OEOM4f
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `Error listing search results, check logs for more detail.`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/documents/?document_type__name__iendswith=%F2%B7%B7%9D%222%C3%8A&amp;correspondent__name__iendswith=&amp;created__date__lte=2026-10-18&amp;created__gt=2026-10-18&amp;shared_by__id=false&amp;custom_fields__id__in=-5807&amp;document_type__isnull=false&amp;query=%C3%A5&amp;original_filename__iexact=%17O%C2%9E%F3%B0%BC%8B%C3%8A%C3%BA%C2%BE%C3%9E%C3%AA+%C2%A0&amp;added__date__lte=2026-10-18&amp;full_perms=false'</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/" time="0.098535">
+      <failure type="failure">1. Test Case ID: rPbTVD
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200, 400
+
+[404] Not Found:
+
+    `{"detail":"No Document matches the given query."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/1/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/ai_suggestions/" time="0.166599">
+      <failure type="failure">1. Test Case ID: lvjTJ0
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/true/ai_suggestions/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/download/" time="0.148008">
+      <failure type="failure">1. Test Case ID: sGzLlM
+
+- Undocumented Content-Type
+
+    Received: application/pdf
+    Documented: application/json
+
+[200] OK:
+
+    `%PDF-1.4
+    1 0 obj
+    &lt;&lt; /Type /Catalog /Pages 2 0 R &gt;&gt;
+    endobj
+    2 0 obj
+    &lt;&lt; /Type /Pages /Kids [3 0 R] /Count 1 &gt;&gt;
+    endobj
+    3 0 obj
+    &lt;&lt; /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources &lt;&lt; /Font &lt;&lt; /F1 5 0 R &gt;&gt; &gt;&gt; &gt;&gt;
+    endobj
+    4 0 obj
+    &lt;&lt; /Length 139 &gt;&gt;
+    stream
+    BT /F1 14 Tf 72 720 Td 80 TL (Hoa don tien dien thang 9/2026 - Dien Luc Da Lat - So tien: 452.300 VND - Han thanh toan: 15/10/2026.) Tj ET
+    endstream
+    endobj
+    5 0 obj
+    &lt;&lt; /Type /Font /Subtype /Type1 /BaseFont /Helvetica &gt;&gt;
+    endobj
+    xref
+    0 6
+    000 // Output truncated...`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/1/download/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/history/" time="1.831089" />
+    <testcase name="GET /api/documents/{id}/metadata/" time="0.781322">
+      <failure type="failure">1. Test Case ID: g910DV
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/%CA%87%C7%9D%C9%AF%C9%90%20%CA%87%E1%B4%89s%20%C9%B9olop%20%C9%AFnsd%E1%B4%89%20%C9%AF%C7%9D%C9%B9o%CB%A5/metadata/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/notes/" time="1.784514" />
+    <testcase name="GET /api/documents/{id}/preview/" time="0.096302">
+      <failure type="failure">1. Test Case ID: U8kyfe
+
+- Undocumented Content-Type
+
+    Received: application/pdf
+    Documented: application/json
+
+[200] OK:
+
+    `%PDF-1.4
+    1 0 obj
+    &lt;&lt; /Type /Catalog /Pages 2 0 R &gt;&gt;
+    endobj
+    2 0 obj
+    &lt;&lt; /Type /Pages /Kids [3 0 R] /Count 1 &gt;&gt;
+    endobj
+    3 0 obj
+    &lt;&lt; /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources &lt;&lt; /Font &lt;&lt; /F1 5 0 R &gt;&gt; &gt;&gt; &gt;&gt;
+    endobj
+    4 0 obj
+    &lt;&lt; /Length 139 &gt;&gt;
+    stream
+    BT /F1 14 Tf 72 720 Td 80 TL (Hoa don tien dien thang 9/2026 - Dien Luc Da Lat - So tien: 452.300 VND - Han thanh toan: 15/10/2026.) Tj ET
+    endstream
+    endobj
+    5 0 obj
+    &lt;&lt; /Type /Font /Subtype /Type1 /BaseFont /Helvetica &gt;&gt;
+    endobj
+    xref
+    0 6
+    000 // Output truncated...`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/1/preview/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/root/" time="0.082950">
+      <failure type="failure">1. Test Case ID: HHghXV
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/41/root/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/share_links/" time="0.066148">
+      <failure type="failure">1. Test Case ID: ZKaq22
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/%F1%96%B3%9F%2A%F1%8A%96%AF%F1%80%87%B5/share_links/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/suggestions/" time="0.088113">
+      <failure type="failure">1. Test Case ID: jnKr5Q
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/%C3%95%C3%9FB1%1A2/suggestions/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/thumb/" time="0.079808">
+      <failure type="failure">1. Test Case ID: A9mtyD
+
+- Undocumented Content-Type
+
+    Received: image/webp
+    Documented: application/json
+
+[200] OK:
+
+    &lt;BINARY&gt;
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/1/thumb/</failure>
+    </testcase>
+    <testcase name="GET /api/tags/" time="0.123678">
+      <failure type="failure">1. Test Case ID: zmI3rZ
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Invalid page."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/tags/?%F0%AB%A6%97%F0%A4%9F%B3=%C2%8E%C3%BAY&amp;%F0%AB%A6%97%F0%A4%9F%B3=d%16%C2%A9%3FBHw%0E1%F3%AE%8D%AERPsC%C3%A5%09%2Bj%F1%85%9C%BB%21%F3%B2%A4%A0&amp;%F0%AB%A6%97%F0%A4%9F%B3=7%C2%A8%C2%B0%C2%87.%1A2%5E%C2%9A%3B%C2%8B&amp;%C2%8F=%C3%AD%C2%AFM&amp;%C2%8F=%C3%91%C3%A2%C2%A4%C2%9A%C2%B4~%C3%84V%C3%88%F2%82%B0%B7%F3%A5%85%91%C2%B2%C3%B93X%C2%8Ef%C2%A1%C3%BF&amp;%C2%8F=%F1%BB%A6%AF&amp;full_perms=false&amp;page=-44661&amp;name__iexact=%C2%94y%2B%0D9%C3%A6lw%F0%9A%8E%97%C2%9B%C2%AE&amp;name__iendswith=X&amp;%15%F3%A4%AE%98%C2%92+Xk%15%C3%A0%1C%C2%B9%F2%96%A0%AF=%C2%B5%F2%96%9D%A2%C3%97%F3%AE%9D%81%F3%81%81%88&amp;%15%F3%A4%AE%98%C2%92+Xk%15%C3%A0%1C%C2%B9%F2%96%A0%AF=&amp;%15%F3%A4%AE%98%C2%92+Xk%15%C3%A0%1C%C2%B9%F2%96%A0%AF=o'</failure>
+    </testcase>
+    <testcase name="GET /api/tags/{id}/" time="0.108657">
+      <failure type="failure">1. Test Case ID: yTZzye
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"No Tag matches the given query."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/tags/1/?full_perms=true'</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
