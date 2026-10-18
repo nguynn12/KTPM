@@ -42,7 +42,9 @@ docker compose version    # kỳ vọng: Docker Compose version v2+
 ## 3. Lấy file compose đã pin (không dùng script install mặc định)
 
 Script `install-paperless-ngx.sh` của hãng kéo `main`/`latest` nên nhóm **không** dùng.
-Dùng bộ file đã pin sẵn trong repo này:
+Dùng bộ file đã pin sẵn trong repo này (`docker/docker-compose.pinned.yml` là bản sao
+`docker-compose.yml` của nhóm, chỉ thêm dòng `env_file: docker-compose.env` để tách
+phần cấu hình Paperless ra riêng):
 
 ```bash
 git clone https://github.com/nguynn12/KTPM.git ktpm && cd ktpm
