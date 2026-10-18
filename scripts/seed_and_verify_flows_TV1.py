@@ -2,7 +2,7 @@
 """Tạo metadata seed giống nhau trên mọi máy qua REST API — TV1.
 Chạy sau khi đã upload 6 PDF seed:
   pip install requests
-  python3 seed/seed_api.py --base-url http://localhost:8000 --username ADMIN --password MAT_KHAU
+  python3 scripts/seed_and_verify_flows_TV1.py --base-url http://localhost:8000 --username ADMIN --password MAT_KHAU
 """
 import argparse
 import sys

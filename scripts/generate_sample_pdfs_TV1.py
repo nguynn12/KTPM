@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """Sinh lại 6 PDF seed tối giản (PDF 1.4, text ASCII) — TV1.
-Chạy: python3 seed/generate_seed.py  (ghi vào cùng thư mục seed/)
+Chạy: python3 scripts/generate_sample_pdfs_TV1.py  (ghi vào scripts/sample_docs/)
 Không cần thư viện ngoài.
 """
 from pathlib import Path
 
 DOCS = [
-    ("seed_01_hoa_don_dien.pdf", "Hoa don tien dien thang 9/2026 - Dien Luc Da Lat - So tien: 452.300 VND - Han thanh toan: 15/10/2026."),
-    ("seed_02_hop_dong_dich_vu.pdf", "Hop dong dich vu ve sinh van phong - So HD: DV-2026-041 - Thoi han: 12 thang - Ben cung cap: Cong ty Sach Dep."),
-    ("seed_03_bao_cao_tuan.pdf", "Bao cao tuan 41 - Nhom KTPM - Hoan thanh: cai dat moi truong, upload tai lieu mau - Tuan toi: chay Schemathesis vong 1."),
-    ("seed_04_bien_ban_hop.pdf", "Bien ban hop nhom ngay 10/10/2026 - Noi dung: chot tag v3.2.1, phan cong 5 thanh vien, lap repo Git chung."),
-    ("seed_05_phieu_thu.pdf", "Phieu thu so PT-118 - Nguoi nop: Nguyen Van A - So tien: 2.000.000 VND - Ly do: tam ung van phong pham."),
-    ("seed_06_huong_dan_scan.pdf", "Huong dan scan tai lieu - Dinh dang: PDF, toi thieu 300 DPI - Dat ten file theo mau: YYYY-MM-DD-noi-dung.pdf."),
+    ("TV1_Sample_01_HoaDon_101.pdf", "Hoa don tien dien thang 9/2026 - Dien Luc Da Lat - So tien: 452.300 VND - Han thanh toan: 15/10/2026."),
+    ("TV1_Sample_02_HopDong_101.pdf", "Hop dong dich vu ve sinh van phong - So HD: DV-2026-041 - Thoi han: 12 thang - Ben cung cap: Cong ty Sach Dep."),
+    ("TV1_Sample_03_BaoCao_101.pdf", "Bao cao tuan 41 - Nhom KTPM - Hoan thanh: cai dat moi truong, upload tai lieu mau - Tuan toi: chay Schemathesis vong 1."),
+    ("TV1_Sample_04_BienBanHop_101.pdf", "Bien ban hop nhom ngay 10/10/2026 - Noi dung: chot tag v3.1.3, phan cong 5 thanh vien, lap repo Git chung."),
+    ("TV1_Sample_05_PhieuThu_101.pdf", "Phieu thu so PT-118 - Nguoi nop: Nguyen Van A - So tien: 2.000.000 VND - Ly do: tam ung van phong pham."),
+    ("TV1_Sample_06_HuongDanScan_101.pdf", "Huong dan scan tai lieu - Dinh dang: PDF, toi thieu 300 DPI - Dat ten file theo mau: YYYY-MM-DD-noi-dung.pdf."),
 ]
 
 def make_pdf(text: str) -> bytes:
@@ -40,7 +40,7 @@ def make_pdf(text: str) -> bytes:
     return bytes(out)
 
 def main() -> None:
-    dest = Path(__file__).parent
+    dest = Path(__file__).parent / "sample_docs"
     for name, text in DOCS:
         (dest / name).write_bytes(make_pdf(text))
         print(f"wrote {name} ({(dest / name).stat().st_size} bytes)")

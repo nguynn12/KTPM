@@ -7,7 +7,7 @@
 
 **Thao tác UI:**
 1. Đăng nhập http://localhost:8000 → Dashboard.
-2. Kéo-thả `seed/seed_01_hoa_don_dien.pdf` vào Dashboard.
+2. Kéo-thả `scripts/sample_docs/TV1_Sample_01_HoaDon_101.pdf` vào Dashboard.
 3. Đợi 30–90 s → mở tài liệu → tab **Content** hiện đúng câu
    "Hoa don tien dien thang 9/2026 …" → OCR thành công.
 4. Chụp ảnh: màn hình danh sách + nội dung Content.
@@ -16,7 +16,7 @@
 ```bash
 curl -s -X POST http://localhost:8000/api/documents/post_document/ \
   -H "Authorization: Token $TOKEN" \
-  -F "document=@seed/seed_01_hoa_don_dien.pdf" | head -c 300
+  -F "document=@scripts/sample_docs/TV1_Sample_01_HoaDon_101.pdf" | head -c 300
 # kỳ vọng: 200/201, trả về task id; sau ~60s GET /api/documents/ thấy tài liệu mới
 ```
 
@@ -28,7 +28,7 @@ curl -s -X POST http://localhost:8000/api/documents/post_document/ \
 3. Mở tài liệu ở Luồng 1 → gán tag `hoa-don` + correspondent → Save.
 4. Chụp ảnh: trang edit hiển thị tag + correspondent đã gán.
 
-**Tương đương API (cũng là cách `seed_api.py` làm):**
+**Tương đương API (cũng là cách `scripts/seed_and_verify_flows_TV1.py` làm):**
 ```bash
 curl -s -X POST http://localhost:8000/api/tags/ \
   -H "Authorization: Token $TOKEN" -H "Content-Type: application/json" \

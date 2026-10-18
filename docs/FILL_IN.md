@@ -8,13 +8,13 @@
 
 | Thành phần | Thông tin / Phiên bản trích xuất thực tế | Lệnh kiểm tra thực tế |
 |---|---|---|
-| **Hệ điều hành (OS)** | Windows 11 + WSL2 (Ubuntu) | `scripts/check_env.ps1`, `docs/TV1_Onboarding.md` |
+| **Hệ điều hành (OS)** | Windows 11 + WSL2 (Ubuntu) | `scripts/check_env_TV1.ps1`, `docs/ONBOARDING_TV1.md` |
 | **Docker Engine** | `Docker version 29.8.0, build 88096ef` | `docker --version` |
 | **Docker Compose** | `Docker Compose version v5.5.1` | `docker compose version` |
 | **Python (Host)** | `Python 3.15.0` | `python --version` |
 | **Schemathesis** | **Chưa cài** (`schemathesis: command not found`) | `schemathesis --version` |
-| **Tag Paperless-ngx (pin)** | `v3.1.3` | `PINNED-VERSIONS.md` |
-| **Commit SHA Paperless-ngx (pin)** | `d48663e9ebaadc4b413a6ca3bc88cb5fbc4e468e` | `PINNED-VERSIONS.md` |
+| **Tag Paperless-ngx (pin)** | `v3.1.3` | `docs/PINNED_VERSION_TV1.md` |
+| **Commit SHA Paperless-ngx (pin)** | `d48663e9ebaadc4b413a6ca3bc88cb5fbc4e468e` | `docs/PINNED_VERSION_TV1.md` |
 | **Tag Image Docker (`docker-compose.pinned.yml`)** | • `broker`: `docker.io/valkey/valkey:9-alpine`<br>• `db`: `docker.io/library/postgres:18`<br>• `webserver`: `ghcr.io/paperless-ngx/paperless-ngx:3.1.3` | Đọc trực tiếp từ file `docker/docker-compose.pinned.yml` |
 | **Tên các Container** | `webserver`, `db`, `broker` | `docker compose ps` (theo `docker-compose.pinned.yml`) |
 | **Port** | `8000` → http://localhost:8000 | `docker-compose.pinned.yml` |
@@ -34,7 +34,7 @@
 | **Số test case sinh ra** | Chưa có dữ liệu |
 | **Số test thất bại** | Chưa có dữ liệu |
 | **Thời gian chạy** | Chưa có dữ liệu |
-| **File mẫu** | `results/TV1_101_mau.md` (mẫu để điền sau khi chạy thật) |
+| **File mẫu** | `results/TV1_seed101_mau.md` (mẫu để điền sau khi chạy thật) |
 | **File triển khai thật** | `results/TV1_deploy_13-10.md` (biên bản dựng hệ thống + 3 luồng nghiệp vụ, đã chạy) |
 
 ---
@@ -115,6 +115,6 @@ Agent không thể và không được phép tạo tự động các nội dung 
 
 4. **Chạy thực tế Schemathesis (seed 101):**
    - [ ] Cài `pip install "schemathesis==4.30.1"`.
-   - [ ] Chạy Vòng 1, Vòng 2, Vòng 3 theo `docs/TV1_Onboarding.md`.
-   - [ ] Điền số liệu thật vào `results/TV1_101_<ngày>.md` (mẫu hiện tại là `results/TV1_101_mau.md`).
+   - [ ] Chạy Vòng 1, Vòng 2, Vòng 3 theo `docs/ONBOARDING_TV1.md`.
+   - [ ] Điền số liệu thật vào `results/TV1_101_<ngày>.md` (mẫu hiện tại là `results/TV1_seed101_mau.md`).
    - [ ] Ghi file `docs/bugs/BUG-xx.md` cho mỗi lỗi phát hiện (nếu có).
