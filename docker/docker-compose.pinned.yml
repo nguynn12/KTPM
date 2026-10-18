@@ -1,0 +1,47 @@
+# Pinned compose — Paperless-ngx v3.1.3 (TV1)
+# Nguồn: docker-compose.yml của nhóm (đã kiểm chứng thực tế TV1 ngày 13/10)
+# (commit d48663e9ebaadc4b413a6ca3bc88cb5fbc4e468e).
+# Thay đổi duy nhất so với file gốc: image pin :3.1.3 thay vì :latest.
+# Cách dùng: cp docker/docker-compose.pinned.yml docker-compose.yml
+
+services:
+  broker:
+    image: docker.io/valkey/valkey:9-alpine
+    restart: unless-stopped
+    volumes:
+      - redisdata:/data
+
+  db:
+    image: docker.io/library/postgres:18
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql
+    environment:
+      POSTGRES_DB: paperless
+      POSTGRES_USER: paperless
+      POSTGRES_PASSWORD: paperless
+
+  webserver:
+    image: ghcr.io/paperless-ngx/paperless-ngx:3.1.3
+    restart: unless-stopped
+    depends_on:
+      - db
+      - broker
+    ports:
+      - "8000:8000"
+    volumes:
+      - data:/usr/src/paperless/data
+      - media:/usr/src/paperless/media
+      - ./export:/usr/src/paperless/export
+      - ./consume:/usr/src/paperless/consume
+    env_file: docker-compose.env
+    environment:
+      PAPERLESS_REDIS: redis://broker:6379
+      PAPERLESS_DBHOST: db
+      PAPERLESS_DBENGINE: postgresql
+
+volumes:
+  data:
+  media:
+  pgdata:
+  redisdata:
