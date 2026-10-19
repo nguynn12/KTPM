@@ -22,3 +22,6 @@ export/
 pgdata/
 redisdata/
 *.log
+*.docx
+~$*.docx
+*.bak

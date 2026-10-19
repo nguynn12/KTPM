@@ -22,23 +22,31 @@
 
 ## 2. Kết quả kiểm thử Schemathesis (trích xuất từ `results/`)
 
-### Vòng 1: Chỉ kiểm tra phương thức GET (`TV2_round1_seed202.*`)
-- **Vòng kiểm thử:** Vòng 1 (GET-only baseline test)
+### Vòng 1: Chỉ kiểm tra phương thức GET trên 4 nhóm tài nguyên (`TV2_round1_seed202.*`)
+- **Vòng kiểm thử:** Vòng 1 (GET-only chuẩn hóa trên 4 nhóm tài nguyên `tags`, `correspondents`, `document_types`, `documents`)
 - **Seed:** `202`
-- **Lệnh đã chạy (đã lọc Token):**
+- **Lệnh chuẩn hóa đã chạy (đã lọc Token):**
   - *Lệnh ghi nhận trong ndjson:*
     ```bash
-    st run http://webserver:8000/api/schema/ --include-method GET --seed 202 --max-examples 25 -H Authorization: [Filtered] --report junit,ndjson --report-junit-path /results/TV2_round1_seed202_junit.xml --report-ndjson-path /results/TV2_round1_seed202.ndjson --no-color
+    st run http://webserver:8000/api/schema/ --url http://webserver:8000 --include-path-regex ^/api/(tags|correspondents|document_types|documents)/ --seed 202 --max-examples 25 --workers 1 --mode all -H "Authorization: Token [Filtered]" --report junit,ndjson --report-junit-path /results/TV2_round1_seed202_junit.xml --report-ndjson-path /results/TV2_round1_seed202.ndjson --output-sanitize true --no-color --exclude-method POST --exclude-method PUT --exclude-method PATCH --exclude-method DELETE --phases examples,fuzzing --checks not_a_server_error,status_code_conformance,content_type_conformance,response_headers_conformance,response_schema_conformance
     ```
   - *Lệnh Docker run thực tế:*
     ```bash
-    docker run --rm -v ${PWD}/results:/results --network ktpm_default schemathesis/schemathesis:latest run http://webserver:8000/api/schema/ --include-method GET --seed 202 --max-examples 25 -H "Authorization: Token [FILTERED]" --report junit,ndjson --report-junit-path /results/TV2_round1_seed202_junit.xml --report-ndjson-path /results/TV2_round1_seed202.ndjson --no-color
+    docker run --rm -v ${PWD}/results:/results --network ktpm_default schemathesis/schemathesis:latest run http://webserver:8000/api/schema/ --url http://webserver:8000 --include-path-regex "^/api/(tags|correspondents|document_types|documents)/" --seed 202 --max-examples 25 --workers 1 --mode all -H "Authorization: Token [FILTERED]" --report junit,ndjson --report-junit-path /results/TV2_round1_seed202_junit.xml --report-ndjson-path /results/TV2_round1_seed202.ndjson --output-sanitize true --no-color --exclude-method POST --exclude-method PUT --exclude-method PATCH --exclude-method DELETE --phases examples,fuzzing --checks not_a_server_error,status_code_conformance,content_type_conformance,response_headers_conformance,response_schema_conformance
     ```
-- **Số endpoint/operation được test:** `65/163` operations được chọn và kiểm thử (Đạt 39.8% Schema Operation Coverage).
-- **Số test case sinh ra:** `2517` test cases sinh ra (`176` skipped).
-- **Số test thất bại:** `97` test cases phát hiện `121` lỗi riêng biệt (unique failures).
-  - *Chi tiết lỗi do công cụ in ra:* Server error: 13, Response violates schema: 10, API accepted schema-violating request: 13, API rejected schema-compliant request: 13, Invalid Allow header: 1, Undocumented Content-Type: 4, Undocumented HTTP status code: 66, Unsupported methods: 1.
-- **Thời gian chạy:** `183.35s` (xấp xỉ 3 phút 3 giây).
+- **Số endpoint/operation được test:** `19/163` operations được chọn và kiểm thử (Đạt 11.6% Schema Operation Coverage — hoàn toàn đồng nhất với chuẩn 19 operation của nhóm).
+- **Số test case sinh ra:** `159` test cases sinh ra (0 skipped).
+- **Số test thất bại:** `14` test cases phát hiện `16` lỗi riêng biệt (unique failures).
+  - *Chi tiết lỗi do công cụ in ra:* Server error: 2, Response violates schema: 4, Undocumented Content-Type: 4, Undocumented HTTP status code: 6.
+  - *Lỗi quan trọng xác nhận:*
+    - `GET /api/documents/?content__iendswith=...` → `HTTP 500 Server Error`
+    - `GET /api/documents/{id}/share_links/` với `{id}` chuỗi → `HTTP 500 Server Error` (BUG-04)
+    - `GET /api/document_types/{id}/` → Response vi phạm Schema thiếu `permissions` (BUG-06)
+- **Thời gian chạy:** `31.85s`.
+
+> [!NOTE]
+> **Lần chạy thăm dò mở rộng trước đó (`results/TV2_round1_seed202_thamdo.*`):**
+> Lần chạy đầu tiên do chưa thêm cờ `--include-path-regex` nên công cụ đã quét toàn bộ 65 operation GET trên toàn hệ thống Paperless-ngx (sinh ra 2517 test case, 97 test phát hiện 121 lỗi, thời gian 183.35s). Lần chạy này được lưu lại với hậu tố `_thamdo` để làm minh chứng khảo sát mở rộng, không dùng để so sánh ngang hàng với các thành viên khác.
 
 ---
 
