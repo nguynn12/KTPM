@@ -130,6 +130,22 @@ def create_document():
         r_cap.font.size = Pt(10)
         r_cap.font.italic = True
 
+    doc.add_heading("1.4. Sơ đồ quan hệ dữ liệu cốt lõi (Hình 2 - ER Diagram)", level=2).runs[0].font.name = "Times New Roman"
+    p_erd_desc = doc.add_paragraph()
+    p_erd_desc.add_run("Dưới đây là sơ đồ quan hệ thực thể (ERD) giữa 4 tài nguyên trọng tâm (Document, Tag, Correspondent, DocumentType) và bảng người dùng User được trích xuất trực tiếp từ models.py:\n").font.name = "Times New Roman"
+
+    erd_img_path = "docs/images/so_do_quan_he_du_lieu.png"
+    if os.path.exists(erd_img_path):
+        p_erd_pic = doc.add_paragraph()
+        p_erd_pic.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p_erd_pic.add_run().add_picture(erd_img_path, width=Inches(6.5))
+        p_erd_cap = doc.add_paragraph()
+        p_erd_cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        r_erd_cap = p_erd_cap.add_run("Hình 2: Sơ đồ quan hệ dữ liệu (ER Diagram) giữa các thực thể trong Paperless-ngx")
+        r_erd_cap.font.name = "Times New Roman"
+        r_erd_cap.font.size = Pt(10)
+        r_erd_cap.font.italic = True
+
     p2.add_run("• Lấy Auth Token qua API:\n")
     
     code_token = doc.add_paragraph()

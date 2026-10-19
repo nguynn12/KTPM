@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" style="background:#ffffff; font-family:'Segoe UI', Arial, sans-serif;">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#1d4ed8"/>
+    </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#0d9488"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#d97706"/>
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#7c3aed"/>
+    </marker>
+  </defs>
+
+  <!-- BACKGROUND & HEADER -->
+  <rect x="0" y="0" width="1200" height="800" fill="#f8fafc"/>
+  <rect x="0" y="0" width="1200" height="65" fill="#1e293b"/>
+  <text x="600" y="30" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="bold">
+    HÌNH 2: SƠ ĐỒ QUAN HỆ DỮ LIỆU CỐT LÕI (ER DIAGRAM) PAPERLESS-NGX
+  </text>
+  <text x="600" y="52" text-anchor="middle" fill="#94a3b8" font-size="12">
+    Căn cứ từ src/documents/models.py (v3.1.3) · 4 Thực thể API trọng tâm: Document, Tag, Correspondent, DocumentType
+  </text>
+
+  <!-- ==================== ENTITY: USER (auth_user) ==================== -->
+  <g transform="translate(475, 80)" filter="url(#shadow)">
+    <rect x="0" y="0" width="250" height="130" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.8"/>
+    <rect x="0" y="0" width="250" height="32" rx="8" fill="#334155"/>
+    <text x="125" y="21" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">User (auth_user)</text>
+    <text x="15" y="52" fill="#b91c1c" font-size="11" font-weight="bold">[PK] id : int</text>
+    <text x="15" y="70" fill="#334155" font-size="11">• username : varchar(150)</text>
+    <text x="15" y="88" fill="#334155" font-size="11">• email : varchar(254)</text>
+    <text x="15" y="106" fill="#334155" font-size="11">• is_superuser : boolean</text>
+    <text x="15" y="122" fill="#334155" font-size="11">• is_active : boolean</text>
+  </g>
+
+  <!-- ==================== ENTITY: DOCUMENT (documents_document) ==================== -->
+  <g transform="translate(460, 260)" filter="url(#shadow)">
+    <rect x="0" y="0" width="280" height="280" rx="8" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+    <rect x="0" y="0" width="280" height="35" rx="8" fill="#1d4ed8"/>
+    <text x="140" y="22" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="bold">Document (Trung tâm)</text>
+    <text x="15" y="56" fill="#b91c1c" font-size="11" font-weight="bold">[PK] id : int</text>
+    <text x="15" y="75" fill="#334155" font-size="11">• title : varchar(128)</text>
+    <text x="15" y="94" fill="#334155" font-size="11">• content : text (Nội dung OCR)</text>
+    <text x="15" y="113" fill="#334155" font-size="11">• created : date (Ngày văn bản)</text>
+    <text x="15" y="132" fill="#334155" font-size="11">• modified : datetime</text>
+    <text x="15" y="151" fill="#334155" font-size="11">• added : datetime</text>
+    <text x="15" y="170" fill="#334155" font-size="11">• checksum : varchar(32) (MD5)</text>
+    <text x="15" y="189" fill="#334155" font-size="11">• mime_type : varchar(256)</text>
+    <text x="15" y="212" fill="#0d9488" font-size="11" font-weight="bold">[FK] correspondent_id : int (null)</text>
+    <text x="15" y="232" fill="#d97706" font-size="11" font-weight="bold">[FK] document_type_id : int (null)</text>
+    <text x="15" y="252" fill="#334155" font-size="11" font-weight="bold">[FK] owner_id : int (null)</text>
+  </g>
+
+  <!-- ==================== ENTITY: CORRESPONDENT ==================== -->
+  <g transform="translate(60, 260)" filter="url(#shadow)">
+    <rect x="0" y="0" width="270" height="230" rx="8" fill="#ffffff" stroke="#0d9488" stroke-width="2"/>
+    <rect x="0" y="0" width="270" height="35" rx="8" fill="#0d9488"/>
+    <text x="135" y="22" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="bold">Correspondent (Người gửi)</text>
+    <text x="15" y="56" fill="#b91c1c" font-size="11" font-weight="bold">[PK] id : int</text>
+    <text x="15" y="75" fill="#334155" font-size="11">• name : varchar(128) (Bắt buộc)</text>
+    <text x="15" y="94" fill="#334155" font-size="11">• slug : slug (Tự sinh)</text>
+    <text x="15" y="113" fill="#334155" font-size="11">• match : varchar(256)</text>
+    <text x="15" y="132" fill="#334155" font-size="11">• matching_algorithm : int (0..6)</text>
+    <text x="15" y="151" fill="#334155" font-size="11">• is_insensitive : boolean</text>
+    <text x="15" y="174" fill="#334155" font-size="11" font-weight="bold">[FK] owner_id : int</text>
+    <rect x="15" y="190" width="240" height="25" rx="4" fill="#f0fdfa"/>
+    <text x="135" y="206" text-anchor="middle" fill="#0f766e" font-size="10" font-weight="bold">Kế thừa MatchingModel</text>
+  </g>
+
+  <!-- ==================== ENTITY: DOCUMENT TYPE ==================== -->
+  <g transform="translate(870, 260)" filter="url(#shadow)">
+    <rect x="0" y="0" width="270" height="230" rx="8" fill="#ffffff" stroke="#d97706" stroke-width="2"/>
+    <rect x="0" y="0" width="270" height="35" rx="8" fill="#d97706"/>
+    <text x="135" y="22" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="bold">DocumentType (Loại tài liệu)</text>
+    <text x="15" y="56" fill="#b91c1c" font-size="11" font-weight="bold">[PK] id : int</text>
+    <text x="15" y="75" fill="#334155" font-size="11">• name : varchar(128) (Bắt buộc)</text>
+    <text x="15" y="94" fill="#334155" font-size="11">• slug : slug (Tự sinh)</text>
+    <text x="15" y="113" fill="#334155" font-size="11">• match : varchar(256)</text>
+    <text x="15" y="132" fill="#334155" font-size="11">• matching_algorithm : int (0..6)</text>
+    <text x="15" y="151" fill="#334155" font-size="11">• is_insensitive : boolean</text>
+    <text x="15" y="174" fill="#334155" font-size="11" font-weight="bold">[FK] owner_id : int</text>
+    <rect x="15" y="190" width="240" height="25" rx="4" fill="#fffbeb"/>
+    <text x="135" y="206" text-anchor="middle" fill="#b45309" font-size="10" font-weight="bold">Kế thừa MatchingModel</text>
+  </g>
+
+  <!-- ==================== ENTITY: TAG ==================== -->
+  <g transform="translate(60, 520)" filter="url(#shadow)">
+    <rect x="0" y="0" width="270" height="255" rx="8" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/>
+    <rect x="0" y="0" width="270" height="35" rx="8" fill="#7c3aed"/>
+    <text x="135" y="22" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="bold">Tag (Nhãn phân loại)</text>
+    <text x="15" y="56" fill="#b91c1c" font-size="11" font-weight="bold">[PK] id : int</text>
+    <text x="15" y="75" fill="#334155" font-size="11">• name : varchar(128) (Bắt buộc)</text>
+    <text x="15" y="94" fill="#334155" font-size="11">• color : varchar(7) (HEX #rrggbb)</text>
+    <text x="15" y="113" fill="#334155" font-size="11">• match : varchar(256)</text>
+    <text x="15" y="132" fill="#334155" font-size="11">• matching_algorithm : int (0..6)</text>
+    <text x="15" y="151" fill="#334155" font-size="11">• is_insensitive : boolean</text>
+    <text x="15" y="170" fill="#334155" font-size="11">• is_inbox_tag : boolean</text>
+    <text x="15" y="192" fill="#7c3aed" font-size="11" font-weight="bold">[FK] parent_id : int (đệ quy &lt;= 5)</text>
+    <text x="15" y="210" fill="#334155" font-size="11" font-weight="bold">[FK] owner_id : int</text>
+    <rect x="15" y="222" width="240" height="23" rx="4" fill="#faf5ff"/>
+    <text x="135" y="238" text-anchor="middle" fill="#6b21a8" font-size="10" font-weight="bold">MatchingModel + TreeNode</text>
+  </g>
+
+  <!-- ==================== ENTITY: DOCUMENT_TAGS (N:M) ==================== -->
+  <g transform="translate(460, 580)" filter="url(#shadow)">
+    <rect x="0" y="0" width="280" height="140" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.8"/>
+    <rect x="0" y="0" width="280" height="30" rx="8" fill="#475569"/>
+    <text x="140" y="20" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">documents_document_tags (N:M)</text>
+    <text x="15" y="52" fill="#b91c1c" font-size="11" font-weight="bold">[PK] id : int</text>
+    <text x="15" y="74" fill="#1d4ed8" font-size="11" font-weight="bold">[FK] document_id : int</text>
+    <text x="15" y="96" fill="#7c3aed" font-size="11" font-weight="bold">[FK] tag_id : int</text>
+    <text x="15" y="120" fill="#334155" font-size="10" font-style="italic">Ràng buộc: Unique(document_id, tag_id)</text>
+  </g>
+
+  <!-- ==================== HỘP GIẢI THÍCH NGUYÊN TẮC ==================== -->
+  <g transform="translate(870, 520)" filter="url(#shadow)">
+    <rect x="0" y="0" width="270" height="255" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+    <rect x="0" y="0" width="270" height="32" rx="8" fill="#334155"/>
+    <text x="135" y="21" text-anchor="middle" fill="#ffffff" font-size="11.5" font-weight="bold">QUY TẮC RÀNG BUỘC CHÍNH</text>
+    
+    <text x="15" y="55" fill="#1d4ed8" font-size="11" font-weight="bold">1. Quan hệ 1 : Nhiều (1:N):</text>
+    <text x="15" y="72" fill="#475569" font-size="10">• 1 Correspondent gửi N Documents</text>
+    <text x="15" y="88" fill="#475569" font-size="10">• 1 DocumentType phân loại N Docs</text>
+
+    <text x="15" y="112" fill="#7c3aed" font-size="11" font-weight="bold">2. Quan hệ Nhiều : Nhiều (N:M):</text>
+    <text x="15" y="129" fill="#475569" font-size="10">• 1 Document gắn nhiều Tags</text>
+    <text x="15" y="145" fill="#475569" font-size="10">• 1 Tag gắn cho nhiều Documents</text>
+
+    <text x="15" y="169" fill="#0d9488" font-size="11" font-weight="bold">3. Đệ quy phân cấp cây (Tree):</text>
+    <text x="15" y="186" fill="#475569" font-size="10">• Tag lồng nhau tối đa 5 cấp</text>
+
+    <text x="15" y="210" fill="#b91c1c" font-size="11" font-weight="bold">4. Ràng buộc duy nhất:</text>
+    <text x="15" y="227" fill="#475569" font-size="10">• UniqueConstraint(name, owner)</text>
+    <text x="15" y="243" fill="#475569" font-size="10">• Độ dài max_length name: 128 ký tự</text>
+  </g>
+
+  <!-- ==================== ĐƯỜNG KẾT NỐI (RELATIONSHIPS) ==================== -->
+  <!-- User -> Document -->
+  <path d="M 600 210 L 600 260" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+  <rect x="605" y="225" width="80" height="20" rx="3" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="645" y="239" text-anchor="middle" fill="#334155" font-size="9" font-weight="bold">owns (1 : N)</text>
+
+  <!-- Correspondent -> Document -->
+  <path d="M 330 375 L 460 375" fill="none" stroke="#0d9488" stroke-width="2.5" marker-end="url(#arrow-teal)"/>
+  <rect x="355" y="360" width="85" height="20" rx="4" fill="#f0fdfa" stroke="#5eead4"/>
+  <text x="397" y="374" text-anchor="middle" fill="#0f766e" font-size="10" font-weight="bold">sender of (1:N)</text>
+
+  <!-- DocumentType -> Document -->
+  <path d="M 870 375 L 740 375" fill="none" stroke="#d97706" stroke-width="2.5" marker-end="url(#arrow-amber)"/>
+  <rect x="765" y="360" width="95" height="20" rx="4" fill="#fffbeb" stroke="#fcd34d"/>
+  <text x="812" y="374" text-anchor="middle" fill="#b45309" font-size="10" font-weight="bold">categorizes (1:N)</text>
+
+  <!-- Document -> Document_Tags -->
+  <path d="M 600 540 L 600 580" fill="none" stroke="#1d4ed8" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+
+  <!-- Tag -> Document_Tags -->
+  <path d="M 330 650 L 460 650" fill="none" stroke="#7c3aed" stroke-width="2.5" marker-end="url(#arrow-purple)"/>
+  <rect x="360" y="635" width="70" height="20" rx="4" fill="#faf5ff" stroke="#d8b4fe"/>
+  <text x="395" y="649" text-anchor="middle" fill="#6b21a8" font-size="10" font-weight="bold">tagged with</text>
+
+  <!-- Tag self-referencing (Parent) -->
+  <path d="M 60 650 C 15 650, 15 720, 60 720" fill="none" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow-purple)"/>
+  <rect x="18" y="675" width="70" height="18" rx="3" fill="#ffffff" stroke="#d8b4fe"/>
+  <text x="53" y="687" text-anchor="middle" fill="#6b21a8" font-size="8" font-weight="bold">parent of</text>
+
+</svg>
