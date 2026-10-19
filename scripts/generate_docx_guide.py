@@ -113,6 +113,23 @@ def create_document():
     p2.add_run("http://localhost:8000 (Tài khoản: admin / Mật khẩu: admin)\n")
     p2.add_run("• Tài liệu OpenAPI Schema (Swagger UI): ").bold = True
     p2.add_run("http://localhost:8000/api/schema/swagger-ui/\n")
+
+    doc.add_heading("1.3. Sơ đồ kiến trúc container hệ thống Paperless-ngx (Hình 1)", level=2).runs[0].font.name = "Times New Roman"
+    p_img_desc = doc.add_paragraph()
+    p_img_desc.add_run("Dưới đây là sơ đồ chi tiết kiến trúc các container trong môi trường Docker Compose (gồm 3 services: webserver, database postgres, và message broker redis) cùng các phân vùng lưu trữ persistent volumes:\n").font.name = "Times New Roman"
+
+    img_path = "docs/images/so_do_kien_truc_container.png"
+    if os.path.exists(img_path):
+        p_pic = doc.add_paragraph()
+        p_pic.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p_pic.add_run().add_picture(img_path, width=Inches(6.5))
+        p_cap = doc.add_paragraph()
+        p_cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        r_cap = p_cap.add_run("Hình 1: Sơ đồ kiến trúc container hệ thống Paperless-ngx v3.1.3")
+        r_cap.font.name = "Times New Roman"
+        r_cap.font.size = Pt(10)
+        r_cap.font.italic = True
+
     p2.add_run("• Lấy Auth Token qua API:\n")
     
     code_token = doc.add_paragraph()
