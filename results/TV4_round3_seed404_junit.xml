@@ -1,0 +1,2629 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites errors="0" failures="53" skipped="0" tests="54" time="86.149800">
+  <testsuite name="schemathesis" hostname="DESKTOP-F7KVP28" errors="0" failures="53" skipped="0" tests="54" time="86.149800">
+    <testcase name="POST /api/correspondents/" time="0.827591">
+      <failure type="failure">1. Test Case ID: Tu3gVl
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 201
+
+[400] Bad Request:
+
+    `{"name":["This field is required."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/correspondents/</failure>
+      <failure type="failure">1. Test Case ID: zVWPux
+
+- Response violates schema
+
+    "document_count" is a required property
+
+    Validated against the response schema for status code 201.
+
+    Schema at /components/schemas/Correspondent:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "last_correspondence",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "id": 4,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "0",
+            "owner": 2,
+            "slug": "0",
+            "user_can_change": true
+        }
+
+[201] Created:
+
+    `{"id":4,"slug":"0","name":"0","match":"","matching_algorithm":1,"is_insensitive":true,"owner":2,"user_can_change":true}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{"name": "0"}' http://localhost:8000/api/correspondents/</failure>
+    </testcase>
+    <testcase name="POST /api/document_types/" time="0.374650">
+      <failure type="failure">1. Test Case ID: SUbbQ5
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 201
+
+[400] Bad Request:
+
+    `{"name":["This field is required."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/document_types/</failure>
+      <failure type="failure">1. Test Case ID: UOtHtb
+
+- Response violates schema
+
+    "document_count" is a required property
+
+    Validated against the response schema for status code 201.
+
+    Schema at /components/schemas/DocumentType:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+                },
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "id": 4,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "0",
+            "owner": 2,
+            "slug": "0",
+            "user_can_change": true
+        }
+
+[201] Created:
+
+    `{"id":4,"slug":"0","name":"0","match":"","matching_algorithm":1,"is_insensitive":true,"owner":2,"user_can_change":true}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{"name": "0"}' http://localhost:8000/api/document_types/</failure>
+    </testcase>
+    <testcase name="POST /api/documents/bulk_download/" time="0.518926">
+      <failure type="failure">1. Test Case ID: SMsAdc
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200, 403
+
+[400] Bad Request:
+
+    `{"follow_formatting":["Must be a valid boolean."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -H 'Cookie: [Filtered]' -d '{"documents": [], "all": false, "filters": {}, "content": "archive", "compression": "none", "follow_formatting": {}}' http://localhost:8000/api/documents/bulk_download/</failure>
+      <failure type="failure">1. Test Case ID: iN6eWV
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+
+[400] Bad Request:
+
+    `{"non_field_errors":["documents is required unless all is true."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{}' http://localhost:8000/api/documents/bulk_download/</failure>
+    </testcase>
+    <testcase name="POST /api/documents/bulk_edit/" time="0.096914">
+      <failure type="failure">1. Test Case ID: yRQ4QC
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"method":["This field is required."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/bulk_edit/</failure>
+      <failure type="failure">1. Test Case ID: UmoTYe
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+
+[400] Bad Request:
+
+    `{"non_field_errors":["documents is required unless all is true."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{"method": "merge"}' http://localhost:8000/api/documents/bulk_edit/</failure>
+    </testcase>
+    <testcase name="POST /api/documents/delete/" time="0.521138">
+      <failure type="failure">1. Test Case ID: BBF5VE
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"filters":["Expected a dictionary of items but got type \"list\"."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -H 'Cookie: [Filtered]' -d '{"documents": [], "all": false, "filters": [null, null]}' http://localhost:8000/api/documents/delete/</failure>
+      <failure type="failure">1. Test Case ID: jd9Tkg
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+
+[400] Bad Request:
+
+    `{"non_field_errors":["documents is required unless all is true."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{}' http://localhost:8000/api/documents/delete/</failure>
+    </testcase>
+    <testcase name="POST /api/documents/edit_pdf/" time="0.100958">
+      <failure type="failure">1. Test Case ID: kd8UeP
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"documents":["This field is required."],"operations":["This field is required."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/edit_pdf/</failure>
+      <failure type="failure">1. Test Case ID: rpkpS9
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{"documents": [], "operations": []}' http://localhost:8000/api/documents/edit_pdf/</failure>
+    </testcase>
+    <testcase name="POST /api/documents/email/" time="1.944330">
+      <failure type="failure">1. Test Case ID: fTLqMP
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+
+[400] Bad Request:
+
+    `{"documents":["This field is required."],"addresses":["Invalid email address: 0"]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' -H 'Content-Type: multipart/form-data; boundary=2dc6a16fd82663c8201e56fda43ec3bf' -d $'--2dc6a16fd82663c8201e56fda43ec3bf\r\nContent-Disposition: form-data; name="addresses"\r\n\r\n0\r\n--2dc6a16fd82663c8201e56fda43ec3bf\r\nContent-Disposition: form-data; name="subject"\r\n\r\n0\r\n--2dc6a16fd82663c8201e56fda43ec3bf\r\nContent-Disposition: form-data; name="message"\r\n\r\n0\r\n--2dc6a16fd82663c8201e56fda43ec3bf\r\nContent-Disposition: form-data; name="use_archive_version"\r\n\r\nfalse\r\n--2dc6a16fd82663c8201e56fda43ec3bf--\r\n' http://localhost:8000/api/documents/email/
+
+    ⚠️  Request body contains non-printable characters. Actual value: b'--2dc6a16fd82663c8201e56fda43ec3bf\r\nContent-Disposition: form-data; name="addresses"\r\n\r\n0\r\n--2dc6a16fd82663c8201e56fda43ec3bf\r\nContent-Disposition: form-data; name="subject"\r\n\r\n0\r\n--2dc6a16fd82663c8201e56fda43ec3bf\r\nContent-Disposition: form-data; name="message"\r\n\r\n0\r\n--2dc6a16fd82663c8201e56fda43ec3bf\r\nContent-Disposition: form-data; name="use_archive_version"\r\n\r\nfalse\r\n--2dc6a16fd82663c8201e56fda43ec3bf--\r\n'</failure>
+    </testcase>
+    <testcase name="POST /api/documents/merge/" time="0.422530">
+      <failure type="failure">1. Test Case ID: gprH9T
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"documents":["This field is required."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/merge/</failure>
+    </testcase>
+    <testcase name="POST /api/documents/merge_as_versions/" time="0.094033">
+      <failure type="failure">1. Test Case ID: f9kvsB
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"documents":["This field is required."],"root_document_id":["This field is required."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/merge_as_versions/</failure>
+      <failure type="failure">1. Test Case ID: SAA6SO
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+
+[400] Bad Request:
+
+    `{"non_field_errors":["At least two documents are required."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{"documents": [], "root_document_id": 0}' http://localhost:8000/api/documents/merge_as_versions/</failure>
+    </testcase>
+    <testcase name="POST /api/documents/post_document/" time="0.453671">
+      <failure type="failure">1. Test Case ID: Kq9vJs
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"document":["No file was submitted."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/post_document/</failure>
+    </testcase>
+    <testcase name="POST /api/documents/remove_password/" time="0.403409">
+      <failure type="failure">1. Test Case ID: UpKaOx
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"documents":["This field is required."],"password":["This field is required."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/remove_password/</failure>
+    </testcase>
+    <testcase name="POST /api/documents/reprocess/" time="0.493754">
+      <failure type="failure">1. Test Case ID: wdDJBE
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"remote_ocr":["Must be a valid boolean."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -H 'Cookie: [Filtered]' -d '{"documents": [], "all": false, "filters": {}, "remote_ocr": {}}' http://localhost:8000/api/documents/reprocess/</failure>
+      <failure type="failure">1. Test Case ID: oBULJ2
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+
+[400] Bad Request:
+
+    `{"non_field_errors":["documents is required unless all is true."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{}' http://localhost:8000/api/documents/reprocess/</failure>
+    </testcase>
+    <testcase name="POST /api/documents/rotate/" time="0.093336">
+      <failure type="failure">1. Test Case ID: UJHtuS
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"degrees":["This field is required."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/rotate/</failure>
+      <failure type="failure">1. Test Case ID: VENWRe
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+
+[400] Bad Request:
+
+    `{"non_field_errors":["documents is required unless all is true."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{"degrees": 0}' http://localhost:8000/api/documents/rotate/</failure>
+    </testcase>
+    <testcase name="POST /api/documents/selection_data/" time="0.088095">
+      <failure type="failure">1. Test Case ID: V4g8SF
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"documents":["This field is required."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/selection_data/</failure>
+      <failure type="failure">1. Test Case ID: YLnR5I
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+
+[400] Bad Request:
+
+    `{"documents":["This field is required."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: multipart/form-data; boundary=c637e12e2b1a998d80d1b087531af51c' -d $'--c637e12e2b1a998d80d1b087531af51c--\r\n' http://localhost:8000/api/documents/selection_data/
+
+    ⚠️  Request body contains non-printable characters. Actual value: b'--c637e12e2b1a998d80d1b087531af51c--\r\n'</failure>
+    </testcase>
+    <testcase name="POST /api/tags/" time="0.396723">
+      <failure type="failure">1. Test Case ID: RqzNMv
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 201
+
+[400] Bad Request:
+
+    `{"name":["This field is required."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/tags/</failure>
+      <failure type="failure">1. Test Case ID: TSpora
+
+- Response violates schema
+
+    "document_count" is a required property
+
+    Validated against the response schema for status code 201.
+
+    Schema at /components/schemas/Tag:
+
+        {
+            "required": [
+                "children",
+                "document_count",
+                "id",
+                "name",
+                "slug",
+                "text_color",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "children": [],
+            "color": "#a6cee3",
+            "id": 5,
+            "is_inbox_tag": false,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "0",
+            "owner": 2,
+            "parent": null,
+            "slug": "0",
+            "text_color": "#000000",
+            "user_can_change": true
+        }
+
+[201] Created:
+
+    `{"id":5,"slug":"0","name":"0","color":"#a6cee3","text_color":"#000000","match":"","matching_algorithm":1,"is_insensitive":true,"is_inbox_tag":false,"owner":2,"user_can_change":true,"parent":null,"children":[]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{"name": "0"}' http://localhost:8000/api/tags/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/next_asn/" time="0.753051" />
+    <testcase name="POST /api/documents/chat/" time="0.101986">
+      <failure type="failure">1. Test Case ID: leZ3Wl
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `AI is required for this feature`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/chat/</failure>
+      <failure type="failure">1. Test Case ID: Mnc1UY
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+
+[400] Bad Request:
+
+    `AI is required for this feature`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{"q": "0"}' http://localhost:8000/api/documents/chat/</failure>
+    </testcase>
+    <testcase name="POST /api/documents/{id}/email/" time="0.150033">
+      <failure type="failure">1. Test Case ID: gVFUPG
+
+- Server error
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/0/email/</failure>
+    </testcase>
+    <testcase name="POST /api/documents/{id}/notes/" time="3.274908">
+      <failure type="failure">1. Test Case ID: m1Ucmz
+
+- Server error
+
+- Unsupported methods
+
+    Unsupported method TRACE returned 500, expected 405 Method Not Allowed
+
+    Return 405 for methods not listed in the OpenAPI spec
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X TRACE -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -H 'Cookie: [Filtered]' -d '{"note": "0"}' 'http://localhost:8000/api/documents/0/notes/?id=0'</failure>
+    </testcase>
+    <testcase name="POST /api/documents/{id}/update_version/" time="0.512102">
+      <failure type="failure">1. Test Case ID: epT6f8
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"document":["No file was submitted."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/0/update_version/</failure>
+    </testcase>
+    <testcase name="PUT /api/correspondents/{id}/" time="0.382497">
+      <failure type="failure">1. Test Case ID: CDllGv
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"No Correspondent matches the given query."}`
+
+Reproduce with:
+
+    curl -X PUT -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/correspondents/0/</failure>
+      <failure type="failure">1. Test Case ID: 4W56SJ
+
+- Response violates schema
+
+    "last_correspondence" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Correspondent:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "last_correspondence",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 0,
+            "id": 4,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "0",
+            "owner": null,
+            "slug": "0",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"id":4,"slug":"0","name":"0","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":0,"owner":null,"user_can_change":true}`
+
+Reproduce with:
+
+    curl -X PUT -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{"name": "0"}' http://localhost:8000/api/correspondents/4/</failure>
+    </testcase>
+    <testcase name="PUT /api/document_types/{id}/" time="0.376375">
+      <failure type="failure">1. Test Case ID: CxgxnC
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"No DocumentType matches the given query."}`
+
+Reproduce with:
+
+    curl -X PUT -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/document_types/0/</failure>
+      <failure type="failure">1. Test Case ID: vWy46P
+
+- Response violates schema
+
+    "permissions" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/DocumentType:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+                },
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 0,
+            "id": 4,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "0",
+            "owner": null,
+            "slug": "0",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"id":4,"slug":"0","name":"0","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":0,"owner":null,"user_can_change":true}`
+
+Reproduce with:
+
+    curl -X PUT -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{"name": "0"}' http://localhost:8000/api/document_types/4/</failure>
+    </testcase>
+    <testcase name="PUT /api/documents/{id}/" time="0.611623">
+      <failure type="failure">1. Test Case ID: lCWziH
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"No Document matches the given query."}`
+
+Reproduce with:
+
+    curl -X PUT -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/0/</failure>
+      <failure type="failure">1. Test Case ID: RHKRNh
+
+- Response violates schema (2 violations)
+
+    "is_shared_by_requester" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Document:
+
+        {
+            "required": [
+                "added",
+                "archived_file_name",
+                "correspondent",
+                "document_type",
+                "duplicate_documents",
+                "id",
+                "is_shared_by_requester",
+                "mime_type",
+                "modified",
+                "notes",
+                "original_file_name",
+                "page_count",
+                "permissions",
+                "root_document",
+                "storage_path",
+                "tags",
+                "user_can_change",
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "added": "2026-10-13T01:16:10.163728+07:00",
+            "archive_serial_number": null,
+            "archived_file_name": null,
+            "content": "HOA DON BAN HANG - SO TIEN 202.000 VND - NGUOI BAN: TV2 TA NH...
+            "correspondent": null,
+            "created": "2026-10-13",
+            "created_date": "2026-10-13",
+            "custom_fields": [],
+            "deleted_at": null,
+            "document_type": null,
+            "duplicate_documents": [],
+            "id": 1,
+            "mime_type": "text/plain",
+            "modified": "2026-10-13T01:16:35.140851+07:00",
+            "notes": [
+                {
+                    "created": "2026-10-13T01:16:30.729797+07:00",
+                    "id": 1,
+            // Output truncated...
+        }
+
+    null is not of type "integer"
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Document/properties/root_document:
+
+        {
+            "type": "integer",
+            "readOnly": true
+        }
+
+    Value:
+
+        null
+
+[200] OK:
+
+    `{"id":1,"correspondent":null,"document_type":null,"storage_path":null,"title":"Hoa Don Thanh Toan Dich Vu KTPM Seed 202","content":"HOA DON BAN HANG - SO TIEN 202.000 VND - NGUOI BAN: TV2 TA NHAT NGUYEN - DH DA LAT","tags":[],"created":"2026-10-13","created_date":"2026-10-13","modified":"2026-10-13T01:16:35.140851+07:00","added":"2026-10-13T01:16:10.163728+07:00","deleted_at":null,"archive_serial_number":null,"original_file_name":"TV2_Sample_Invoice_202.txt","archived_file_name":null,"duplicate_documents":[ // Output truncated...`
+
+Reproduce with:
+
+    curl -X PUT -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{"correspondent": null, "document_type": null, "storage_path": null, "tags": []}' http://localhost:8000/api/documents/1/</failure>
+    </testcase>
+    <testcase name="PUT /api/tags/{id}/" time="0.095262">
+      <failure type="failure">1. Test Case ID: Spptv7
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"No Tag matches the given query."}`
+
+Reproduce with:
+
+    curl -X PUT -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/tags/0/</failure>
+      <failure type="failure">1. Test Case ID: tUmEl2
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"parent":["Invalid pk \"-112\" - object does not exist."]}`
+
+Reproduce with:
+
+    curl -X PUT -H 'Authorization: [Filtered]' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Cookie: [Filtered]' -d 'matching_algorithm=1&amp;name=%F3%B7%87%A4%C3%B3%C2%9EE%C2%9A&amp;parent=-112&amp;match=X%1B&amp;color=%23a6cee3' http://localhost:8000/api/tags/5/</failure>
+    </testcase>
+    <testcase name="GET /api/correspondents/" time="0.303330">
+      <failure type="failure">1. Test Case ID: qW14HJ
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Invalid page."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/correspondents/?id__in=0&amp;full_perms=true&amp;id=0&amp;name__icontains=&amp;name__iendswith=&amp;name__iexact=&amp;name__istartswith=&amp;ordering=&amp;page=0'</failure>
+      <failure type="failure">1. Test Case ID: ZZZ1P1
+
+- Response violates schema
+
+    "last_correspondence" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Correspondent:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "last_correspondence",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 0,
+            "id": 4,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "0",
+            "owner": null,
+            "slug": "0",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"count":1,"next":null,"previous":null,"results":[{"id":4,"slug":"0","name":"0","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":0,"owner":null,"user_can_change":true}]}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/correspondents/?id=4'</failure>
+    </testcase>
+    <testcase name="GET /api/correspondents/{id}/" time="0.294707">
+      <failure type="failure">1. Test Case ID: MFRPro
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"No Correspondent matches the given query."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/correspondents/0/?full_perms=null&amp;full_perms=null'</failure>
+      <failure type="failure">1. Test Case ID: dO6zx3
+
+- Response violates schema (2 violations)
+
+    "permissions" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Correspondent:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "last_correspondence",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 0,
+            "id": 4,
+            "is_insensitive": true,
+            "last_correspondence": null,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "0",
+            "owner": null,
+            "slug": "0",
+            "user_can_change": true
+        }
+
+    null is not of type "string"
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Correspondent/properties/last_correspondence:
+
+        {
+            "type": "string",
+            "format": "date",
+            "readOnly": true
+        }
+
+    Value:
+
+        null
+
+[200] OK:
+
+    `{"id":4,"slug":"0","name":"0","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":0,"last_correspondence":null,"owner":null,"user_can_change":true}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/correspondents/4/</failure>
+    </testcase>
+    <testcase name="GET /api/document_types/" time="0.297228">
+      <failure type="failure">1. Test Case ID: jV9ijS
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Invalid page."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/document_types/?id__in=0&amp;full_perms=true&amp;id=0&amp;name__icontains=&amp;name__iendswith=&amp;name__iexact=&amp;name__istartswith=&amp;ordering=&amp;page=0'</failure>
+      <failure type="failure">1. Test Case ID: N7Z4kl
+
+- Response violates schema
+
+    "permissions" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/DocumentType:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+                },
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 0,
+            "id": 4,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "0",
+            "owner": null,
+            "slug": "0",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"count":1,"next":null,"previous":null,"results":[{"id":4,"slug":"0","name":"0","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":0,"owner":null,"user_can_change":true}]}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/document_types/?id=4'</failure>
+    </testcase>
+    <testcase name="GET /api/document_types/{id}/" time="0.285791">
+      <failure type="failure">1. Test Case ID: bau9yf
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"No DocumentType matches the given query."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/document_types/0/?full_perms=null&amp;full_perms=null'</failure>
+      <failure type="failure">1. Test Case ID: EKbI8o
+
+- Response violates schema
+
+    "permissions" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/DocumentType:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+                },
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 0,
+            "id": 4,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "0",
+            "owner": null,
+            "slug": "0",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"id":4,"slug":"0","name":"0","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":0,"owner":null,"user_can_change":true}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/document_types/4/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/" time="0.396012">
+      <failure type="failure">1. Test Case ID: W0NLpI
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"detail":"Specify only one of text, title_search, query, or more_like_id."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/documents/?correspondent__id__in=0&amp;document_type__id__in=0&amp;id__in=0&amp;owner__id__in=0&amp;storage_path__id__in=0&amp;added__date__gt=2000-01-01&amp;added__date__gte=2000-01-01&amp;added__date__lt=2000-01-01&amp;added__date__lte=2000-01-01&amp;added__day=0&amp;added__gt=2000-01-01T00%3A00%3A00Z&amp;added__gte=2000-01-01T00%3A00%3A00Z&amp;added__lt=2000-01-01T00%3A00%3A00Z&amp;added__lte=2000-01-01T00%3A00%3A00Z&amp;added__month=0&amp;added__year=0&amp;archive_serial_number=0&amp;archive_serial_number__gt=0&amp;archive_serial_number__gte=0&amp;archive_serial_number__isnull=true&amp;archive_serial_number__lt=0&amp;archive_serial_number__lte=0&amp;checksum__icontains=&amp;checksum__iendswith=&amp;checksum__iexact=&amp;checksum__istartswith=&amp;content__icontains=0&amp;content__iendswith=0&amp;content__iexact=0&amp;content__istartswith=0&amp;correspondent__id=0&amp;correspondent__id__none=0&amp;correspondent__isnull=true&amp;correspondent__name__icontains=&amp;correspondent__name__iendswith=&amp;correspondent__name__iexact=&amp;correspondent__name__istartswith=&amp;created__date__gt=2000-01-01&amp;created__date__gte=2000-01-01&amp;created__date__lt=2000-01-01&amp;created__date__lte=2000-01-01&amp;created__day=0&amp;created__gt=2000-01-01&amp;created__gte=2000-01-01&amp;created__lt=2000-01-01&amp;created__lte=2000-01-01&amp;created__month=0&amp;created__year=0&amp;custom_field_query=0&amp;custom_fields__icontains=0&amp;custom_fields__id__all=0&amp;custom_fields__id__in=0&amp;custom_fields__id__none=0&amp;document_type__id=0&amp;document_type__id__none=0&amp;document_type__isnull=true&amp;document_type__name__icontains=&amp;document_type__name__iendswith=&amp;document_type__name__iexact=&amp;document_type__name__istartswith=&amp;fields=&amp;full_perms=true&amp;has_custom_fields=true&amp;id=0&amp;is_in_inbox=true&amp;is_tagged=true&amp;mime_type=&amp;modified__date__gt=2000-01-01&amp;modified__date__gte=2000-01-01&amp;modified__date__lt=2000-01-01&amp;modified__date__lte=2000-01-01&amp;modified__day=0&amp;modified__gt=2000-01-01T00%3A00%3A00Z&amp;modified__gte=2000-01-01T00%3A00%3A00Z&amp;modified__lt=2000-01-01T00%3A00%3A00Z&amp;modified__lte=2000-01-01T00%3A00%3A00Z&amp;modified__month=0&amp;modified__year=0&amp;ordering=&amp;original_filename__icontains=&amp;original_filename__iendswith=&amp;original_filename__iexact=&amp;original_filename__istartswith=&amp;owner__id=0&amp;owner__id__none=0&amp;owner__isnull=true&amp;page=0&amp;page_size=0&amp;query=&amp;search=&amp;shared_by__id=true&amp;storage_path__id=0&amp;storage_path__id__none=0&amp;storage_path__isnull=true&amp;storage_path__name__icontains=&amp;storage_path__name__iendswith=&amp;storage_path__name__iexact=&amp;storage_path__name__istartswith=&amp;tags__id=0&amp;tags__id__all=0&amp;tags__id__in=0&amp;tags__id__none=0&amp;tags__name__icontains=&amp;tags__name__iendswith=&amp;tags__name__iexact=&amp;tags__name__istartswith=&amp;text=&amp;title__icontains=&amp;title__iendswith=&amp;title__iexact=&amp;title__istartswith=&amp;title_content=0'</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/" time="0.319586">
+      <failure type="failure">1. Test Case ID: zZuWH8
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200, 400
+
+[404] Not Found:
+
+    `{"detail":"No Document matches the given query."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/documents/0/?full_perms=false&amp;x-schemathesis-unknown-property=42'</failure>
+      <failure type="failure">1. Test Case ID: aLbrnD
+
+- Response violates schema (2 violations)
+
+    "permissions" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Document:
+
+        {
+            "required": [
+                "added",
+                "archived_file_name",
+                "correspondent",
+                "document_type",
+                "duplicate_documents",
+                "id",
+                "is_shared_by_requester",
+                "mime_type",
+                "modified",
+                "notes",
+                "original_file_name",
+                "page_count",
+                "permissions",
+                "root_document",
+                "storage_path",
+                "tags",
+                "user_can_change",
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "added": "2026-10-13T01:16:10.163728+07:00",
+            "archive_serial_number": null,
+            "archived_file_name": null,
+            "content": "HOA DON BAN HANG - SO TIEN 202.000 VND - NGUOI BAN: TV2 TA NH...
+            "correspondent": null,
+            "created": "2026-10-13",
+            "created_date": "2026-10-13",
+            "custom_fields": [],
+            "deleted_at": null,
+            "document_type": null,
+            "duplicate_documents": [],
+            "id": 1,
+            "is_shared_by_requester": false,
+            "mime_type": "text/plain",
+            "modified": "2026-10-13T01:16:35.140851+07:00",
+            "notes": [
+                {
+                    "created": "2026-10-13T01:16:30.729797+07:00",
+            // Output truncated...
+        }
+
+    null is not of type "integer"
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Document/properties/root_document:
+
+        {
+            "type": "integer",
+            "readOnly": true
+        }
+
+    Value:
+
+        null
+
+[200] OK:
+
+    `{"id":1,"correspondent":null,"document_type":null,"storage_path":null,"title":"Hoa Don Thanh Toan Dich Vu KTPM Seed 202","content":"HOA DON BAN HANG - SO TIEN 202.000 VND - NGUOI BAN: TV2 TA NHAT NGUYEN - DH DA LAT","tags":[],"created":"2026-10-13","created_date":"2026-10-13","modified":"2026-10-13T01:16:35.140851+07:00","added":"2026-10-13T01:16:10.163728+07:00","deleted_at":null,"archive_serial_number":null,"original_file_name":"TV2_Sample_Invoice_202.txt","archived_file_name":null,"duplicate_documents":[ // Output truncated...`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/documents/1/?full_perms=false'</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/ai_suggestions/" time="0.124530">
+      <failure type="failure">1. Test Case ID: B4LlIB
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/null%2Cnull/ai_suggestions/</failure>
+      <failure type="failure">1. Test Case ID: hrDJSY
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+
+[400] Bad Request:
+
+    `AI is required for this feature`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/1/ai_suggestions/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/download/" time="0.294005">
+      <failure type="failure">1. Test Case ID: NdhiGC
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/documents/0/download/?original=false&amp;x-schemathesis-unknown-property=42'</failure>
+      <failure type="failure">1. Test Case ID: jovdy7
+
+- Undocumented Content-Type
+
+    Received: text/plain; charset=utf-8
+    Documented: application/json
+
+[200] OK:
+
+    `HOA DON BAN HANG - SO TIEN 202.000 VND - NGUOI BAN: TV2 TA NHAT NGUYEN - DH DA LAT`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/1/download/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/history/" time="0.704650">
+      <failure type="failure">1. Test Case ID: BjMNIZ
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/documents/null%2Cnull/history/?page=0&amp;page_size=0'</failure>
+      <failure type="failure">1. Test Case ID: F8h9nw
+
+- Response violates schema
+
+    [{"action":"update","actor":{"id":2,"username":"admin"},"changes":{"tags":{"objects":["TV2_Tag_Invoice_202"],"operation":"delete","type":"m2m"}},"id":47,"timestamp":"2026-10-12T18:16:35.139509Z"},{"action":"update","actor":{"id":2,"username":"admin"},"changes":{"correspondent":["1","None"],"document_type":["1","None"]},"id":46,"timestamp":"2026-10-12T18:16:35.120903Z"},{"action":"update","actor":null,"changes":{"Note Added":["None",11]},"id":43,"timestamp":"2026-10-12T18:16:33.697138Z"},{"action":"update","actor":null,"changes":{"Note Added":["None",10]},"id":41,"timestamp":"2026-10-12T18:16:33.494308Z"},{"action":"update","actor":null,"changes":{"Note Added":["None",9]},"id":39,"timestamp":"2026-10-12T18:16:33.299088Z"},{"action":"update","actor":null,"changes":{"Note Added":["None",8]},"id":37,"timestamp":"2026-10-12T18:16:33.102853Z"},{"action":"update","actor":null,"changes":{"Note Added":["None",7]},"id":35,"timestamp":"2026-10-12T18:16:32.908671Z"},{"action":"update","actor":null,"changes":{"Note Added":["None",6]},"id":33,"timestamp":"2026-10-12T18:16:32.721815Z"},{"action":"update","actor":null,"changes":{"Note Added":["None",5]},"id":31,"timestamp":"2026-10-12T18:16:32.529224Z"},{"action":"update","actor":null,"changes":{"Note Added":["None",4]},"id":29,"timestamp":"2026-10-12T18:16:32.335575Z"},{"action":"update","actor":null,"changes":{"Note Added":["None",3]},"id":27,"timestamp":"2026-10-12T18:16:32.145003Z"},{"action":"update","actor":null,"changes":{"Note Added":["None",2]},"id":25,"timestamp":"2026-10-12T18:16:31.933247Z"},{"action":"update","actor":null,"changes":{"Note Added":["None",1]},"id":23,"timestamp":"2026-10-12T18:16:30.743433Z"},{"action":"update","actor":null,"changes":{"filename":["None","0000001.txt"]},"id":14,"timestamp":"2026-10-12T18:16:10.294194Z"},{"action":"update","actor":null,"changes":{"correspondent":["None","1"],"created":["2026-10-13","2026-10-13 01:16:09+07:00"],"document_type":["None","1"],"owner":["None","2"]},"id":13,"timestamp":"2026-10-12T18:16:10.178989Z"},{"action":"update","actor":null,"changes":{"tags":{"objects":["TV2_Tag_Invoice_202"],"operation":"add","type":"m2m"}},"id":12,"timestamp":"2026-10-12T18:16:10.176481Z"},{"action":"create","actor":null,"changes":{"added":["None","2026-10-12 18:16:10.163728"],"checksum":["None","fe783bd3d8f41cb46d04c8eeaf9db90f896332162e34103f2283deed8424f104"],"content":["None","HOA DON BAN HANG - SO TIEN 202.000 VND - NGUOI BAN: TV2 TA NHAT NGUYEN - DH DA LAT"],"correspondent":["None","None"],"created":["None","2026-10-13 01:16:09+07:00"],"custom_fields":["None","documents.CustomFieldInstance.None"],"deleted_at":["None","None"],"document_type":["None","None"],"id":["None","1"],"mime_type":["None","text/plain"],"notes":["None","documents.Note.None"],"original_filename":["None","TV2_Sample_Invoice_202.txt"],"owner":["None","None"],"restored_at":["None","None"],"root_document":["None","None"],"share_links":["None","documents.ShareLink.None"],"storage_path":["None","None"],"title":["None","Hoa Don Thanh Toan Dich Vu KTPM Seed 202"],"versions":["None","documents.Document.None"],"workflow_runs":["None","documents.WorkflowRun.None"]},"id":11,"timestamp":"2026-10-12T18:16:10.167645Z"}] is not of type "object"
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/PaginatedLogEntryList:
+
+        {
+            "type": "object",
+            "required": [
+                "count",
+                "results"
+            ],
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "example": 123
+                },
+                "next": {
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "format": "uri",
+                            "example": "http://api.example.org/accounts/?page=4"
+                        },
+                        {
+            // Output truncated...
+        }
+
+    Value:
+
+        [
+            {
+                "action": "update",
+                "actor": {
+                    "id": 2,
+                    "username": "admin"
+                },
+                "changes": {
+                    "tags": {
+                        "objects": [
+                            "TV2_Tag_Invoice_202"
+                        ],
+                        "operation": "delete",
+                        "type": "m2m"
+                    }
+                },
+                "id": 47,
+                "timestamp": "2026-10-12T18:16:35.139509Z"
+            },
+            // Output truncated...
+        ]
+
+[200] OK:
+
+    `[{"id":47,"timestamp":"2026-10-12T18:16:35.139509Z","action":"update","changes":{"tags":{"type":"m2m","objects":["TV2_Tag_Invoice_202"],"operation":"delete"}},"actor":{"id":2,"username":"admin"}},{"id":46,"timestamp":"2026-10-12T18:16:35.120903Z","action":"update","changes":{"correspondent":["1","None"],"document_type":["1","None"]},"actor":{"id":2,"username":"admin"}},{"id":43,"timestamp":"2026-10-12T18:16:33.697138Z","action":"update","changes":{"Note Added":["None",11]},"actor":null},{"id":41,"timestamp" // Output truncated...`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/1/history/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/metadata/" time="0.133059">
+      <failure type="failure">1. Test Case ID: kRWOQE
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/null%2Cnull/metadata/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/notes/" time="0.117921">
+      <failure type="failure">1. Test Case ID: fn0yNe
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/documents/null%2Cnull/notes/?id=0'</failure>
+      <failure type="failure">1. Test Case ID: uO4ntT
+
+- API accepted schema-violating request
+
+    Invalid data should have been rejected
+    Expected: 400, 401, 403, 404, 405, 406, 409, 415, 422, 428, 429, 5xx
+    Invalid component:
+      - query: violates `additionalProperties`
+      - path: violates `type` at /properties/id (was integer, became number)
+
+- Undocumented Content-Type
+
+    Received: text/html; charset=utf-8
+    Documented: application/json
+
+[200] OK:
+
+    `&lt;!doctype html&gt;
+
+
+    &lt;html lang="en"&gt;
+        &lt;head&gt;
+            &lt;meta charset="utf-8"&gt;
+            &lt;meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"&gt;
+            &lt;meta name="author" content="Paperless-ngx project and contributors"&gt;
+            &lt;meta name="robots" content="noindex,nofollow"&gt;
+
+            &lt;title&gt;
+            
+        Paperless-ngx sign in
+
+            &lt;/title&gt;
+            &lt;link href="/static/bootstrap.min.css" rel="stylesheet"&gt;
+            &lt;link href="/static/base.css" rel="stylesheet"&gt;
+        &lt;/head&gt; // Output truncated...`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/documents/1.2589555339144669e-255/notes/?=0'</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/preview/" time="0.371292">
+      <failure type="failure">1. Test Case ID: 9wtbdp
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/null%2Cnull/preview/</failure>
+      <failure type="failure">1. Test Case ID: LwtQmf
+
+- Undocumented Content-Type
+
+    Received: text/plain; charset=utf-8
+    Documented: application/json
+
+[200] OK:
+
+    `HOA DON BAN HANG - SO TIEN 202.000 VND - NGUOI BAN: TV2 TA NHAT NGUYEN - DH DA LAT`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/1/preview/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/root/" time="0.122716">
+      <failure type="failure">1. Test Case ID: mGl15j
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/null%2Cnull/root/</failure>
+      <failure type="failure">1. Test Case ID: KNLSDq
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/37740/root/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/share_links/" time="0.138186">
+      <failure type="failure">1. Test Case ID: 5oAFT1
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/%F1%8D%96%91%C2%A9/share_links/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/suggestions/" time="0.130465">
+      <failure type="failure">1. Test Case ID: dSDDQr
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/null%2Cnull/suggestions/</failure>
+    </testcase>
+    <testcase name="GET /api/documents/{id}/thumb/" time="0.368091">
+      <failure type="failure">1. Test Case ID: vfkMxm
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/null%2Cnull/thumb/</failure>
+      <failure type="failure">1. Test Case ID: TPKljb
+
+- Undocumented Content-Type
+
+    Received: image/webp
+    Documented: application/json
+
+[200] OK:
+
+    &lt;BINARY&gt;
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/1/thumb/</failure>
+    </testcase>
+    <testcase name="GET /api/tags/" time="0.062321">
+      <failure type="failure">1. Test Case ID: HQfsf5
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Invalid page."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/tags/?id__in=0&amp;full_perms=true&amp;id=0&amp;is_root=true&amp;name__icontains=&amp;name__iendswith=&amp;name__iexact=&amp;name__istartswith=&amp;ordering=&amp;page=0'</failure>
+    </testcase>
+    <testcase name="GET /api/tags/{id}/" time="0.050123">
+      <failure type="failure">1. Test Case ID: 30ubT5
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"No Tag matches the given query."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/tags/0/?full_perms=null&amp;full_perms=null'</failure>
+    </testcase>
+    <testcase name="PATCH /api/correspondents/{id}/" time="0.420768">
+      <failure type="failure">1. Test Case ID: 1Q0i3o
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X PATCH -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -H 'Cookie: [Filtered]' -d '{"name": "0", "match": "", "matching_algorithm": 0, "is_insensitive": false, "owner": null, "set_permissions": {"view": {"users": [], "groups": []}, "change": {"users": [], "groups": []}}}' http://localhost:8000/api/correspondents/null%2Cnull/</failure>
+      <failure type="failure">1. Test Case ID: YKqO7Z
+
+- Response violates schema
+
+    "last_correspondence" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Correspondent:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "last_correspondence",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 0,
+            "id": 4,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "0",
+            "owner": null,
+            "slug": "0",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"id":4,"slug":"0","name":"0","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":0,"owner":null,"user_can_change":true}`
+
+Reproduce with:
+
+    curl -X PATCH -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{}' http://localhost:8000/api/correspondents/4/</failure>
+    </testcase>
+    <testcase name="PATCH /api/document_types/{id}/" time="0.433332">
+      <failure type="failure">1. Test Case ID: 59PxsJ
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X PATCH -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -H 'Cookie: [Filtered]' -d '{"name": "0", "match": "", "matching_algorithm": 0, "is_insensitive": false, "owner": null, "set_permissions": {"view": {"users": [], "groups": []}, "change": {"users": [], "groups": []}}}' http://localhost:8000/api/document_types/null%2Cnull/</failure>
+      <failure type="failure">1. Test Case ID: B4W1Re
+
+- Response violates schema
+
+    "permissions" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/DocumentType:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+                },
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 0,
+            "id": 4,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "0",
+            "owner": null,
+            "slug": "0",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"id":4,"slug":"0","name":"0","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":0,"owner":null,"user_can_change":true}`
+
+Reproduce with:
+
+    curl -X PATCH -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{}' http://localhost:8000/api/document_types/4/</failure>
+    </testcase>
+    <testcase name="PATCH /api/documents/{id}/" time="0.663421">
+      <failure type="failure">1. Test Case ID: 6La3PE
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X PATCH -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -H 'Cookie: [Filtered]' -d '{"correspondent": null, "document_type": null, "storage_path": null, "title": "", "content": "", "tags": [], "created": "2000-01-01", "created_date": "2000-01-01", "deleted_at": "2000-01-01T00:00:00Z", "archive_serial_number": 0, "owner": null, "set_permissions": {"view": {"users": [], "groups": []}, "change": {"users": [], "groups": []}}, "custom_fields": [], "remove_inbox_tags": null}' http://localhost:8000/api/documents/null%2Cnull/</failure>
+      <failure type="failure">1. Test Case ID: kx5nSs
+
+- Response violates schema (2 violations)
+
+    "is_shared_by_requester" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Document:
+
+        {
+            "required": [
+                "added",
+                "archived_file_name",
+                "correspondent",
+                "document_type",
+                "duplicate_documents",
+                "id",
+                "is_shared_by_requester",
+                "mime_type",
+                "modified",
+                "notes",
+                "original_file_name",
+                "page_count",
+                "permissions",
+                "root_document",
+                "storage_path",
+                "tags",
+                "user_can_change",
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "added": "2026-10-13T01:16:10.163728+07:00",
+            "archive_serial_number": null,
+            "archived_file_name": null,
+            "content": "HOA DON BAN HANG - SO TIEN 202.000 VND - NGUOI BAN: TV2 TA NH...
+            "correspondent": null,
+            "created": "2026-10-13",
+            "created_date": "2026-10-13",
+            "custom_fields": [],
+            "deleted_at": null,
+            "document_type": null,
+            "duplicate_documents": [],
+            "id": 1,
+            "mime_type": "text/plain",
+            "modified": "2026-10-13T01:16:39.104313+07:00",
+            "notes": [
+                {
+                    "created": "2026-10-13T01:16:30.729797+07:00",
+                    "id": 1,
+            // Output truncated...
+        }
+
+    null is not of type "integer"
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Document/properties/root_document:
+
+        {
+            "type": "integer",
+            "readOnly": true
+        }
+
+    Value:
+
+        null
+
+[200] OK:
+
+    `{"id":1,"correspondent":null,"document_type":null,"storage_path":null,"title":"Hoa Don Thanh Toan Dich Vu KTPM Seed 202","content":"HOA DON BAN HANG - SO TIEN 202.000 VND - NGUOI BAN: TV2 TA NHAT NGUYEN - DH DA LAT","tags":[],"created":"2026-10-13","created_date":"2026-10-13","modified":"2026-10-13T01:16:39.104313+07:00","added":"2026-10-13T01:16:10.163728+07:00","deleted_at":null,"archive_serial_number":null,"original_file_name":"TV2_Sample_Invoice_202.txt","archived_file_name":null,"duplicate_documents":[ // Output truncated...`
+
+Reproduce with:
+
+    curl -X PATCH -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{}' http://localhost:8000/api/documents/1/</failure>
+    </testcase>
+    <testcase name="PATCH /api/documents/{id}/versions/{version_id}/" time="0.427314">
+      <failure type="failure">1. Test Case ID: hYLZ2Q
+
+- Undocumented HTTP status code
+
+    Received: 403
+    Documented: 200
+
+[403] Forbidden:
+
+    `&lt;!DOCTYPE html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;meta http-equiv="content-type" content="text/html; charset=utf-8"&gt;
+      &lt;meta name="robots" content="NONE,NOARCHIVE"&gt;
+      &lt;title&gt;403 Forbidden&lt;/title&gt;
+      &lt;style&gt;
+        html * { padding:0; margin:0; }
+        body * { padding:10px 20px; }
+        body * * { padding:0; }
+        body { font-family: sans-serif; background:#eee; color:#000; }
+        body&gt;div { border-bottom:1px solid #ddd; }
+        h1 { font-weight:normal; margin-bottom:.4em; }
+        h1 span { font-size:60%; color:#666; font-weig // Output truncated...`
+
+Reproduce with:
+
+    curl -X PATCH -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -H 'Cookie: [Filtered]' -d '{"version_label": ""}' http://localhost:8000/api/documents/0/versions/null%2Cnull/</failure>
+      <failure type="failure">1. Test Case ID: 0cS4Ow
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"version_label":["This field is required."]}`
+
+Reproduce with:
+
+    curl -X PATCH -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{}' http://localhost:8000/api/documents/1/versions/1/</failure>
+    </testcase>
+    <testcase name="PATCH /api/tags/{id}/" time="0.219631">
+      <failure type="failure">1. Test Case ID: Fmpn68
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X PATCH -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -H 'Cookie: [Filtered]' -d '{"name": "0", "color": "0", "match": "", "matching_algorithm": 0, "is_insensitive": false, "is_inbox_tag": false, "owner": null, "set_permissions": {"view": {"users": [], "groups": []}, "change": {"users": [], "groups": []}}, "parent": null}' http://localhost:8000/api/tags/null%2Cnull/</failure>
+      <failure type="failure">1. Test Case ID: wSgWmA
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"detail":"JSON parse error - Expecting value: line 1 column 1 (char 0)"}`
+
+Reproduce with:
+
+    curl -X PATCH -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d $'\x00' http://localhost:8000/api/tags/5/
+
+    ⚠️  Request body contains non-printable characters. Actual value: b'\x00'</failure>
+    </testcase>
+    <testcase name="DELETE /api/correspondents/{id}/" time="0.315147">
+      <failure type="failure">1. Test Case ID: BHKr8M
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 204
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X DELETE -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/correspondents/null%2Cnull/</failure>
+    </testcase>
+    <testcase name="DELETE /api/document_types/{id}/" time="0.310868">
+      <failure type="failure">1. Test Case ID: uBEUHV
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 204
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X DELETE -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/document_types/null%2Cnull/</failure>
+    </testcase>
+    <testcase name="DELETE /api/documents/{id}/" time="0.434272">
+      <failure type="failure">1. Test Case ID: TvZg5k
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 204
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X DELETE -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/null%2Cnull/</failure>
+    </testcase>
+    <testcase name="DELETE /api/documents/{id}/notes/" time="0.200968">
+      <failure type="failure">1. Test Case ID: rd8CkF
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X DELETE -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/documents/null%2Cnull/notes/?id=0'</failure>
+    </testcase>
+    <testcase name="DELETE /api/documents/{id}/versions/{version_id}/" time="0.043416">
+      <failure type="failure">1. Test Case ID: yk9Agr
+
+- Undocumented HTTP status code
+
+    Received: 403
+    Documented: 204
+
+[403] Forbidden:
+
+    `&lt;!DOCTYPE html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;meta http-equiv="content-type" content="text/html; charset=utf-8"&gt;
+      &lt;meta name="robots" content="NONE,NOARCHIVE"&gt;
+      &lt;title&gt;403 Forbidden&lt;/title&gt;
+      &lt;style&gt;
+        html * { padding:0; margin:0; }
+        body * { padding:10px 20px; }
+        body * * { padding:0; }
+        body { font-family: sans-serif; background:#eee; color:#000; }
+        body&gt;div { border-bottom:1px solid #ddd; }
+        h1 { font-weight:normal; margin-bottom:.4em; }
+        h1 span { font-size:60%; color:#666; font-weig // Output truncated...`
+
+Reproduce with:
+
+    curl -X DELETE -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/0/versions/null%2Cnull/</failure>
+      <failure type="failure">1. Test Case ID: R7pZtj
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 204
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X DELETE -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/1/versions/1/</failure>
+    </testcase>
+    <testcase name="DELETE /api/tags/{id}/" time="0.330510">
+      <failure type="failure">1. Test Case ID: 5lMaoT
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 204
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X DELETE -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/tags/null%2Cnull/</failure>
+    </testcase>
+    <testcase name="Stateful tests" time="64.748245">
+      <failure type="failure">1. Test Case ID: BOrbZS
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+    Hint: The request body contains 5 additional properties not defined in the schema (`)Wµ\x16l`, `M­`, `½§j` and 2 more). The server appears to reject properties the schema allows. Declare `additionalProperties: false` if extras are not accepted, or make the server ignore unknown fields.
+
+[400] Bad Request:
+
+    `{"error":"Object violates owner / name unique constraint"}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{"\u00dc\u001e\u00f0\u00c7\u00d8": {"\u00b9\ud81a\udf86\uda33\ude81": "\ud83c\udffb", "\u001b\u00fc2\u00ea\u00ec8\u00f7\u0086\u00b3\u00dd\u00d1\\\u00a2\u00ee\u0012-\udaf8\udc7d:\ud8fd\udf94\udba4\ude29\f\u00027": 189}, "\u00da\u0096": [false, false], "\u00bd\u0084\u00a7j\u0092": 6555, ")W\u00b5\u0016l": {",\u0004\u00d8": 1.7976931348623157e+308}, "M\u007f\u00ad": 1.9, "is_insensitive": true, "name": "0", "match": ""}' http://localhost:8000/api/document_types/</failure>
+      <failure type="failure">1. Test Case ID: DmBfLW
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+    Hint: The request body contains 2 additional properties not defined in the schema (`i¨`, `Ú񜤭Y`). The server appears to reject properties the schema allows. Declare `additionalProperties: false` if extras are not accepted, or make the server ignore unknown fields.
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"owner":["Invalid pk \"170454398\" - object does not exist."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' -H 'Content-Type: multipart/form-data; boundary=9f66ee9a0666ad8c61b785ccea4daea2' -d $'--9f66ee9a0666ad8c61b785ccea4daea2\r\nContent-Disposition: form-data; name="\xf4\x88\xb6\xba\xc2\x82\xc2\x84\xf1\xbf\x83\xaa\xf2\x98\xbb\x89\x00TÉ\xc2\x90*\x19%22\xf1\xb6\xb6\x80Bǧ"\r\n\r\nnull\r\n--9f66ee9a0666ad8c61b785ccea4daea2\r\nContent-Disposition: form-data; name="set_permissions"\r\n\r\n{"": 4.124470658845478e+16, "\\u00dcP\\u00d1": -1382328878237136.0, "\\u00d2@v\\u00c3": [37145, {}, {"5)\\u00c6n6\\u00ac{\\u00bd\\udb31\\udfaf\\u00b9\\u00e2I\\ud9fb\\udea7\\u00b8\'U\\u0090": "}", "\\u00c4&gt;\\u48a3S\\u00eab": "\\u0091T?R\\u000b"}], "\\u8ec6\\ud841\\ude842": [], " \\u00ba\\uda2b\\udca3a": [true, false, null], "view": {"&gt;\\uda3f\\udd58": [[], {}, {"\\u008a\\ud8d4\\udf9c\\u0011\\ud928\\ude6b\\ud8a1\\uddfeu\\u0094\\u00b9\\u00d7\\u00e7\\u0016]9 \\u0086d\\ud8cc\\udebb": "\\u00ac"}], "groups": [-14754586126315032, -1903455231071760, -32631702493, 3402, 147, -2269, 2616637, 216], "users": []}}\r\n--9f66ee9a0666ad8c61b785ccea4daea2\r\nContent-Disposition: form-data; name="name"\r\n\r\nGQ\r\n--9f66ee9a0666ad8c61b785ccea4daea2\r\nContent-Disposition: form-data; name="matching_algorithm"\r\n\r\n3\r\n--9f66ee9a0666ad8c61b785ccea4daea2--\r\n' http://localhost:8000/api/correspondents/
+
+    ⚠️  Request body contains non-printable characters. Actual value: b'--9f66ee9a0666ad8c61b785ccea4daea2\r\nContent-Disposition: form-data; name="\xf4\x88\xb6\xba\xc2\x82\xc2\x84\xf1\xbf\x83\xaa\xf2\x98\xbb\x89\x00T\xc3\x89\xc2\x90*\x19%22\xf1\xb6\xb6\x80B\xc7\xa7"\r\n\r\nnull\r\n--9f66ee9a0666ad8c61b785ccea4daea2\r\nContent-Disposition: form-data; name="set_permissions"\r\n\r\n{"": 4.124470658845478e+16, "\\u00dcP\\u00d1": -1382328878237136.0, "\\u00d2@v\\u00c3": [37145, {}, {"5)\\u00c6n6\\u00ac{\\u00bd\\udb31\\udfaf\\u00b9\\u00e2I\\ud9fb\\udea7\\u00b8\'U\\u0090": "}", "\\u00c4&gt;\\u48a3S\\u00eab": "\\u0091T?R\\u000b"}], "\\u8ec6\\ud841\\ude842": [], " \\u00ba\\uda2b\\udca3a": [true, false, null], "view": {"&gt;\\uda3f\\udd58": [[], {}, {"\\u008a\\ud8d4\\udf9c\\u0011\\ud928\\ude6b\\ud8a1\\uddfeu\\u0094\\u00b9\\u00d7\\u00e7\\u0016]9 \\u0086d\\ud8cc\\udebb": "\\u00ac"}], "groups": [-14754586126315032, -1903455231071760, -32631702493, 3402, 147, -2269, 2616637, 216], "users": []}}\r\n--9f66ee9a0666ad8c61b785ccea4daea2\r\nContent-Disposition: form-data; name="name"\r\n\r\nGQ\r\n--9f66ee9a0666ad8c61b785ccea4daea2\r\nContent-Disposition: form-data; name="matching_algorithm"\r\n\r\n3\r\n--9f66ee9a0666ad8c61b785ccea4daea2--\r\n'
+    curl -X PATCH -H 'Authorization: [Filtered]' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Cookie: [Filtered]' -d '%C3%9A%C2%9B%F1%9C%A4%ADY=Y%C2%80%F1%A9%AD%BAm%7B%F3%85%A5%BB%C2%8AP%C3%97&amp;is_insensitive=false&amp;match=&amp;owner=170454398&amp;matching_algorithm=5&amp;name=0' http://localhost:8000/api/correspondents/7/</failure>
+      <failure type="failure">1. Test Case ID: MfUjmz
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+    Hint: The request body contains 4 additional properties not defined in the schema (``, `UA򪶶`, `󙅐B` and 1 more). The server appears to reject properties the schema allows. Declare `additionalProperties: false` if extras are not accepted, or make the server ignore unknown fields.
+
+[400] Bad Request:
+
+    `{"error":"Object violates owner / name unique constraint"}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Cookie: [Filtered]' -d '%F4%88%90%B8c=171&amp;UA%F2%AA%B6%B6=%F3%99%9B%A3%F0%A7%9B%AB&amp;UA%F2%AA%B6%B6=null&amp;UA%F2%AA%B6%B6=1.7575077285225542e%2B107&amp;%F3%99%85%90B=-69891&amp;name=0&amp;%19%F0%92%A4%83%C3%A2%C2%8A%C2%AA=%EC%8E%82%28%C2%9F&amp;%19%F0%92%A4%83%C3%A2%C2%8A%C2%AA=%C3%96%F3%BB%AF%8F-e%C3%87&amp;%60N%C3%8B%C3%89%F3%BC%A3%B4%F0%B3%B5%A6=null&amp;%60N%C3%8B%C3%89%F3%BC%A3%B4%F0%B3%B5%A6=&amp;%60N%C3%8B%C3%89%F3%BC%A3%B4%F0%B3%B5%A6=true&amp;%24Y=%2F%C2%96%C2%86%C3%8E&amp;%24Y=%3B%C2%8E&amp;%24Y=%F3%B5%97%9E%C2%8AVL&amp;change=&amp;change=users&amp;change=groups' http://localhost:8000/api/correspondents/</failure>
+      <failure type="failure">1. Test Case ID: LzKLhD
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+    Hint: The request body contains 1 additional property not defined in the schema (`¤\x05\x17É򆓔`). The server appears to reject properties the schema allows. Declare `additionalProperties: false` if extras are not accepted, or make the server ignore unknown fields.
+
+[400] Bad Request:
+
+    `{"color":["Invalid color."],"owner":["Invalid pk \"35592\" - object does not exist."],"set_permissions":["Some groups in don't exist or were specified twice."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -H 'Cookie: [Filtered]' -d '{"\u00a4\u0005\u0017\u00c9\ud9d9\udcd4": {"|0Z\ud92a\udd01\u00f4\u00ba\ud8d5\udf1e\u008d&lt;": 3313, "": 270514}, "parent": null, "owner": 35592, "is_insensitive": true, "set_permissions": {"change": {}, "view": {"\ud835\udd7f\ud835\udd8d\ud835\udd8a \ud835\udd96\ud835\udd9a\ud835\udd8e\ud835\udd88\ud835\udd90 \ud835\udd87\ud835\udd97\ud835\udd94\ud835\udd9c\ud835\udd93 \ud835\udd8b\ud835\udd94\ud835\udd9d \ud835\udd8f\ud835\udd9a\ud835\udd92\ud835\udd95\ud835\udd98 \ud835\udd94\ud835\udd9b\ud835\udd8a\ud835\udd97 \ud835\udd99\ud835\udd8d\ud835\udd8a \ud835\udd91\ud835\udd86\ud835\udd9f\ud835\udd9e \ud835\udd89\ud835\udd94\ud835\udd8c": {"": 3021905548242400.0, "\u0089\u009c@3\ud872\udccd}C\udabc\udcd9\u00b7": "vX\u00bd\u001a", "\u00c0\r\u0018\udb86\udf2eR": [-4.497581173431381e+164, null, true]}, "groups": [-1354711, -166925, 394972778]}}, "color": "\udb8d\udc34\u00e3\u00d9f", "match": "\udacc\udee0\ud9cb\ude96\u00fe\u009a", "matching_algorithm": 3, "name": "0", "is_inbox_tag": false}' http://localhost:8000/api/tags/</failure>
+      <failure type="failure">1. Test Case ID: tSCj7P
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"owner":["Invalid pk \"-12601\" - object does not exist."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/x-www-form-urlencoded' -d name=p%F3%A0%A3%95%C3%89%0D9G%18%EE%A3%BF7l%C3%B3 http://localhost:8000/api/correspondents/
+    curl -X PUT -H 'Authorization: [Filtered]' -H 'Content-Type: application/x-www-form-urlencoded' -d '%C2%88=false&amp;%C2%88=true&amp;%C2%88=null&amp;%F2%BE%89%B3%F1%B7%A8%A2%1DU%C3%9B%C2%94%C2%93%C2%A4%F2%B1%96%90%15%F2%9E%90%A4%107%F0%A0%80%B9=false&amp;is_insensitive=false&amp;name=%F1%9B%8F%89q%C3%B0&amp;owner=-12601&amp;j%C3%AD=-2.100873712002968e-302&amp;view=&amp;view=%C2%B7%C3%85%C3%8D%F1%B0%89%A8&amp;change=%C3%9C%1E%E6%82%85%C3%A7%1D%C3%83Ob~K%00%7D%C2%BCZV&amp;change=q&amp;change=&amp;change=e%C2%92&amp;change=%C3%93hp&amp;change=groups&amp;change=users' http://localhost:8000/api/correspondents/9/</failure>
+      <failure type="failure">1. Test Case ID: je5tln
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+    Hint: The request body contains 1 additional property not defined in the schema (`\x12¾`). The server appears to reject properties the schema allows. Declare `additionalProperties: false` if extras are not accepted, or make the server ignore unknown fields.
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"owner":["Incorrect type. Expected pk value, received str."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{"\u00cf\udb53\udc6dH\u00d1": [1.7724527856494623e+79], "name": "\udb02\udfe7\u00e9\u00d6M.\u00f3\u0095+?\ud837\udc16 \udbaf\ude6e\u00e5\u7bafY"}' http://localhost:8000/api/document_types/
+    curl -X PATCH -H 'Authorization: [Filtered]' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Cookie: [Filtered]' -d '%12%C2%BE=&amp;name=%F1%9B%8F%89q%C3%B0&amp;is_insensitive=true&amp;owner=null&amp;match=' http://localhost:8000/api/document_types/11/</failure>
+      <failure type="failure">1. Test Case ID: fqPIb8
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+
+[400] Bad Request:
+
+    `{"color":["Invalid color."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Cookie: [Filtered]' -d 'I%C2%89%C3%84%F2%98%83%B9%C3%B6%C2%96%C3%AB%2C%C3%B2%C2%AE=%F1%AF%85%AE%C2%BB%C2%82%C2%89&amp;I%C2%89%C3%84%F2%98%83%B9%C3%B6%C2%96%C3%AB%2C%C3%B2%C2%AE=%F2%BA%A0%8F%C3%A2%07%2By%15%C2%B4%C3%A4%C2%B0%F3%B2%84%85%C2%A6%C3%BA%18&amp;=null&amp;%F4%86%B9%BD%F3%9A%AA%A3%F3%A2%BE%91%5E%C3%B1Cc%F2%A1%BB%83%C2%A9x=175730&amp;%C3%96Q%F1%BC%80%9AR%E5%A1%B0%C3%89%7C%F3%AF%83%9E%C2%AD%C3%A4%F3%94%B5%87%C2%82%C2%B3%C2%97%F4%87%B2%B6=%F2%8C%BA%8E%C3%8D%C3%95%C2%BC%22Z%C2%9D%C2%A0&amp;name=NULL' http://localhost:8000/api/tags/
+    curl -X PATCH -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{"color": "\u00fe\u007fe\ud943\udea6\u00ec\u0014\uda6b\udfa3", "matching_algorithm": 0, "owner": null, "match": "", "set_permissions": {"\ud8a8\udc2d\ud884\ude7f\u00a6\u00c2v^": [[-2.2250738585072014e-308, null]], "\ud93e\udce7\ua47a": [], "": null, "\ud8bf\uddb8": [{"": "\u00b8"}], "\u00e2\udab1\udc47\u001f\ud88c\udd00\udbed\udc9d\u00b3e\ud803\udf3c\u000b": [-60932], "view": {}}, "is_insensitive": true, "parent": null, "name": "\udb02\udfe7\u00e9\u00d6M.\u00f3\u0095+?\ud837\udc16 \udbaf\ude6e\u00e5\u7bafY", "is_inbox_tag": false}' http://localhost:8000/api/tags/7/</failure>
+      <failure type="failure">1. Test Case ID: km1HDA
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/tags/?name__iexact=f&amp;page_size=218&amp;id=6'
+    curl -X PUT -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{"\ud9cd\ude47\u008f": [["\u00dd\u00cc\u00c2&gt;\u00ea\u00a2", null, -1.6789755991024834e+16], "\u00f6\ud8c5\udd80\ud8e6\udfff\udbe5\udd59\u00d0e\u00d3\ud89f\udc5a\u0088\ud85e\udf17\ud851\udd11", [15009754274]], "is_inbox_tag": true, "set_permissions": {"x\u00ba\ud978\udc45\ud9b8\udfce\u00f3\ud9e8\udd78\u0096": {}, "R\u00a7\u008bS\u00e1": [], "\u00f8\u00a7n": [], "\udb96\udc03\uda04\udcd7y\udadd\udc8cN\u00dc;\u0093\u00ef": [], "view": {"\u0007\uc2acx\u0016\uda48\udf5d\u008b\u0015\u001c^": [], "\u00d4\udae1\udc84dQ": {}, "FALSE": [-156, [false], {"": false}]}, "change": {"~": true, "groups": ["\u00bd\ud902\udc52\u008d\u00ca", "\u0004a", "\\\udae7\udfed.M\uda6e\ude29\u00d1\udad9\udf77\ud995\udecd", "Ef\ud82d\udcfc", "", "/x", "\u0017\ud961\udea0&gt;\u00e8", "?(\uda21\udc0ft\u008b\u00f0}", "ML\u00c1\u00fag\u00a3\udb05\udc10\\\u5aff\udbbd\ude1a\u00e0\u00ceG4\ud848\udef6\u00c4\u00c8\u0080\u00aa9_\u009f\u00f1\u00f0", "\u0092\u008b\u00fd\u008e\u0004S\u0086\u009a\u00a9c\u009a\u0005\u00ae\u0086\u00dd\u00f5\ud9c7\udcbau", "\ud966\udef5\u00e4\u00df\ud92b\ude65\u00e4\u0005\udac1\udd8d"]}}, "name": "\u1e70\u033a\u033a\u0315o\u035e \u0337i\u0332\u032c\u0347\u032a\u0359n\u031d\u0317\u0355v\u031f\u031c\u0318\u0326\u035fo\u0336\u0319\u0330\u0320k\u00e8\u035a\u032e\u033a\u032a\u0339\u0331\u0324 \u0316t\u031d\u0355\u0333\u0323\u033b\u032a\u035eh\u033c\u0353\u0332\u0326\u0333\u0318\u0332e\u0347\u0323\u0330\u0326\u032c\u034e \u0322\u033c\u033b\u0331\u0318h\u035a\u034e\u0359\u031c\u0323\u0332\u0345i\u0326\u0332\u0323\u0330\u0324v\u033b\u034de\u033a\u032d\u0333\u032a\u0330-m\u0322i\u0345n\u0316\u033a\u031e\u0332\u032f\u0330d\u0335\u033c\u031f\u0359\u0329\u033c\u0318\u0333 \u031e\u0325\u0331\u0333\u032dr\u031b\u0317\u0318e\u0359p\u0360r\u033c\u031e\u033b\u032d\u0317e\u033a\u0320\u0323\u035fs\u0318\u0347\u0333\u034d\u031d\u0349e\u0349\u0325\u032f\u031e\u0332\u035a\u032c\u035c\u01f9\u032c\u034e\u034e\u031f\u0316\u0347\u0324t\u034d\u032c\u0324\u0353\u033c\u032d\u0358\u0345i\u032a\u0331n\u0360g\u0334\u0349 \u034f\u0349\u0345c\u032c\u031fh\u0361a\u032b\u033b\u032f\u0358o\u032b\u031f\u0316\u034d\u0319\u031d\u0349s\u0317\u0326\u0332.\u0328\u0339\u0348\u0323", "owner": null, "color": "\u000e\f\ud887\udffd\u00b0\u0091", "parent": -13152520497511, "match": "", "matching_algorithm": 4, "is_insensitive": false}' http://localhost:8000/api/tags/7/</failure>
+      <failure type="failure">1. Test Case ID: DBSaGp
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' -H 'Content-Type: multipart/form-data; boundary=90a1ba19ebd1697ee04f45a6a1170267' -d $'--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="=}\x7f\xf2\x8d\xab\xae%0D½t\x06\xf2\x93\xa2\xba"\r\n\r\n{"\\u009a\\u001d\\ud9cd\\udc48": [-3.3112699390754416e+16, 2094607]}\r\n--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="9*G"\r\n\r\n{}\r\n--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="åª\xf1\x9a\x9c\xbcM½zô\xf2\xbe\x8c\x97G#\xc2\x95a½"\r\n\r\n-3356\r\n--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="åª\xf1\x9a\x9c\xbcM½zô\xf2\xbe\x8c\x97G#\xc2\x95a½"\r\n\r\n14687\r\n--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="\xf2\xa0\x92\xa8Öú\x06þ\xf4\x85\xb9\xab·f"\r\n\r\n{"2x}\\u000e\\u00b7E\\u00980N\\u009aVj\\u00e6\\ud8f9\\udc39\\u001d\\u001b^": 14}\r\n--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="\xf2\xa0\x92\xa8Öú\x06þ\xf4\x85\xb9\xab·f"\r\n\r\n{}\r\n--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="\xf2\xa0\x92\xa8Öú\x06þ\xf4\x85\xb9\xab·f"\r\n\r\n{}\r\n--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="name"\r\n\r\n\xc2\x8a\xc2\x9cymø\r\n--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="is_insensitive"\r\n\r\nfalse\r\n--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="matching_algorithm"\r\n\r\n2\r\n--90a1ba19ebd1697ee04f45a6a1170267--\r\n' http://localhost:8000/api/document_types/
+
+    ⚠️  Request body contains non-printable characters. Actual value: b'--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="=}\x7f\xf2\x8d\xab\xae%0D\xc2\xbdt\x06\xf2\x93\xa2\xba"\r\n\r\n{"\\u009a\\u001d\\ud9cd\\udc48": [-3.3112699390754416e+16, 2094607]}\r\n--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="9*G"\r\n\r\n{}\r\n--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="\xc3\xa5\xc2\xaa\xf1\x9a\x9c\xbcM\xc2\xbdz\xc3\xb4\xf2\xbe\x8c\x97G#\xc2\x95a\xc2\xbd"\r\n\r\n-3356\r\n--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="\xc3\xa5\xc2\xaa\xf1\x9a\x9c\xbcM\xc2\xbdz\xc3\xb4\xf2\xbe\x8c\x97G#\xc2\x95a\xc2\xbd"\r\n\r\n14687\r\n--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="\xf2\xa0\x92\xa8\xc3\x96\xc3\xba\x06\xc3\xbe\xf4\x85\xb9\xab\xc2\xb7f"\r\n\r\n{"2x}\\u000e\\u00b7E\\u00980N\\u009aVj\\u00e6\\ud8f9\\udc39\\u001d\\u001b^": 14}\r\n--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="\xf2\xa0\x92\xa8\xc3\x96\xc3\xba\x06\xc3\xbe\xf4\x85\xb9\xab\xc2\xb7f"\r\n\r\n{}\r\n--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="\xf2\xa0\x92\xa8\xc3\x96\xc3\xba\x06\xc3\xbe\xf4\x85\xb9\xab\xc2\xb7f"\r\n\r\n{}\r\n--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="name"\r\n\r\n\xc2\x8a\xc2\x9cym\xc3\xb8\r\n--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="is_insensitive"\r\n\r\nfalse\r\n--90a1ba19ebd1697ee04f45a6a1170267\r\nContent-Disposition: form-data; name="matching_algorithm"\r\n\r\n2\r\n--90a1ba19ebd1697ee04f45a6a1170267--\r\n'
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/documents/?document_type__id=19'
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/8077/thumb/</failure>
+      <failure type="failure">1. Test Case ID: p01CHP
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"id__in":["Enter a number."],"id":["Enter a number."]}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/correspondents/?id__in=false&amp;full_perms=-1.7976931348623157e%2B308&amp;id=true'</failure>
+      <failure type="failure">1. Test Case ID: N8FTMy
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -H 'Cookie: [Filtered]' -d '{"match": "", "owner": null, "set_permissions": {}, "name": "TV2_University_202", "matching_algorithm": 4, "is_insensitive": true}' http://localhost:8000/api/correspondents/
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/documents/?correspondent__id=18&amp;modified__gte=2026-10-13T01%3A16%3A10.163728%2B07%3A00&amp;document_type__id=5'
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/999999999999/preview/</failure>
+      <failure type="failure">1. Test Case ID: PEHSQK
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"owner":["Incorrect type. Expected pk value, received str."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' -H 'Content-Type: multipart/form-data; boundary=96f98a278a25421fa388a75e813e2675' -d $'--96f98a278a25421fa388a75e813e2675\r\nContent-Disposition: form-data; name="name"\r\n\r\ni\r\n--96f98a278a25421fa388a75e813e2675\r\nContent-Disposition: form-data; name="match"\r\n\r\n\xc2\x8c`\x15M\x18\xf4\x89\x9a\x96𞺗\xf2\x9f\xb5\x9cK}\r\n--96f98a278a25421fa388a75e813e2675\r\nContent-Disposition: form-data; name="matching_algorithm"\r\n\r\n6\r\n--96f98a278a25421fa388a75e813e2675--\r\n' http://localhost:8000/api/document_types/
+
+    ⚠️  Request body contains non-printable characters. Actual value: b'--96f98a278a25421fa388a75e813e2675\r\nContent-Disposition: form-data; name="name"\r\n\r\ni\r\n--96f98a278a25421fa388a75e813e2675\r\nContent-Disposition: form-data; name="match"\r\n\r\n\xc2\x8c`\x15M\x18\xf4\x89\x9a\x96\xf0\x9e\xba\x97\xf2\x9f\xb5\x9cK}\r\n--96f98a278a25421fa388a75e813e2675\r\nContent-Disposition: form-data; name="matching_algorithm"\r\n\r\n6\r\n--96f98a278a25421fa388a75e813e2675--\r\n'
+    curl -X PATCH -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/document_types/22/
+    curl -X PUT -H 'Authorization: [Filtered]' -H 'Content-Type: application/x-www-form-urlencoded' -d 'owner=null&amp;name=i' http://localhost:8000/api/document_types/22/</failure>
+      <failure type="failure">1. Test Case ID: HdBDwg
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"name__icontains":["Null characters are not allowed."]}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/tags/?id__in=&amp;name__iendswith=%F3%94%9D%B7%C2%8C&amp;is_root=false&amp;name__iexact=o%C2%98%C3%94%F0%BC%A7%9D%C2%92%C3%92&amp;page=1516276&amp;id=16&amp;full_perms=true&amp;name__istartswith=NaN&amp;ordering=%28%E8%B9%81%C3%A3%C3%95%C2%BB%C2%8F%C3%9Ex%3E%C2%85%C2%A2%26%C2%90&amp;page_size=-31871&amp;name__icontains=%00%F1%86%8E%BC%F3%AD%82%8A%F0%AF%83%91%C3%BA%29A%04%F1%86%AE%A06%C2%90%C3%81%09r%C2%AA%F4%87%AD%98%F2%8F%82%ADQ%F3%92%89%82'</failure>
+      <failure type="failure">1. Test Case ID: 64QyoN
+
+- Response violates schema
+
+    "user_can_change" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Tag:
+
+        {
+            "required": [
+                "children",
+                "document_count",
+                "id",
+                "name",
+                "slug",
+                "text_color",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "children": [],
+            "color": "#a6cee3",
+            "document_count": 0,
+            "id": 21,
+            "is_inbox_tag": false,
+            "is_insensitive": false,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "\u0080\u0002FZ\u0002\ud8a1\udce1",
+            "owner": 2,
+            "parent": null,
+            "permissions": {
+                "change": {
+                    "groups": [],
+                    "users": []
+                },
+                "view": {
+                    "groups": [],
+            // Output truncated...
+        }
+
+[200] OK:
+
+    `{"id":21,"slug":"fz","name":"\u0002FZ\u0002𸓡","color":"#a6cee3","text_color":"#000000","match":"","matching_algorithm":1,"is_insensitive":false,"is_inbox_tag":false,"document_count":0,"owner":2,"permissions":{"view":{"users":[],"groups":[]},"change":{"users":[],"groups":[]}},"parent":null,"children":[]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: multipart/form-data; boundary=de3438d0a3a50dae4698ca95cbc6a85c' -d $'--de3438d0a3a50dae4698ca95cbc6a85c\r\nContent-Disposition: form-data; name="b"\r\n\r\n{"": "+", "\\t\\u00d1\\u0015\\ud873\\udc52d\\u00be\\u00e4N": null, "\\u00e0|\\udb01\\udd8c\\ud964\\udcab\\u009a": false}\r\n--de3438d0a3a50dae4698ca95cbc6a85c\r\nContent-Disposition: form-data; name="\x13N\xc2\x80\xc2\x98৽\xf1\x8e\xa9\xaa"\r\n\r\n{"+\\ud8ea\\udd69\\ub868\\u00d3\\ud843\\udc96": {}, "": null, "\\u001e": null}\r\n--de3438d0a3a50dae4698ca95cbc6a85c\r\nContent-Disposition: form-data; name="name"\r\n\r\n\xc2\x80\x02FZ\x02\xf0\xb8\x93\xa1\r\n--de3438d0a3a50dae4698ca95cbc6a85c--\r\n' http://localhost:8000/api/tags/
+
+    ⚠️  Request body contains non-printable characters. Actual value: b'--de3438d0a3a50dae4698ca95cbc6a85c\r\nContent-Disposition: form-data; name="b"\r\n\r\n{"": "+", "\\t\\u00d1\\u0015\\ud873\\udc52d\\u00be\\u00e4N": null, "\\u00e0|\\udb01\\udd8c\\ud964\\udcab\\u009a": false}\r\n--de3438d0a3a50dae4698ca95cbc6a85c\r\nContent-Disposition: form-data; name="\x13N\xc2\x80\xc2\x98\xe0\xa7\xbd\xf1\x8e\xa9\xaa"\r\n\r\n{"+\\ud8ea\\udd69\\ub868\\u00d3\\ud843\\udc96": {}, "": null, "\\u001e": null}\r\n--de3438d0a3a50dae4698ca95cbc6a85c\r\nContent-Disposition: form-data; name="name"\r\n\r\n\xc2\x80\x02FZ\x02\xf0\xb8\x93\xa1\r\n--de3438d0a3a50dae4698ca95cbc6a85c--\r\n'
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/tags/21/?full_perms=true'</failure>
+      <failure type="failure">1. Test Case ID: KxEdQy
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"id":["Enter a number."]}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/document_types/?name__istartswith=%0C&amp;id=false&amp;id=%22~%C2%BA&amp;id=4.0566836687368904e%2B16&amp;id=true&amp;name__iexact=L%3E'</failure>
+      <failure type="failure">1. Test Case ID: jXPlpQ
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200
+
+[500] Internal Server Error:
+
+    `
+    &lt;!doctype html&gt;
+    &lt;html lang="en"&gt;
+    &lt;head&gt;
+      &lt;title&gt;Server Error (500)&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Server Error (500)&lt;/h1&gt;&lt;p&gt;&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/document_types/?name__istartswith=&amp;name__iendswith=%C3%B4%C2%BF%C3%B9&amp;id=20'
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/documents/?modified__year=-2.2250738585e-313&amp;tags__id__none=894765&amp;title__icontains=%F2%9B%96%BC%0C9%F3%B7%BC%B9%C2%A4%1F%3D%C2%95U%C3%BD%C3%93&amp;correspondent__id=5&amp;document_type__id=5'</failure>
+      <failure type="failure">1. Test Case ID: BQwV9M
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+
+[400] Bad Request:
+
+    `{"name__istartswith":["Null characters are not allowed."]}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/correspondents/?id__in=-46307,3385,-177376,-173341942532248,1078,-1605,9564,-113891,-412,-720,12030398&amp;page=409&amp;name__istartswith=%C2%8Bt%C3%95%00%C2%9D&amp;name__icontains=&amp;page_size=-106026926&amp;id=2&amp;name__iendswith=%C3%95~&amp;full_perms=false&amp;name__iexact=%F0%A1%9F%B8%C3%86%C3%8D%C3%A0%C2%8C%F3%88%B0%87Vdu%C3%A0%C3%A5%C3%BB%C2%83%F2%A1%81%9C%F2%84%8C%9D%F2%A8%85%82H%7Cy%F3%98%AA%AB&amp;ordering=%E0%A4%AA%E0%A4%A8%E0%A5%8D%E0%A4%B9+%E0%A4%AA%E0%A4%A8%E0%A5%8D%E0%A4%B9+%E0%A4%A4%E0%A5%8D%E0%A4%B0+%E0%A4%B0%E0%A5%8D%E0%A4%9A+%E0%A4%95%E0%A5%83%E0%A4%95%E0%A5%83+%E0%A4%A1%E0%A5%8D%E0%A4%A1+%E0%A4%A8%E0%A5%8D%E0%A4%B9%E0%A5%83%E0%A5%87+%D8%A5%D9%84%D8%A7+%D8%A8%D8%B3%D9%85+%D8%A7%D9%84%D9%84%D9%87'</failure>
+      <failure type="failure">1. Test Case ID: flIYV2
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+    Hint: The request body contains 2 additional properties not defined in the schema (`O\x03ÎHM`, `򗸶¡\x15kÈ`). The server appears to reject properties the schema allows. Declare `additionalProperties: false` if extras are not accepted, or make the server ignore unknown fields.
+
+[400] Bad Request:
+
+    `{"documents":["Some documents in documents don't exist or were specified twice."],"addresses":["Invalid email address: 1ÐÜ¿÷Þ    \u0012xsÎ±¨\tÑ񶌣ì\u001fÇ"]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Content-Type: application/json' -d '{"\u00b5\u00b5\u001f\u00e6\u00cb\u00a9\u0099\ud93a\udf05": 1.8357938525695828e+16, "\u00b8\u00f9H": {"\u0096*\u00e8\u0001\u0015\u00ec\u00cd": -6.128596675558699e+86, "\u00c3\u00cd:\ud9af\udf10\udb1b\udd8e\u00cf\ud9b2\udc99\ud9f9\ude05&gt;:": []}, "e\u0093\udad4\ude9c\u00f2": [null, 9574861725329082.0], "\u00bc\u0015": {"Inf": -2.2250738585e-313, "\u001f\u00f4g\u0083\t\u0083\u00d7": true, "\uda2d\udeff\u00c2\u0086\u0015": null}, "\u00b1\udae1\udfdc": {"\u008f": "", "\ud845\uddc5": "\u00db\u00b1|", "\uda8d\udc04\u00d2": 4.77952849764573e+16}, "name": "\u0004\u0099", "match": "5 \u00e9", "is_insensitive": true, "set_permissions": {}, "matching_algorithm": 4, "owner": null}' http://localhost:8000/api/document_types/
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/documents/?correspondent__id=6&amp;document_type__id=22'
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' -H 'Content-Type: multipart/form-data; boundary=528f36b35f6cd6749c695a66fe3fea11' -d $'--528f36b35f6cd6749c695a66fe3fea11\r\nContent-Disposition: form-data; name="O\x03ÎHM"\r\n\r\n{"": null, "^j\\u008a\\u001b?\\u00b7?\\u0085": "e", ",\\u001e\\uda29\\udd8f": null}\r\n--528f36b35f6cd6749c695a66fe3fea11\r\nContent-Disposition: form-data; name="addresses"\r\n\r\n1\xc2\x9dÐÜ¿÷\xc2\x88Þ\xc2\x9f\xc2\x85\x12xsÎ±¨\tÑ\xf1\xb6\x8c\xa3ì\x1fÇ\r\n--528f36b35f6cd6749c695a66fe3fea11\r\nContent-Disposition: form-data; name="message"\r\n\r\n\xc2\xad\x1cðS\r\n--528f36b35f6cd6749c695a66fe3fea11\r\nContent-Disposition: form-data; name="subject"\r\n\r\nÅ\r\n--528f36b35f6cd6749c695a66fe3fea11--\r\n' http://localhost:8000/api/documents/196/email/
+
+    ⚠️  Request body contains non-printable characters. Actual value: b'--528f36b35f6cd6749c695a66fe3fea11\r\nContent-Disposition: form-data; name="O\x03\xc3\x8eHM"\r\n\r\n{"": null, "^j\\u008a\\u001b?\\u00b7?\\u0085": "e", ",\\u001e\\uda29\\udd8f": null}\r\n--528f36b35f6cd6749c695a66fe3fea11\r\nContent-Disposition: form-data; name="addresses"\r\n\r\n1\xc2\x9d\xc3\x90\xc3\x9c\xc2\xbf\xc3\xb7\xc2\x88\xc3\x9e\xc2\x9f\xc2\x85\x12xs\xc3\x8e\xc2\xb1\xc2\xa8\t\xc3\x91\xf1\xb6\x8c\xa3\xc3\xac\x1f\xc3\x87\r\n--528f36b35f6cd6749c695a66fe3fea11\r\nContent-Disposition: form-data; name="message"\r\n\r\n\xc2\xad\x1c\xc3\xb0S\r\n--528f36b35f6cd6749c695a66fe3fea11\r\nContent-Disposition: form-data; name="subject"\r\n\r\n\xc3\x85\r\n--528f36b35f6cd6749c695a66fe3fea11--\r\n'</failure>
+      <failure type="failure">1. Test Case ID: syE660
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/document_types/?name__icontains=%C3%A3%5D%F1%B5%B3%96&amp;page_size=-599199&amp;id=27&amp;name__istartswith=%F2%BD%91%80S-%2C%C3%98p%C2%9A'
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/documents/?tags__id__none=-33881041502595&amp;correspondent__id=6&amp;document_type__id=22'
+    curl -X PATCH -H 'Authorization: [Filtered]' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Cookie: [Filtered]' -d '=T%C3%BD%F4%86%8D%84%C3%AC%F1%88%82%AD&amp;=6.687334438319398e%2B262&amp;C=%3C%F1%A2%98%B5%F2%87%AE%B5O&amp;C=%F2%83%94%A9%C3%8F%C3%A3%C3%B5&amp;C=%F3%B4%83%A7k%F1%AA%97%8Fi%E7%B6%B9&amp;version_label=null' http://localhost:8000/api/documents/294/versions/17960/</failure>
+      <failure type="failure">1. Test Case ID: Dt3tb7
+
+- API rejected schema-compliant request
+
+    Valid data should have been accepted
+    Expected: 2xx, 3xx, 401, 403, 404, 409, 429, 5xx
+
+[400] Bad Request:
+
+    `{"name__icontains":["Null characters are not allowed."]}`
+
+Reproduce with:
+
+    curl -X POST -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' -H 'Content-Type: multipart/form-data; boundary=1cd7b8d78069b2a824805a7096c3bb9a' -d $'--1cd7b8d78069b2a824805a7096c3bb9a\r\nContent-Disposition: form-data; name="f¾\xf3\xa1\xb1\x93𣫳\xf1\xab\x80\x8f\xf2\xac\x93\xaa,\xc2\x85Õúå\xf2\x91\x8b\x81C"\r\n\r\n{}\r\n--1cd7b8d78069b2a824805a7096c3bb9a\r\nContent-Disposition: form-data; name="Â"\r\n\r\n3097469280169815965696\r\n--1cd7b8d78069b2a824805a7096c3bb9a\r\nContent-Disposition: form-data; name="=\xf2\x83\xa6\x8eÁÏ"\r\n\r\nnull\r\n--1cd7b8d78069b2a824805a7096c3bb9a\r\nContent-Disposition: form-data; name="=\xf2\x83\xa6\x8eÁÏ"\r\n\r\n4.870451444832035e-301\r\n--1cd7b8d78069b2a824805a7096c3bb9a\r\nContent-Disposition: form-data; name="name"\r\n\r\nÆga·ªî²Ý4T7\r\n--1cd7b8d78069b2a824805a7096c3bb9a\r\nContent-Disposition: form-data; name="is_insensitive"\r\n\r\nfalse\r\n--1cd7b8d78069b2a824805a7096c3bb9a\r\nContent-Disposition: form-data; name="set_permissions"\r\n\r\n{"B": {"": 25801248, "\\u00f2w]0D\\udbed\\udd2b": "\\ud9d2\\uddb0"}, "change": {"\\"\\ud9ff\\udcf7\\u00b5\\u00ff\\udbdc\\udc08\\u001f": {" \\ud821\\udd9dyAv": 884, "\\u00cbZ\\udb6e\\udc20\\ud89e\\uddaf\\ud991\\udfa2^\\u0012": null, "Q;\\u00ba\\u0007\\uda48\\udfb7^\\u00fb\\u001fd\\r\\ud277x\\ud8fe\\udce3\\u00bd!\\u0017\\u008cY": [true, -379436650, null]}, "\\u0002": "", "\\u009c": [], "+\\u0081\\ud955\\udf648\\u00f0\\u00a6Wb\\ud963\\ude80\\u00ae,\\u00fd2\\u00ed\\u00af\\u00c3\\u00ec": [882, {}, {"\\u00d9": "\\ud8ac\\udfbd", "\\u00e0\\u00add\\u008f\\u0019\\u00be": -2457813681826497536}]}, "view": {"\\uda5c\\ude35": [["\\u008a"], {}, {}], "\\\\\\u0016\\u00d14\\ud9cf\\udf36": [], "7y\\udb9e\\udf57\\u000e!\\u00a9m": {"\\n\\u00b4\\u00c8\\u00e5\\u0017\\u00c9\\ud8a0\\udc47\\u00d0\\udb03\\ude59\\u0087": {"\\u00fb\\u00f9\\u000b\\u00e7\\u00da\\ud965\\udd41\';\\u00bc\\\\\\u00d1\\u009b\\ud9fe\\ude8d/": -1455245579404271, "UL\\uda71\\ude3a": 7.096852266366317e-38, ".\\ud85b\\udd4b": null}}, "\\ud858\\ude8a=\\u0091\\u00c6|\\uda48\\udd42\\ud90f\\udc48": {}, "=": [false, "\\u00ac3"]}}\r\n--1cd7b8d78069b2a824805a7096c3bb9a--\r\n' http://localhost:8000/api/document_types/
+
+    ⚠️  Request body contains non-printable characters. Actual value: b'--1cd7b8d78069b2a824805a7096c3bb9a\r\nContent-Disposition: form-data; name="f\xc2\xbe\xf3\xa1\xb1\x93\xf0\xa3\xab\xb3\xf1\xab\x80\x8f\xf2\xac\x93\xaa,\xc2\x85\xc3\x95\xc3\xba\xc3\xa5\xf2\x91\x8b\x81C"\r\n\r\n{}\r\n--1cd7b8d78069b2a824805a7096c3bb9a\r\nContent-Disposition: form-data; name="\xc3\x82"\r\n\r\n3097469280169815965696\r\n--1cd7b8d78069b2a824805a7096c3bb9a\r\nContent-Disposition: form-data; name="=\xf2\x83\xa6\x8e\xc3\x81\xc3\x8f"\r\n\r\nnull\r\n--1cd7b8d78069b2a824805a7096c3bb9a\r\nContent-Disposition: form-data; name="=\xf2\x83\xa6\x8e\xc3\x81\xc3\x8f"\r\n\r\n4.870451444832035e-301\r\n--1cd7b8d78069b2a824805a7096c3bb9a\r\nContent-Disposition: form-data; name="name"\r\n\r\n\xc3\x86ga\xc2\xb7\xc2\xaa\xc3\xae\xc2\xb2\xc3\x9d4T7\r\n--1cd7b8d78069b2a824805a7096c3bb9a\r\nContent-Disposition: form-data; name="is_insensitive"\r\n\r\nfalse\r\n--1cd7b8d78069b2a824805a7096c3bb9a\r\nContent-Disposition: form-data; name="set_permissions"\r\n\r\n{"B": {"": 25801248, "\\u00f2w]0D\\udbed\\udd2b": "\\ud9d2\\uddb0"}, "change": {"\\"\\ud9ff\\udcf7\\u00b5\\u00ff\\udbdc\\udc08\\u001f": {" \\ud821\\udd9dyAv": 884, "\\u00cbZ\\udb6e\\udc20\\ud89e\\uddaf\\ud991\\udfa2^\\u0012": null, "Q;\\u00ba\\u0007\\uda48\\udfb7^\\u00fb\\u001fd\\r\\ud277x\\ud8fe\\udce3\\u00bd!\\u0017\\u008cY": [true, -379436650, null]}, "\\u0002": "", "\\u009c": [], "+\\u0081\\ud955\\udf648\\u00f0\\u00a6Wb\\ud963\\ude80\\u00ae,\\u00fd2\\u00ed\\u00af\\u00c3\\u00ec": [882, {}, {"\\u00d9": "\\ud8ac\\udfbd", "\\u00e0\\u00add\\u008f\\u0019\\u00be": -2457813681826497536}]}, "view": {"\\uda5c\\ude35": [["\\u008a"], {}, {}], "\\\\\\u0016\\u00d14\\ud9cf\\udf36": [], "7y\\udb9e\\udf57\\u000e!\\u00a9m": {"\\n\\u00b4\\u00c8\\u00e5\\u0017\\u00c9\\ud8a0\\udc47\\u00d0\\udb03\\ude59\\u0087": {"\\u00fb\\u00f9\\u000b\\u00e7\\u00da\\ud965\\udd41\';\\u00bc\\\\\\u00d1\\u009b\\ud9fe\\ude8d/": -1455245579404271, "UL\\uda71\\ude3a": 7.096852266366317e-38, ".\\ud85b\\udd4b": null}}, "\\ud858\\ude8a=\\u0091\\u00c6|\\uda48\\udd42\\ud90f\\udc48": {}, "=": [false, "\\u00ac3"]}}\r\n--1cd7b8d78069b2a824805a7096c3bb9a--\r\n'
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/document_types/42/?full_perms=false'
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/document_types/?id__in=5451967,-5094326830871&amp;id=42&amp;full_perms=true&amp;name__icontains=%F2%A8%AE%8E%F1%AB%8F%A2t%F1%8A%8C%AE%C2%99%C3%BC%C2%BF5%F2%93%80%9F%18%F1%B9%BE%98F2%C2%82%C3%A9%C3%BE%C2%BB%C3%9A%C2%AA%E7%AA%96%F0%A2%81%AD%F0%93%B3%B1%C3%89AdX%23%1D%C2%B9%C3%AA%C2%83%00&amp;page=2248505&amp;name__iexact=%C3%AD%04%19&amp;ordering=%C3%A1%C3%96%C3%A6%3E%C3%87%C3%BE%F3%9C%88%91%E4%AB%AD&amp;name__istartswith=&amp;name__iendswith=%F3%B5%93%8D%C3%B0&amp;page_size=-4888254236'</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
