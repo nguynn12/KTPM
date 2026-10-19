@@ -2,13 +2,13 @@
 """
 scripts/seed_data.py
 Script seed dữ liệu ban đầu cho hệ thống Paperless-ngx
-Phục vụ đề tài Kiểm thử phần mềm - TV2 (Tạ Nhật Nguyên) - Seed: 202
+Phục vụ đề tài Kiểm thử phần mềm - TV4 (Nguyễn Nhất Minh) - Seed: 404
 """
 
 import os
 import sys
 import random
-import time
+import argparse
 from pathlib import Path
 import requests
 
@@ -18,9 +18,6 @@ if sys.platform == "win32":
         sys.stderr.reconfigure(encoding="utf-8")
     except Exception:
         pass
-
-SEED_VALUE = 202
-random.seed(SEED_VALUE)
 
 BASE_URL = os.getenv("PAPERLESS_URL", "http://localhost:8000")
 ADMIN_USER = os.getenv("PAPERLESS_ADMIN_USER", "admin")
@@ -40,17 +37,18 @@ def get_auth_token():
         sys.exit(1)
 
 
-def seed():
-    print(f"=== BẮT ĐẦU SEED DỮ LIỆU (SEED {SEED_VALUE}) ===")
+def seed(seed_val=404, prefix="TV4"):
+    print(f"=== BẮT ĐẦU SEED DỮ LIỆU (SEED {seed_val}, PREFIX {prefix}) ===")
+    random.seed(seed_val)
     token = get_auth_token()
     headers = {"Authorization": f"Token {token}"}
 
     # 1. Tạo Tags
     tags = [
-        {"name": "TV2_Tag_Invoice_202", "color": "#e6194b", "is_inbox_tag": False},
-        {"name": "TV2_Tag_Urgent_202", "color": "#3cb44b", "is_inbox_tag": False},
-        {"name": "TV2_Tag_Archive_202", "color": "#ffe119", "is_inbox_tag": False},
-        {"name": "TV2_Tag_Finance_202", "color": "#4363d8", "is_inbox_tag": False},
+        {"name": f"{prefix}_Tag_Invoice_{seed_val}", "color": "#e6194b", "is_inbox_tag": False},
+        {"name": f"{prefix}_Tag_Urgent_{seed_val}", "color": "#3cb44b", "is_inbox_tag": False},
+        {"name": f"{prefix}_Tag_Archive_{seed_val}", "color": "#ffe119", "is_inbox_tag": False},
+        {"name": f"{prefix}_Tag_Finance_{seed_val}", "color": "#4363d8", "is_inbox_tag": False},
     ]
     created_tags = {}
     for tag_data in tags:
@@ -66,9 +64,9 @@ def seed():
 
     # 2. Tạo Correspondents
     correspondents = [
-        {"name": "TV2_Bank_202"},
-        {"name": "TV2_Supplier_202"},
-        {"name": "TV2_University_202"},
+        {"name": f"{prefix}_Bank_{seed_val}"},
+        {"name": f"{prefix}_Supplier_{seed_val}"},
+        {"name": f"{prefix}_University_{seed_val}"},
     ]
     created_correspondents = {}
     for corr in correspondents:
@@ -84,9 +82,9 @@ def seed():
 
     # 3. Tạo Document Types
     doc_types = [
-        {"name": "TV2_DocType_Invoice_202"},
-        {"name": "TV2_DocType_Receipt_202"},
-        {"name": "TV2_DocType_Contract_202"},
+        {"name": f"{prefix}_DocType_Invoice_{seed_val}"},
+        {"name": f"{prefix}_DocType_Receipt_{seed_val}"},
+        {"name": f"{prefix}_DocType_Contract_{seed_val}"},
     ]
     created_doc_types = {}
     for dt in doc_types:
@@ -106,20 +104,20 @@ def seed():
 
     sample_files = [
         {
-            "filename": "TV2_Sample_Invoice_202.txt",
-            "title": "Hoa Don Thanh Toan Dich Vu KTPM Seed 202",
-            "content": "HOA DON BAN HANG - SO TIEN 202.000 VND - NGUOI BAN: TV2 TA NHAT NGUYEN - DH DA LAT",
-            "tag": "TV2_Tag_Invoice_202",
-            "corr": "TV2_Bank_202",
-            "dtype": "TV2_DocType_Invoice_202",
+            "filename": f"{prefix}_Sample_Invoice_{seed_val}.txt",
+            "title": f"Hoa Don Thanh Toan Dich Vu KTPM Seed {seed_val}",
+            "content": f"HOA DON BAN HANG - SO TIEN {seed_val}.000 VND - NGUOI BAN: {prefix} NGUYEN NHAT MINH - DH DA LAT",
+            "tag": f"{prefix}_Tag_Invoice_{seed_val}",
+            "corr": f"{prefix}_Bank_{seed_val}",
+            "dtype": f"{prefix}_DocType_Invoice_{seed_val}",
         },
         {
-            "filename": "TV2_Sample_Contract_202.txt",
-            "title": "Hop Dong Kiem Thu He Thong Schemathesis Seed 202",
-            "content": "HOP DONG KIEM THU PHAN MEM MON HOC - NHÓM 5 - PHU TRACH TV2 TA NHAT NGUYEN SEED 202",
-            "tag": "TV2_Tag_Finance_202",
-            "corr": "TV2_University_202",
-            "dtype": "TV2_DocType_Contract_202",
+            "filename": f"{prefix}_Sample_Contract_{seed_val}.txt",
+            "title": f"Hop Dong Kiem Thu He Thong Schemathesis Seed {seed_val}",
+            "content": f"HOP DONG KIEM THU PHAN MEM MON HOC - NHOM 17 - PHU TRACH {prefix} NGUYEN NHAT MINH SEED {seed_val}",
+            "tag": f"{prefix}_Tag_Finance_{seed_val}",
+            "corr": f"{prefix}_University_{seed_val}",
+            "dtype": f"{prefix}_DocType_Contract_{seed_val}",
         },
     ]
 
@@ -155,4 +153,8 @@ def seed():
 
 
 if __name__ == "__main__":
-    seed()
+    parser = argparse.ArgumentParser(description="Seed dữ liệu cho hệ thống Paperless-ngx")
+    parser.add_argument("--seed", type=int, default=404, help="Seed ngẫu nhiên")
+    parser.add_argument("--prefix", default="TV4", help="Tiền tố tên đối tượng")
+    args = parser.parse_args()
+    seed(args.seed, args.prefix)
