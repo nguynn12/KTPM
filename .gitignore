@@ -22,3 +22,8 @@ export/
 pgdata/
 redisdata/
 *.log
+
+# IDE & Tool caches
+.idea/
+.schemathesis/
+
