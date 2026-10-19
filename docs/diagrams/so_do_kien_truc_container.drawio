@@ -1,0 +1,136 @@
+<mxfile host="app.diagrams.net" modified="2026-10-19T15:10:00.000Z" agent="Mozilla/5.0" version="24.7.17">
+  <diagram id="diagram_container" name="Hinh 1 - Kien Truc Container">
+    <mxGraphModel dx="1434" dy="844" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" background="#F8FAFC" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- TIÊU ĐỀ -->
+        <mxCell id="title_1" value="&lt;b style=&quot;font-size: 20px;&quot;&gt;HÌNH 1: SƠ ĐỒ KIẾN TRÚC CONTAINER HỆ THỐNG PAPERLESS-NGX&lt;/b&gt;&lt;br&gt;&lt;i style=&quot;font-size: 13px; color: #64748B;&quot;&gt;Đề tài R08 + K05: Kiểm thử tự động API bằng Schemathesis · Môi trường Docker Compose (3 Services)&lt;/i&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="380" y="30" width="840" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- KHỐI 1: CLIENTS & TEST HARNESS -->
+        <mxCell id="group_clients" value="1. TẦNG CLIENTS &amp; KIỂM THỬ" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#94A3B8;strokeWidth=2;dashed=1;fontStyle=1;fontSize=14;fontColor=#334155;startSize=35;" vertex="1" parent="1">
+          <mxGeometry x="40" y="110" width="300" height="720" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_browser" value="&lt;b style=&quot;font-size: 13px; color: #1D4ED8;&quot;&gt;🌐 Trình duyệt Web (UI)&lt;/b&gt;&lt;br&gt;&lt;b style=&quot;color: #2563EB;&quot;&gt;Angular Frontend SPA&lt;/b&gt;&lt;br&gt;&lt;hr style=&quot;border: 0.5px solid #BFDBFE;&quot;&gt;&lt;div style=&quot;text-align: left; font-size: 11px; color: #334155;&quot;&gt;• Tải lên hóa đơn / hợp đồng&lt;br&gt;• Quản lý Tag, Nhãn, Loại tệp&lt;br&gt;• Tìm kiếm toàn văn trực quan&lt;/div&gt;&lt;br&gt;&lt;span style=&quot;background: #DBEAFE; color: #1E40AF; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 10px;&quot;&gt;http://localhost:8000&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#3B82F6;strokeWidth=1.5;shadow=1;" vertex="1" parent="group_clients">
+          <mxGeometry x="25" y="60" width="250" height="170" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_schemathesis" value="&lt;b style=&quot;font-size: 13px; color: #7E22CE;&quot;&gt;⚙️ Schemathesis (QA Engine)&lt;/b&gt;&lt;br&gt;&lt;b style=&quot;color: #9333EA;&quot;&gt;API Fuzzing / Property Testing&lt;/b&gt;&lt;br&gt;&lt;hr style=&quot;border: 0.5px solid #E9D5FF;&quot;&gt;&lt;div style=&quot;text-align: left; font-size: 11px; color: #334155;&quot;&gt;• TV4 (Nguyễn Nhất Minh - Seed 404)&lt;br&gt;• Vòng 1: GET-only (19 operations)&lt;br&gt;• Vòng 2: CRUD Metadata (18 operations)&lt;br&gt;• Vòng 3: All Checks (53 operations)&lt;/div&gt;&lt;br&gt;&lt;span style=&quot;background: #F3E8FF; color: #6B21A8; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 10px;&quot;&gt;Authorization: Token [Token]&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#A855F7;strokeWidth=1.5;shadow=1;" vertex="1" parent="group_clients">
+          <mxGeometry x="25" y="270" width="250" height="200" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_swagger" value="&lt;b style=&quot;font-size: 13px; color: #047857;&quot;&gt;📄 Swagger UI / cURL / Scripts&lt;/b&gt;&lt;br&gt;&lt;b style=&quot;color: #059669;&quot;&gt;OpenAPI 3.0.3 Specification&lt;/b&gt;&lt;br&gt;&lt;hr style=&quot;border: 0.5px solid #A7F3D0;&quot;&gt;&lt;div style=&quot;text-align: left; font-size: 11px; color: #334155;&quot;&gt;• Tra cứu đặc tả 163 operations&lt;br&gt;• Tái hiện độc lập BUG-01..06&lt;br&gt;• 18 Manual TCs (Correspondents)&lt;/div&gt;&lt;br&gt;&lt;span style=&quot;background: #D1FAE5; color: #065F46; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 10px;&quot;&gt;/api/schema/swagger-ui/&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#10B981;strokeWidth=1.5;shadow=1;" vertex="1" parent="group_clients">
+          <mxGeometry x="25" y="500" width="250" height="180" as="geometry" />
+        </mxCell>
+
+        <!-- KHỐI 2: DOCKER COMPOSE NETWORK -->
+        <mxCell id="group_docker" value="2. MẠNG DOCKER COMPOSE (Bridge: ktpm_default)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;strokeWidth=2.5;fontStyle=1;fontSize=14;fontColor=#0369A1;startSize=35;" vertex="1" parent="1">
+          <mxGeometry x="380" y="110" width="800" height="720" as="geometry" />
+        </mxCell>
+
+        <!-- Container 1: paperless-webserver -->
+        <mxCell id="c_webserver" value="&lt;b style=&quot;font-size: 13px; color: #1E3A8A;&quot;&gt;📦 Container 1: paperless-webserver&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 11px; color: #2563EB;&quot;&gt;Image: ghcr.io/paperless-ngx/paperless-ngx:3.1.3 (Port Host 8000:8000)&lt;/span&gt;" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#2563EB;strokeWidth=2;fontStyle=1;startSize=40;rounded=1;shadow=1;" vertex="1" parent="group_docker">
+          <mxGeometry x="30" y="50" width="740" height="320" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sub_drf" value="&lt;b style=&quot;color: #1E40AF;&quot;&gt;Django REST Framework (DRF)&lt;/b&gt;&lt;hr style=&quot;border: 0.5px solid #93C5FD;&quot;&gt;&lt;div style=&quot;text-align: left; font-size: 11px; color: #334155;&quot;&gt;• API Views: Tag, Corr, Doc, Type&lt;br&gt;• Serializers &amp;amp; Data Validation&lt;br&gt;• Phân quyền (Django-Guardian)&lt;br&gt;• Sinh OpenAPI Schema tự động&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#93C5FD;strokeWidth=1.5;" vertex="1" parent="c_webserver">
+          <mxGeometry x="25" y="55" width="320" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sub_celery" value="&lt;b style=&quot;color: #B45309;&quot;&gt;Celery Worker &amp;amp; OCR Pipeline&lt;/b&gt;&lt;hr style=&quot;border: 0.5px solid #FCD34D;&quot;&gt;&lt;div style=&quot;text-align: left; font-size: 11px; color: #334155;&quot;&gt;• Tiêu thụ job nền từ Redis queue&lt;br&gt;• Engine: OCRmyPDF + Tesseract&lt;br&gt;• Trích xuất nội dung văn bản (OCR)&lt;br&gt;• Sinh ảnh thumbnail xem trước&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FBBF24;strokeWidth=1.5;" vertex="1" parent="c_webserver">
+          <mxGeometry x="390" y="55" width="320" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sub_search" value="&lt;div style=&quot;text-align: center;&quot;&gt;&lt;b style=&quot;color: #334155;&quot;&gt;Hệ thống phụ trợ nội bộ Container Webserver&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 11px; color: #475569;&quot;&gt;🔍 Whoosh Full-text Search Indexer &amp;nbsp;· &amp;nbsp;⚙️ Document Classifier (Tự động gán nhãn) &amp;nbsp;· &amp;nbsp;📂 Consume Directory Watcher&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#CBD5E1;strokeWidth=1;" vertex="1" parent="c_webserver">
+          <mxGeometry x="25" y="210" width="685" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Container 2: paperless-db -->
+        <mxCell id="c_db" value="&lt;b style=&quot;font-size: 13px; color: #0F766E;&quot;&gt;🗄️ Container 2: paperless-db&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #14B8A6;&quot;&gt;Image: postgres:16-alpine (Port 5432)&lt;/span&gt;&lt;hr style=&quot;border: 0.5px solid #5EEAD4;&quot;&gt;&lt;b style=&quot;color: #115E59;&quot;&gt;PostgreSQL 16 Database&lt;/b&gt;&lt;br&gt;&lt;div style=&quot;text-align: left; font-size: 11px; color: #334155;&quot;&gt;• documents_document&lt;br&gt;• documents_tag&lt;br&gt;• documents_correspondent&lt;br&gt;• documents_documenttype&lt;br&gt;• auth_user &amp;amp; authtoken_token&lt;br&gt;• celery_taskmeta (trạng thái)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0FDF4;strokeColor=#0D9488;strokeWidth=2;shadow=1;" vertex="1" parent="group_docker">
+          <mxGeometry x="30" y="410" width="340" height="270" as="geometry" />
+        </mxCell>
+
+        <!-- Container 3: paperless-broker -->
+        <mxCell id="c_broker" value="&lt;b style=&quot;font-size: 13px; color: #B91C1C;&quot;&gt;⚡ Container 3: paperless-broker&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #F87171;&quot;&gt;Image: redis:7-alpine (Port 6379)&lt;/span&gt;&lt;hr style=&quot;border: 0.5px solid #FCA5A5;&quot;&gt;&lt;b style=&quot;color: #991B1B;&quot;&gt;Redis 7 In-Memory Store&lt;/b&gt;&lt;br&gt;&lt;div style=&quot;text-align: left; font-size: 11px; color: #334155;&quot;&gt;• Celery Message Queue (Broker)&lt;br&gt;• Nhận &amp;amp; phân phối tác vụ OCR&lt;br&gt;• Bộ đệm kết quả trung gian&lt;br&gt;• Đảm bảo bất đồng bộ không nghẽn API&lt;br&gt;• Lưu trữ dump.rdb trên redisdata&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF2F2;strokeColor=#EF4444;strokeWidth=2;shadow=1;" vertex="1" parent="group_docker">
+          <mxGeometry x="430" y="410" width="340" height="270" as="geometry" />
+        </mxCell>
+
+        <!-- KHỐI 3: PERSISTENT VOLUMES -->
+        <mxCell id="group_volumes" value="3. PERSISTENT VOLUMES (LƯU TRỮ HOST)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#64748B;strokeWidth=2;dashed=1;fontStyle=1;fontSize=14;fontColor=#334155;startSize=35;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="110" width="380" height="720" as="geometry" />
+        </mxCell>
+
+        <mxCell id="v_media" value="&lt;b style=&quot;color: #1E293B;&quot;&gt;📁 volume: media&lt;/b&gt;&lt;br&gt;&lt;i style=&quot;font-size: 10px; color: #64748B;&quot;&gt;Mount: /usr/src/paperless/media&lt;/i&gt;&lt;br&gt;&lt;div style=&quot;text-align: left; font-size: 11px; color: #334155;&quot;&gt;• Tệp tin gốc (PDF, ảnh quét, TXT)&lt;br&gt;• Tệp PDF sau xử lý OCRmyPDF&lt;br&gt;• Ảnh thu nhỏ (Thumbnails preview)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#94A3B8;strokeWidth=1.5;" vertex="1" parent="group_volumes">
+          <mxGeometry x="25" y="55" width="330" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="v_data" value="&lt;b style=&quot;color: #1E293B;&quot;&gt;📁 volume: data&lt;/b&gt;&lt;br&gt;&lt;i style=&quot;font-size: 10px; color: #64748B;&quot;&gt;Mount: /usr/src/paperless/data&lt;/i&gt;&lt;br&gt;&lt;div style=&quot;text-align: left; font-size: 11px; color: #334155;&quot;&gt;• Whoosh Search Index databases&lt;br&gt;• Cấu hình hệ thống &amp;amp; cache nội bộ&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#94A3B8;strokeWidth=1.5;" vertex="1" parent="group_volumes">
+          <mxGeometry x="25" y="185" width="330" height="95" as="geometry" />
+        </mxCell>
+
+        <mxCell id="v_pgdata" value="&lt;b style=&quot;color: #0F766E;&quot;&gt;🗄️ volume: pgdata&lt;/b&gt;&lt;br&gt;&lt;i style=&quot;font-size: 10px; color: #134E4A;&quot;&gt;Mount: /var/lib/postgresql/data&lt;/i&gt;&lt;br&gt;&lt;div style=&quot;text-align: left; font-size: 11px; color: #334155;&quot;&gt;• Toàn bộ cơ sở dữ liệu PostgreSQL&lt;br&gt;• Bảng metadata, users, khóa ngoại, indexes&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0FDFA;strokeColor=#5EEAD4;strokeWidth=1.5;" vertex="1" parent="group_volumes">
+          <mxGeometry x="25" y="300" width="330" height="95" as="geometry" />
+        </mxCell>
+
+        <mxCell id="v_redisdata" value="&lt;b style=&quot;color: #B91C1C;&quot;&gt;⚡ volume: redisdata&lt;/b&gt;&lt;br&gt;&lt;i style=&quot;font-size: 10px; color: #7F1D1D;&quot;&gt;Mount: /data (dump.rdb)&lt;/i&gt;&lt;br&gt;&lt;div style=&quot;text-align: left; font-size: 11px; color: #334155;&quot;&gt;• Trạng thái hàng đợi Redis bền vững&lt;br&gt;• Bảo đảm không mất task khi container restart&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF2F2;strokeColor=#FCA5A5;strokeWidth=1.5;" vertex="1" parent="group_volumes">
+          <mxGeometry x="25" y="415" width="330" height="95" as="geometry" />
+        </mxCell>
+
+        <mxCell id="v_host" value="&lt;b style=&quot;color: #1E293B;&quot;&gt;📂 Thư mục Host Bind Mounts&lt;/b&gt;&lt;hr style=&quot;border: 0.5px solid #CBD5E1;&quot;&gt;&lt;div style=&quot;text-align: left; font-size: 11px; color: #334155;&quot;&gt;• &lt;b&gt;./consume:&lt;/b&gt; Thả file trực tiếp để tự động nạp&lt;br&gt;• &lt;b&gt;./export:&lt;/b&gt; Thư mục xuất bản sao lưu tài liệu&lt;br&gt;• &lt;b&gt;.env / secrets:&lt;/b&gt; Biến môi trường và khóa mật&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#CBD5E1;strokeWidth=1.5;" vertex="1" parent="group_volumes">
+          <mxGeometry x="25" y="530" width="330" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- KẾT NỐI (ARROWS) -->
+        <!-- Browser -> Webserver -->
+        <mxCell id="e_browser" value="&lt;b style=&quot;background: #FFFFFF; color: #1E40AF; padding: 2px;&quot;&gt;HTTP :8000&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#2563EB;strokeWidth=2.5;" edge="1" parent="1" source="c_browser" target="sub_drf">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Schemathesis -> Webserver -->
+        <mxCell id="e_fuzzer" value="&lt;b style=&quot;background: #FFFFFF; color: #7E22CE; padding: 2px;&quot;&gt;REST API (Token)&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;strokeColor=#A855F7;strokeWidth=2.5;" edge="1" parent="1" source="c_schemathesis" target="sub_drf">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Webserver <-> Database -->
+        <mxCell id="e_db" value="&lt;b style=&quot;background: #FFFFFF; color: #0F766E; padding: 2px;&quot;&gt;PostgreSQL :5432 (SQL)&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;strokeColor=#0D9488;strokeWidth=2.2;" edge="1" parent="1" source="sub_drf" target="c_db">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="575" y="480" />
+              <mxPoint x="575" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Webserver <-> Redis -->
+        <mxCell id="e_redis" value="&lt;b style=&quot;background: #FFFFFF; color: #B91C1C; padding: 2px;&quot;&gt;Celery Queue :6379&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;strokeColor=#EF4444;strokeWidth=2.2;" edge="1" parent="1" source="sub_celery" target="c_broker">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="980" y="480" />
+              <mxPoint x="980" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Webserver -> Media Volume -->
+        <mxCell id="e_media" value="&lt;span style=&quot;background: #FFFFFF; color: #475569;&quot;&gt;Mount&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=1.8;dashed=1;" edge="1" parent="1" source="sub_celery" target="v_media">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Database -> pgdata Volume -->
+        <mxCell id="e_pgvol" value="&lt;span style=&quot;background: #FFFFFF; color: #0F766E;&quot;&gt;Storage&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0D9488;strokeWidth=1.5;dashed=1;" edge="1" parent="1" source="c_db" target="v_pgdata">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Redis -> redisdata Volume -->
+        <mxCell id="e_redisvol" value="&lt;span style=&quot;background: #FFFFFF; color: #B91C1C;&quot;&gt;Storage&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#EF4444;strokeWidth=1.5;dashed=1;" edge="1" parent="1" source="c_broker" target="v_redisdata">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,87 @@
+<mxfile host="app.diagrams.net" modified="2026-10-19T15:15:00.000Z" agent="Mozilla/5.0" version="24.7.17">
+  <diagram id="diagram_erd" name="Hinh 2 - Quan He Du Lieu ERD">
+    <mxGraphModel dx="1434" dy="844" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" background="#F8FAFC" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- TIÊU ĐỀ -->
+        <mxCell id="title_2" value="&lt;b style=&quot;font-size: 20px;&quot;&gt;HÌNH 2: SƠ ĐỒ QUAN HỆ DỮ LIỆU CỐT LÕI (ER DIAGRAM) PAPERLESS-NGX&lt;/b&gt;&lt;br&gt;&lt;i style=&quot;font-size: 13px; color: #64748B;&quot;&gt;Trích xuất trực tiếp từ src/documents/models.py (v3.1.3) · 4 Thực thể API cốt lõi: Document, Tag, Correspondent, DocumentType&lt;/i&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="340" y="30" width="940" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- THỰC THỂ 1: USER (auth_user) -->
+        <mxCell id="ent_user" value="&lt;b style=&quot;font-size: 13px; color: #FFFFFF;&quot;&gt;User (auth_user)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #E2E8F0;&quot;&gt;Bảng quản trị người dùng&lt;/span&gt;&lt;hr style=&quot;border: 0.5px solid #64748B;&quot;&gt;&lt;div style=&quot;text-align: left; font-size: 11px;&quot;&gt;&lt;span style=&quot;color: #EF4444; font-weight: bold;&quot;&gt;[PK] id : int&lt;/span&gt;&lt;br&gt;• username : varchar(150)&lt;br&gt;• email : varchar(254)&lt;br&gt;• is_superuser : boolean&lt;br&gt;• is_active : boolean&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#334155;strokeColor=#475569;strokeWidth=2;fontColor=#FFFFFF;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="660" y="110" width="280" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- THỰC THỂ 2: DOCUMENT (Trung tâm) -->
+        <mxCell id="ent_doc" value="&lt;b style=&quot;font-size: 14px; color: #FFFFFF;&quot;&gt;Document (Trung tâm)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #DBEAFE;&quot;&gt;documents_document&lt;/span&gt;&lt;hr style=&quot;border: 0.5px solid #3B82F6;&quot;&gt;&lt;div style=&quot;text-align: left; font-size: 11px; color: #1E293B;&quot;&gt;&lt;span style=&quot;color: #EF4444; font-weight: bold;&quot;&gt;[PK] id : int&lt;/span&gt;&lt;br&gt;• title : varchar(128)&lt;br&gt;• content : text (Nội dung OCR)&lt;br&gt;• created : date (Ngày văn bản)&lt;br&gt;• modified : datetime (Ngày sửa)&lt;br&gt;• added : datetime (Ngày nạp)&lt;br&gt;• checksum : varchar(32) (MD5)&lt;br&gt;• mime_type : varchar(256)&lt;br&gt;&lt;span style=&quot;color: #0D9488; font-weight: bold;&quot;&gt;[FK] correspondent_id : int (null)&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;color: #D97706; font-weight: bold;&quot;&gt;[FK] document_type_id : int (null)&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;color: #475569; font-weight: bold;&quot;&gt;[FK] owner_id : int (null)&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;strokeWidth=2.5;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="320" width="320" height="310" as="geometry" />
+        </mxCell>
+
+        <!-- THỰC THỂ 3: CORRESPONDENT (Người gửi) -->
+        <mxCell id="ent_corr" value="&lt;b style=&quot;font-size: 13px; color: #0F766E;&quot;&gt;Correspondent (Người gửi)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #14B8A6;&quot;&gt;documents_correspondent&lt;/span&gt;&lt;hr style=&quot;border: 0.5px solid #5EEAD4;&quot;&gt;&lt;div style=&quot;text-align: left; font-size: 11px; color: #1E293B;&quot;&gt;&lt;span style=&quot;color: #EF4444; font-weight: bold;&quot;&gt;[PK] id : int&lt;/span&gt;&lt;br&gt;• name : varchar(128) (Bắt buộc)&lt;br&gt;• slug : slug (Tự sinh)&lt;br&gt;• match : varchar(256)&lt;br&gt;• matching_algorithm : int (0..6)&lt;br&gt;• is_insensitive : boolean&lt;br&gt;&lt;span style=&quot;color: #475569; font-weight: bold;&quot;&gt;[FK] owner_id : int&lt;/span&gt;&lt;/div&gt;&lt;br&gt;&lt;div style=&quot;background: #F0FDFA; padding: 3px; border-radius: 4px; font-size: 10px; color: #0F766E; font-weight: bold;&quot;&gt;Kế thừa MatchingModel&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0D9488;strokeWidth=2;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="320" width="300" height="260" as="geometry" />
+        </mxCell>
+
+        <!-- THỰC THỂ 4: DOCUMENT TYPE (Loại tài liệu) -->
+        <mxCell id="ent_dtype" value="&lt;b style=&quot;font-size: 13px; color: #B45309;&quot;&gt;DocumentType (Loại tài liệu)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #F59E0B;&quot;&gt;documents_documenttype&lt;/span&gt;&lt;hr style=&quot;border: 0.5px solid #FCD34D;&quot;&gt;&lt;div style=&quot;text-align: left; font-size: 11px; color: #1E293B;&quot;&gt;&lt;span style=&quot;color: #EF4444; font-weight: bold;&quot;&gt;[PK] id : int&lt;/span&gt;&lt;br&gt;• name : varchar(128) (Bắt buộc)&lt;br&gt;• slug : slug (Tự sinh)&lt;br&gt;• match : varchar(256)&lt;br&gt;• matching_algorithm : int (0..6)&lt;br&gt;• is_insensitive : boolean&lt;br&gt;&lt;span style=&quot;color: #475569; font-weight: bold;&quot;&gt;[FK] owner_id : int&lt;/span&gt;&lt;/div&gt;&lt;br&gt;&lt;div style=&quot;background: #FFFBEB; padding: 3px; border-radius: 4px; font-size: 10px; color: #B45309; font-weight: bold;&quot;&gt;Kế thừa MatchingModel&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D97706;strokeWidth=2;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="320" width="300" height="260" as="geometry" />
+        </mxCell>
+
+        <!-- THỰC THỂ 5: TAG (Nhãn phân loại) -->
+        <mxCell id="ent_tag" value="&lt;b style=&quot;font-size: 13px; color: #6B21A8;&quot;&gt;Tag (Nhãn phân loại)&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #8B5CF6;&quot;&gt;documents_tag&lt;/span&gt;&lt;hr style=&quot;border: 0.5px solid #D8B4FE;&quot;&gt;&lt;div style=&quot;text-align: left; font-size: 11px; color: #1E293B;&quot;&gt;&lt;span style=&quot;color: #EF4444; font-weight: bold;&quot;&gt;[PK] id : int&lt;/span&gt;&lt;br&gt;• name : varchar(128) (Bắt buộc)&lt;br&gt;• color : varchar(7) (HEX #rrggbb)&lt;br&gt;• match : varchar(256)&lt;br&gt;• matching_algorithm : int (0..6)&lt;br&gt;• is_insensitive : boolean&lt;br&gt;• is_inbox_tag : boolean&lt;br&gt;&lt;span style=&quot;color: #7C3AED; font-weight: bold;&quot;&gt;[FK] parent_id : int (đệ quy &amp;lt;= 5)&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;color: #475569; font-weight: bold;&quot;&gt;[FK] owner_id : int&lt;/span&gt;&lt;/div&gt;&lt;br&gt;&lt;div style=&quot;background: #FAF5FF; padding: 3px; border-radius: 4px; font-size: 10px; color: #6B21A8; font-weight: bold;&quot;&gt;MatchingModel + TreeNodeModel&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=2;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="670" width="300" height="300" as="geometry" />
+        </mxCell>
+
+        <!-- THỰC THỂ 6: BẢNG TRUNG GIAN (N:M) -->
+        <mxCell id="ent_rel" value="&lt;b style=&quot;font-size: 12px; color: #334155;&quot;&gt;documents_document_tags&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size: 10px; color: #64748B;&quot;&gt;Bảng liên kết Nhiều - Nhiều (N:M)&lt;/span&gt;&lt;hr style=&quot;border: 0.5px solid #CBD5E1;&quot;&gt;&lt;div style=&quot;text-align: left; font-size: 11px; color: #1E293B;&quot;&gt;&lt;span style=&quot;color: #EF4444; font-weight: bold;&quot;&gt;[PK] id : int&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;color: #1D4ED8; font-weight: bold;&quot;&gt;[FK] document_id : int&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;color: #7C3AED; font-weight: bold;&quot;&gt;[FK] tag_id : int&lt;/span&gt;&lt;br&gt;&lt;i style=&quot;color: #64748B;&quot;&gt;Ràng buộc: Unique(doc_id, tag_id)&lt;/i&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#64748B;strokeWidth=1.8;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="740" width="320" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- HỘP QUY TẮC RÀNG BUỘC -->
+        <mxCell id="box_rules" value="&lt;b style=&quot;font-size: 13px; color: #0F172A;&quot;&gt;QUY TẮC TOÀN VẸN VÀ RÀNG BUỘC DỮ LIỆU&lt;/b&gt;&lt;hr style=&quot;border: 0.5px solid #CBD5E1;&quot;&gt;&lt;div style=&quot;text-align: left; font-size: 11px; color: #334155; line-height: 1.6;&quot;&gt;&lt;b style=&quot;color: #1D4ED8;&quot;&gt;1. Quan hệ 1 : Nhiều (1:N, Nullable):&lt;/b&gt;&lt;br&gt;• 1 Correspondent là người gửi của nhiều Documents.&lt;br&gt;• 1 DocumentType phân loại cho nhiều Documents.&lt;br&gt;&lt;br&gt;&lt;b style=&quot;color: #7C3AED;&quot;&gt;2. Quan hệ Nhiều : Nhiều (N:M):&lt;/b&gt;&lt;br&gt;• 1 Document được gắn 0, 1 hoặc nhiều Tags.&lt;br&gt;• 1 Tag có thể dùng để phân loại cho nhiều Documents.&lt;br&gt;&lt;br&gt;&lt;b style=&quot;color: #6B21A8;&quot;&gt;3. Phân cấp đệ quy cây nhãn (Tree Model):&lt;/b&gt;&lt;br&gt;• Tag có khóa ngoại tự tham chiếu &lt;i&gt;parent_id&lt;/i&gt; với độ sâu tối đa 5 cấp (&lt;i&gt;MAX_NESTING_DEPTH = 5&lt;/i&gt;).&lt;br&gt;&lt;br&gt;&lt;b style=&quot;color: #B91C1C;&quot;&gt;4. Ràng buộc duy nhất (UniqueConstraint):&lt;/b&gt;&lt;br&gt;• Tên (&lt;i&gt;name&lt;/i&gt;) là duy nhất theo từng chủ sở hữu (&lt;i&gt;owner&lt;/i&gt;).&lt;br&gt;• Độ dài tối đa trường &lt;i&gt;name&lt;/i&gt; là 128 ký tự.&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#94A3B8;strokeWidth=1.5;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="670" width="300" height="300" as="geometry" />
+        </mxCell>
+
+        <!-- KẾT NỐI (RELATIONSHIPS) -->
+        <!-- User -> Document (1:N) -->
+        <mxCell id="rel_user_doc" value="&lt;b style=&quot;background: #FFFFFF; color: #334155; padding: 2px;&quot;&gt;owns (1 : N)&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=2;" edge="1" parent="1" source="ent_user" target="ent_doc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Correspondent -> Document (1:N) -->
+        <mxCell id="rel_corr_doc" value="&lt;b style=&quot;background: #F0FDFA; color: #0F766E; padding: 3px; border: 0.5px solid #5EEAD4; border-radius: 3px;&quot;&gt;sender of (1 : N)&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0D9488;strokeWidth=2.5;" edge="1" parent="1" source="ent_corr" target="ent_doc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- DocumentType -> Document (1:N) -->
+        <mxCell id="rel_dtype_doc" value="&lt;b style=&quot;background: #FFFBEB; color: #B45309; padding: 3px; border: 0.5px solid #FCD34D; border-radius: 3px;&quot;&gt;categorizes (1 : N)&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D97706;strokeWidth=2.5;" edge="1" parent="1" source="ent_dtype" target="ent_doc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Document -> Junction Table -->
+        <mxCell id="rel_doc_junc" value="&lt;b style=&quot;background: #FFFFFF; color: #1D4ED8; padding: 2px;&quot;&gt;1 : N&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1D4ED8;strokeWidth=2.2;" edge="1" parent="1" source="ent_doc" target="ent_rel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Tag -> Junction Table -->
+        <mxCell id="rel_tag_junc" value="&lt;b style=&quot;background: #FAF5FF; color: #6B21A8; padding: 3px; border: 0.5px solid #D8B4FE; border-radius: 3px;&quot;&gt;tagged with (N : M)&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2.2;" edge="1" parent="1" source="ent_tag" target="ent_rel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Tag Self-referencing (Parent) -->
+        <mxCell id="rel_tag_tree" value="&lt;b style=&quot;background: #FFFFFF; color: #6B21A8; padding: 2px;&quot;&gt;parent of (đệ quy &amp;lt;= 5)&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.9;entryDx=0;entryDy=0;strokeColor=#7C3AED;strokeWidth=1.8;" edge="1" parent="1" source="ent_tag" target="ent_tag">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="100" y="880" />
+              <mxPoint x="100" y="940" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
