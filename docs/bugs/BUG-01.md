@@ -67,7 +67,7 @@ TypeError: argument of type 'bool' is not a container or iterable
 ## 6. Lệnh tái hiện (Curl)
 ```bash
 curl -X POST http://localhost:8000/api/tags/ \
-  -H "Authorization: Token 3716828bfd21075a2fb68f1b959d02d2756f8d7a" \
+  -H "Authorization: Token <TOKEN>" \
   -H "Content-Type: application/json" \
   -d '{"name": "Test_Perm_Crash", "set_permissions": {"view": false}}'
 ```
