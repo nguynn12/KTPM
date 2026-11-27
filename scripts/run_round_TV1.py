@@ -42,6 +42,14 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+if sys.platform == "win32":
+    # Windows PowerShell mac dinh co the la cp1252 -> print tieng Viet gay UnicodeEncodeError.
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
 SEED = 101
 PAPERLESS_IMAGE = "ghcr.io/paperless-ngx/paperless-ngx:3.1.3"
 PAPERLESS_SHA = "d48663e9ebaadc4b413a6ca3bc88cb5fbc4e468e"
@@ -408,8 +416,14 @@ def main() -> int:
         cmd += ["--phases", cfg["phases"]]
     cmd += ["--checks", cfg["checks"]]
 
+    # Schemathesis in header Unicode; tren Windows PowerShell (cp1252) tien trinh con se crash
+    # neu khong ep UTF-8. Truyen env nay de runner chay duoc tren moi may.
+    child_env = os.environ.copy()
+    child_env.setdefault("PYTHONUTF8", "1")
+    child_env.setdefault("PYTHONIOENCODING", "utf-8")
+
     proc = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8",
-                          errors="replace", timeout=7200)
+                          errors="replace", timeout=7200, env=child_env)
     out = (proc.stdout or "") + (proc.stderr or "")
 
     artifacts["log"].write_text(sanitize(out, [token, password]), encoding="utf-8")

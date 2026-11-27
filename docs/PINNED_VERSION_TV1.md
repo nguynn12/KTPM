@@ -7,10 +7,13 @@
 |---|---|
 | Repo | https://github.com/paperless-ngx/paperless-ngx |
 | Tag/release đã chốt | **v3.1.3** (release ổn định 04/09/2026; đã chạy xong vòng 1–3 và dựng thật TV1 ngày 13/10) |
+| Annotated tag object | `cbd6b56c9f0eb7261c903cf5ccdbe124d433e995` (tag `v3.1.3` trỏ tới commit bên dưới) |
 | Commit SHA (đầy đủ) | `d48663e9ebaadc4b413a6ca3bc88cb5fbc4e468e` |
 | Image Docker pin | `ghcr.io/paperless-ngx/paperless-ngx:3.1.3` |
-| Phiên bản Schemathesis (cả nhóm đồng nhất) | `4.30.1` — cài bằng `pip install "schemathesis==4.30.1"`, kiểm tra bằng `schemathesis --version` |
-| Python yêu cầu (cho Schemathesis) | 3.11 – 3.13 (theo docs Schemathesis; Paperless container tự mang Python riêng) |
+| Image digest (đã pull 26/11/2026) | `sha256:aa810a36942c63d4ee70d00eda7236cd3d6acfb7eb3f7987fb568ed14df8817a` |
+| Label image | `org.opencontainers.image.version=3.1.3`, `org.opencontainers.image.revision=d48663e9...` |
+| Phiên bản Schemathesis (cả nhóm đồng nhất) | `4.30.1` — nguồn PyPI chính thức https://pypi.org/project/schemathesis/4.30.1/, cài bằng `pip install "schemathesis==4.30.1"`, kiểm tra bằng `schemathesis --version` |
+| Python yêu cầu (cho Schemathesis) | 3.11 – 3.13; nhóm chốt **3.13** (PyPI ghi `Requires-Python >=3.10`, nhưng 3.14/3.15 có thể thiếu wheel `pyyaml`; Paperless container tự mang Python riêng) |
 | Phạm vi test | `/api/tags/`, `/api/correspondents/`, `/api/document_types/`, `/api/documents/` |
 | Port mặc định | `8000` → mở http://localhost:8000 |
 | DB / service kèm theo | PostgreSQL `docker.io/library/postgres:16-alpine`, Redis `docker.io/library/redis:7-alpine` (theo `docker-compose.yml` của nhóm) |
@@ -28,9 +31,26 @@
 ## Cách kiểm chứng pin (ai cũng chạy được)
 
 ```bash
-docker images | grep paperless-ngx        # phải thấy :3.1.3, KHÔNG thấy :latest
-docker compose exec webserver python -c "import paperless; print(paperless.__version__)" 2>/dev/null || \
+# 1. Tag annotated + commit that tag points to (2 dòng, không phải 1)
+git ls-remote --tags https://github.com/paperless-ngx/paperless-ngx.git \
+  refs/tags/v3.1.3 refs/tags/v3.1.3^{}
+# cbd6b56c9f0eb7261c903cf5ccdbe124d433e995  refs/tags/v3.1.3
+# d48663e9ebaadc4b413a6ca3bc88cb5fbc4e468e  refs/tags/v3.1.3^{}
+
+# 2. Image + label + digest
+docker image inspect ghcr.io/paperless-ngx/paperless-ngx:3.1.3 \
+  --format '{{json .Config.Labels}}'
+docker image inspect ghcr.io/paperless-ngx/paperless-ngx:3.1.3 \
+  --format '{{json .RepoDigests}}'
+
+# 3. Phien ban Paperless trong container (KHONG dung paperless.__version__)
 docker compose exec webserver cat /usr/src/paperless/src/paperless/version.py
-git -C paperless-ngx-src log --oneline -1  # nếu có clone repo để đọc code: phải ra d48663e
+docker compose exec webserver python3 -c \
+  "from paperless.version import __full_version_str__; print(__full_version_str__)"
+
+# 4. Schemathesis
 schemathesis --version                    # phải ra 4.30.1 trên cả 5 máy
 ```
+
+Kết quả xác minh lại từ môi trường sạch ngày 26/11/2026:
+[`../results/TV1_cleanenv_verify.md`](../results/TV1_cleanenv_verify.md).

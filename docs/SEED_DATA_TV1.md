@@ -52,6 +52,8 @@ Cả 2 script ghi file vào `scripts/sample_docs/`.
 ## Lưu ý
 
 - Không để file `.env` thật, token hay mật khẩu admin vào thư mục này.
+- **`scripts/prepare_baseline_TV1.py` reset trước khi seed**: nó xóa toàn bộ documents/tags/
+  correspondents/document_types qua API (giữ user admin). Chỉ chạy trên môi trường thử nghiệm.
 - Đây là seed **101** của TV1; TV2 dùng seed 202 (`scripts/sample_docs/TV2_Sample_*.txt`), TV3 dùng seed 303.
 - Muốn test tiếng Việt: thêm PDF tiếng Việt + đặt `PAPERLESS_OCR_LANGUAGE=vie`
   (cần `docker compose up -d` lại để container cài gói `tesseract-ocr-vie`).

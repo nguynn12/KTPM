@@ -5,6 +5,10 @@
 > Bản pin: xem `docs/PINNED_VERSION_TV1.md` (Paperless-ngx **v3.1.3**, Schemathesis **4.30.1**).
 > Chỉ test trên `http://localhost:8000` — không gửi request ra Internet.
 >
+> **Hướng dẫn chuẩn mới nhất ở gốc repo: [`README.md`](../README.md).**
+> Tài liệu này giữ bản chi tiết + xử lý sự cố; đã được đối chiếu lại bằng lần xác minh môi trường
+> sạch ngày 26/11/2026 — xem [`results/TV1_cleanenv_verify.md`](../results/TV1_cleanenv_verify.md).
+>
 > Tài liệu này gộp bản TV1 viết ban đầu và phần hiệu đính ngày 12/10 (sửa 2 lệnh sai
 > mà TV2 từng hướng dẫn: `manage.py set_password` / `manage.py create_api_token` — xem mục 6 và mục 12).
 
@@ -16,7 +20,7 @@
 | Ổ đĩa trống | 10 GB | 125.6 GB |
 | OS | Win 10/11 + WSL2, hoặc Ubuntu 22.04+, hoặc macOS 13+ | Windows 11 + WSL2 (Ubuntu) |
 | Docker Desktop | ≥ 4.30 (kèm Compose v2) | 29.8.0 / Compose v5.5.1 |
-| Python (cho Schemathesis) | 3.11–3.13 | máy TV1 chưa có Python — dùng Docker để seed |
+| Python (cho Schemathesis) | 3.11–3.13 (nhóm chốt 3.13) | Python 3.13.15, venv `.venv` |
 
 Kiểm tra nhanh bằng script có sẵn:
 
@@ -42,18 +46,30 @@ docker compose version    # kỳ vọng: Docker Compose version v2+
 ## 3. Lấy file compose đã pin (không dùng script install mặc định)
 
 Script `install-paperless-ngx.sh` của hãng kéo `main`/`latest` nên nhóm **không** dùng.
-Dùng bộ file đã pin sẵn trong repo này (`docker/docker-compose.pinned.yml` là bản sao
-`docker-compose.yml` của nhóm, chỉ thêm dòng `env_file: docker-compose.env` để tách
-phần cấu hình Paperless ra riêng):
+Dùng bộ file đã pin sẵn trong repo này.
+
+### Cách A — compose gốc + `.env` (đã xác minh 26/11/2026)
 
 ```bash
 git clone https://github.com/nguynn12/KTPM.git ktpm && cd ktpm
 git checkout TV1_TranGiaHuy
+cp .env.example .env
+# Sửa .env: PAPERLESS_SECRET_KEY, PAPERLESS_ADMIN_PASSWORD, PAPERLESS_URL
+# Sinh SECRET:
+python3 -c "import secrets; print(secrets.token_urlsafe(64))"
+docker compose pull && docker compose up -d
+```
+
+### Cách B — bản pinned tách cấu hình
+
+`docker/docker-compose.pinned.yml` là bản sao `docker-compose.yml` của nhóm, chỉ thêm dòng
+`env_file: docker-compose.env` để tách phần cấu hình Paperless ra riêng:
+
+```bash
 cp docker/docker-compose.pinned.yml docker-compose.yml
 cp docker/docker-compose.env.example docker-compose.env
 cp docker/.env.example .env
-# Sinh SECRET thật, thay dòng PAPERLESS_SECRET_KEY=change-me trong docker-compose.env:
-python3 -c "import secrets; print(secrets.token_urlsafe(64))"
+# Sinh SECRET thật, thay dòng PAPERLESS_SECRET_KEY=change-me trong docker-compose.env
 ```
 
 Kiểm tra dòng image trong `docker-compose.yml` phải là:
@@ -68,7 +84,7 @@ image: ghcr.io/paperless-ngx/paperless-ngx:3.1.3
 |---|---|---|
 | `PAPERLESS_SECRET_KEY` | Khóa ký session/token, **bắt buộc đổi**, không commit lên Git | chuỗi ngẫu nhiên 64 ký tự |
 | `PAPERLESS_ADMIN_PASSWORD` | Mật khẩu admin tạo tự động ở lần chạy đầu — **không để `admin`/`change-me` khi chạy thật** | mật khẩu mạnh của bạn |
-| `PAPERLESS_URL` | URL công khai (để nguyên comment khi chạy local) | không đặt |
+| `PAPERLESS_URL` | URL công khai; phải khớp port thực tế | `http://localhost:8000` |
 | `PAPERLESS_TIME_ZONE` | Múi giờ hiển thị | `Asia/Ho_Chi_Minh` |
 | `PAPERLESS_OCR_LANGUAGE` | Ngôn ngữ OCR chính | `eng` (bộ seed là tiếng Anh; nếu thêm tài liệu tiếng Việt thì đặt `vie` + thêm `PAPERLESS_OCR_LANGUAGES=vie`) |
 | `PAPERLESS_REDIS` / `PAPERLESS_DBHOST` / `PAPERLESS_DBENGINE` | Trỏ sang container broker/db (đã khai trong compose) | giữ nguyên |
@@ -121,8 +137,8 @@ Trả về `{"token":"abc..."}`. Dùng cho mọi lệnh sau qua header
 # Cách 2: copy vào thư mục consume để hệ thống tự nuốt:
 cp scripts/sample_docs/TV1_Sample_*.pdf consume/ && sleep 60 && docker compose logs --tail=20 webserver
 # Tạo tag / correspondent / document_type mẫu giống nhau:
-pip install requests
-python3 scripts/seed_and_verify_flows_TV1.py --base-url http://localhost:8000 --username <ADMIN> --password <MK>
+# (dùng venv đã cài requirements.txt ở mục 10)
+.\.venv\Scripts\python.exe scripts\seed_and_verify_flows_TV1.py --base-url http://localhost:8000 --username <ADMIN> --password <MK>
 ```
 
 Chi tiết bộ seed: xem `docs/SEED_DATA_TV1.md`.
@@ -130,15 +146,25 @@ Bộ seed/script riêng của TV2 nằm ở `scripts/seed_data.py`, `scripts/res
 
 ## 9. Reset về trạng thái ban đầu (trước mỗi vòng test Vòng 2, Vòng 3)
 
+> 🛑 **CẢNH BÁO: các lệnh dưới đây XÓA DỮ LIỆU. Chỉ dùng trên môi trường thử nghiệm,
+> không dùng trên dữ liệu thật, và nên sao lưu trước nếu cần.**
+
 ```bash
-docker compose down -v        # XÓA SẠCH volume/db — cẩn thận, chỉ chạy khi được yêu cầu
+# XÓA TOÀN BỘ volume/db/media của project hiện tại:
+docker compose down -v        # CHỈ test — không chạy trên production
 docker compose up -d
-docker compose run --rm webserver createsuperuser   # tạo lại admin
+docker compose run --rm webserver createsuperuser   # tạo lại admin nếu chưa có trong .env
 # upload lại scripts/sample_docs/TV1_Sample_*.pdf + chạy lại seed_and_verify_flows_TV1.py
 ```
 
-Script dùng chung của nhóm: `scripts/reset_system.ps1` (script duy nhất được phép `down -v`),
-`scripts/reset_data.py` (reset API nhẹ: xóa documents/tags/correspondents/document_types, giữ user).
+Ngoài ra, **`scripts/prepare_baseline_TV1.py` cũng xóa dữ liệu trước khi seed** (xóa
+documents/tags/correspondents/document_types qua API, giữ user admin). Đây là bước reset nhẹ
+dùng trước mỗi vòng 2/3, nhưng vẫn là thao tác xóa dữ liệu — chỉ chạy trên máy test.
+
+Script dùng chung của nhóm: `scripts/reset_system.ps1` (`down -v` + dựng lại),
+`scripts/reset_data.py` (reset API nhẹ: xóa documents/tags/correspondents/document_types, giữ user;
+lưu ý bản này chỉ xóa trang đầu API nên có thể sót bản ghi — TV1 dùng `prepare_baseline_TV1.py`
+có xử lý phân trang).
 
 ## 10. Cài Schemathesis (bản nhóm dùng chung)
 
@@ -149,7 +175,7 @@ Trên máy TV1 đã gặp đúng lỗi này với Python 3.15 → cài thêm Pyt
 
 ```powershell
 py -3.13 -m venv .venv                                   # PowerShell (Windows)
-.\.venv\Scripts\python.exe -m pip install "schemathesis==4.30.1"
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\schemathesis.exe --version               # phải ra 4.30.1 trên cả 5 máy
 .\.venv\Scripts\schemathesis.exe run --help              # đọc kỹ trước khi chạy
 ```
@@ -157,8 +183,15 @@ py -3.13 -m venv .venv                                   # PowerShell (Windows)
 ```bash
 # WSL / Ubuntu / macOS
 python3 -m venv .venv && source .venv/bin/activate
-pip install "schemathesis==4.30.1" && schemathesis --version
+pip install -r requirements.txt && schemathesis --version
 ```
+
+> Nguồn đúng phiên bản: PyPI https://pypi.org/project/schemathesis/4.30.1/
+> (`requirements.txt` ghim `schemathesis==4.30.1`, `requests==2.34.2`).
+>
+> **Windows/PowerShell mã hoá cp1252/cp437:** nếu gọi trực tiếp `schemathesis` và gặp
+> `UnicodeEncodeError: 'charmap'`, đặt `$env:PYTHONUTF8="1"` trước khi chạy.
+> Runner `scripts/run_round_TV1.py` đã tự ép UTF-8 cho tiến trình con.
 
 ### Chạy 3 vòng (seed 101) bằng runner của TV1
 
@@ -220,11 +253,17 @@ Phạm vi từng vòng và **cách lọc đúng** của Schemathesis 4.30.1 (đ�
 | `webserver` restart liên tục | `.env` sai hoặc DB chưa sẵn sàng | `docker compose logs webserver`, chờ thêm 2 phút |
 | Lệnh `set_password` / `create_api_token` báo `Unknown command` | Hai lệnh này không tồn tại trong Paperless-ngx | Dùng mục 5–6 ở trên |
 | `pip install schemathesis` lỗi build `pyyaml`, báo `Microsoft Visual C++ 14.0 or greater is required` | Python quá mới (3.14/3.15) chưa có wheel `pyyaml` | Cài Python 3.11–3.13 rồi tạo venv bằng bản đó: `py -3.13 -m venv .venv` |
-| WSL hết dung lượng | Image + volume phình | `docker system prune -a --volumes` (xóa hết rồi làm lại từ bước 5) |
+| `UnicodeEncodeError: 'charmap'` khi chạy Schemathesis/runner | PowerShell dùng codepage cp1252/cp437 | Runner TV1 đã tự ép UTF-8; nếu gọi trực tiếp, đặt `$env:PYTHONUTF8="1"` |
+| `Conflict. The container name "/paperless-broker" is already in use` | Đang có stack `paperless-*` khác (kể cả container đã stop) | Dừng/xóa stack cũ, hoặc dùng project khác + đổi `container_name` (ví dụ `tv1verify-*`) |
+| `AttributeError: module 'paperless' has no attribute '__version__'` | Lệnh kiểm tra phiên bản cũ sai | Dùng `cat /usr/src/paperless/src/paperless/version.py` hoặc `from paperless.version import __full_version_str__` |
+| Chạy `prepare_baseline_TV1.py` xong mất dữ liệu | Script reset trước khi seed (xóa documents/tags/correspondents/document_types) | Chỉ chạy trên môi trường thử nghiệm; sao lưu trước nếu cần |
+| WSL hết dung lượng | Image + volume phình | `docker system prune -a --volumes` (xóa hết rồi làm lại từ bước 5; **cẩn thận: xóa cả volume project khác**) |
 
 ## 13. Checklist TV1
 
 - [x] Chốt tag `v3.1.3` + SHA `d48663e9ebaadc4b413a6ca3bc88cb5fbc4e468e` (`docs/PINNED_VERSION_TV1.md`)
+- [x] Viết README gốc `README.md` (yêu cầu môi trường, pin, .env, compose, OpenAPI, seed, chạy test, tìm kết quả, reset)
+- [x] Xác minh lại toàn bộ trên môi trường sạch 26/11/2026 (`results/TV1_cleanenv_verify.md` + `.log`)
 - [x] Viết tài liệu này (cài từ máy sạch, port, biến môi trường, token, reset, sự cố)
 - [x] `docker/docker-compose.pinned.yml` + file env mẫu (không chứa secret thật)
 - [x] Bộ seed `scripts/sample_docs/TV1_Sample_*.pdf` + `scripts/seed_and_verify_flows_TV1.py`
@@ -232,4 +271,5 @@ Phạm vi từng vòng và **cách lọc đúng** của Schemathesis 4.30.1 (đ�
 - [x] Dựng thành công trên máy TV1 (13/10/2026) + biên bản `results/TV1_deploy_13-10.md`
 - [ ] Chụp ảnh bằng chứng và lưu vào `docs/evidence/`
 - [x] Chạy Vòng 1–3 với seed 101, điền `results/TV1_ketqua_seed101.md` (18/10/2026: 19/18/53 operation; 20/58/136 lỗi khác nhau)
+- [x] Chạy lại Vòng 1–3 trên môi trường sạch 26/11/2026 (19/18/53 operation; 18/53/139 unique failures — khác do Hypothesis `6.170.17` và dữ liệu/ID khác)
 - [x] Báo cáo lỗi do TV1 phát hiện: `docs/bugs/BUG-04.md` (500 khi `{id}` không phải số), `BUG-05.md`, `BUG-06.md`

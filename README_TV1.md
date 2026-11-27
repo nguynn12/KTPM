@@ -3,6 +3,10 @@
 Đề tài: Kiểm thử phần mềm — Paperless-ngx (R08) + K05 Schemathesis (schema-based API testing).
 Nhóm: 5 người, môn Kiểm thử phần mềm, Trường Đại học Đà Lạt. Mốc giữa kỳ: 20/10/2026.
 
+> **README chuẩn ở gốc repo: [`README.md`](README.md).**
+> File này giữ phần mô tả vai trò/cấu trúc cũ; nếu có khác biệt, làm theo `README.md`.
+> Xác minh môi trường sạch 26/11/2026: [`results/TV1_cleanenv_verify.md`](results/TV1_cleanenv_verify.md).
+
 ## Vai trò TV1 — Phần C, H (môi trường & tài liệu cài đặt)
 
 | Việc | Nằm ở đâu |
@@ -22,9 +26,10 @@ Nhóm: 5 người, môn Kiểm thử phần mềm, Trường Đại học Đà L
 |---|---|
 | Repo hệ thống | https://github.com/paperless-ngx/paperless-ngx |
 | Tag đã chốt | `v3.1.3` |
-| Commit SHA | `d48663e9ebaadc4b413a6ca3bc88cb5fbc4e468e` |
-| Image Docker | `ghcr.io/paperless-ngx/paperless-ngx:3.1.3` |
-| Schemathesis | `4.30.1` |
+| Annotated tag object | `cbd6b56c9f0eb7261c903cf5ccdbe124d433e995` |
+| Commit SHA (tag trỏ tới) | `d48663e9ebaadc4b413a6ca3bc88cb5fbc4e468e` |
+| Image Docker | `ghcr.io/paperless-ngx/paperless-ngx:3.1.3` (digest `sha256:aa810a36...`) |
+| Schemathesis | `4.30.1` (PyPI) |
 | Port | `8000` (http://localhost:8000) |
 
 Xem chi tiết: `docs/PINNED_VERSION_TV1.md`.
@@ -33,7 +38,8 @@ Xem chi tiết: `docs/PINNED_VERSION_TV1.md`.
 
 ```
 D:\KTPM/
-├── README_TV1.md                  (file này — TV1)
+├── README.md                      (TV1: README chuẩn ở gốc — cài/chạy/kiểm tra/reset)
+├── README_TV1.md                  (file này — mô tả vai trò/cấu trúc cũ)
 ├── .gitignore, .env.example, docker-compose.yml, requirements.txt   (dùng chung cả nhóm)
 ├── docker/                        (TV1: compose pin 3.1.3 + env mẫu)
 │   ├── docker-compose.pinned.yml
@@ -55,6 +61,8 @@ D:\KTPM/
 │   ├── TV1_ketqua_seed101.md      (TV1: bảng kết quả thật 3 vòng + phân loại lỗi)
 │   ├── TV1_round{1,2,3}_seed101.{log,xml,ndjson}  (TV1: log, JUnit, NDJSON thô)
 │   ├── TV1_round{1,2,3}_seed101_summary.md        (TV1: tóm tắt tự động mỗi vòng)
+│   ├── TV1_cleanenv_verify.md/.log                (TV1: xác minh môi trường sạch 26/11/2026)
+│   ├── TV1_cleanenv_round{1,2,3}_seed101_summary.md
 │   └── TV2_round{1,2,3}_seed202*  (TV2: log 3 vòng Schemathesis)
 └── scripts/
     ├── check_env_TV1.ps1, check_env_TV1.sh          (TV1)
@@ -78,23 +86,25 @@ D:\KTPM/
 
 ## Cách chạy lại toàn bộ
 
+> Hướng dẫn đầy đủ, có cảnh báo xóa dữ liệu: [`README.md`](README.md).
+
 1. Cài Docker Desktop (≥ 4.30), bật WSL2 trên Windows.
-2. `cp docker/docker-compose.pinned.yml docker-compose.yml`
-3. `cp docker/docker-compose.env.example docker-compose.env` → sửa `PAPERLESS_SECRET_KEY` (không commit).
-4. `docker compose up -d` → chờ 3 container `webserver/db/broker` Up.
-5. Tạo admin: `docker compose run --rm webserver createsuperuser` (hoặc để hệ thống tự tạo từ `.env`).
-6. Kiểm tra http://localhost:8000 + Swagger http://localhost:8000/api/schema/view/.
-7. Dựng lại dữ liệu seed (quy trình nhóm: reset → seed → xác nhận baseline):
+2. `Copy-Item .env.example .env` → sửa `PAPERLESS_SECRET_KEY`, `PAPERLESS_ADMIN_PASSWORD`,
+   `PAPERLESS_URL` (không commit `.env`).
+3. `docker compose pull && docker compose up -d` → chờ 3 container `webserver/db/broker` Up,
+   `webserver` healthy.
+4. Tạo admin: để hệ thống tự tạo từ `.env`, hoặc
+   `docker compose run --rm webserver createsuperuser`.
+5. Kiểm tra http://localhost:8000 + Swagger http://localhost:8000/api/schema/view/;
+   `GET /api/schema/` phải `200`, OpenAPI 3.0.3.
+6. Cài Schemathesis: cần **Python 3.11–3.13** (Python 3.15 lỗi build `pyyaml`) →
+   `py -3.13 -m venv .venv` rồi `.\.venv\Scripts\python.exe -m pip install -r requirements.txt`.
+7. Dựng dữ liệu seed (quy trình nhóm: reset → seed → xác nhận baseline):
    `.\.venv\Scripts\python.exe scripts\prepare_baseline_TV1.py`
-8. Cài Schemathesis: cần **Python 3.11–3.13** (Python 3.15 hiện lỗi build `pyyaml`) →
-   `py -3.13 -m venv .venv` rồi `.\.venv\Scripts\python.exe -m pip install "schemathesis==4.30.1"`.
-9. Chạy 3 vòng seed 101: `.\.venv\Scripts\python.exe scripts\run_round_TV1.py --round 1|2|3`
+   ⚠️ Bước này **xóa dữ liệu** documents/tags/correspondents/document_types — chỉ chạy trên máy test.
+8. Chạy 3 vòng seed 101: `.\.venv\Scripts\python.exe scripts\run_round_TV1.py --round 1|2|3`
    (chạy lại bước 7 trước vòng 2 và vòng 3 vì fuzzing có tạo/xoá dữ liệu).
+9. Kết quả: `results/TV1_round<N>_seed101.{xml,ndjson,log}` + `_summary.md`.
 
 Chi tiết từng bước (kèm xử lý sự cố): `docs/ONBOARDING_TV1.md`.
-
-## Quy tắc Git
-
-- Mỗi thành viên commit trên tài khoản của mình (để peer-review cuối kỳ).
-- Không commit `.env` thật, token, mật khẩu, `paperless-ngx/`, `.venv/`.
-- Nhánh TV1 trên repo nhóm: `TV1_TranGiaHuy` (`https://github.com/nguynn12/KTPM.git`).
+Xác minh môi trường sạch: `results/TV1_cleanenv_verify.md`.
