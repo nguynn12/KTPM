@@ -1,0 +1,591 @@
+Schemathesis v4.30.1
+━━━━━━━━━━━━━━━━━━━━
+
+
+ ✅  Loaded specification from http://localhost:8000/api/schema/ (in 1.17s)    
+
+     Base URL:         http://localhost:8000                                   
+     Specification:    Open API 3.0.3                                          
+     Operations:       19 selected / 163 total                                 
+
+
+ ✅  API capabilities:                                                         
+
+     Supports NULL byte in headers:                            ✘               
+     Accepts backslash and control characters in URL paths:    ✓               
+
+ ⏭   Examples (in 0.03s)                                                       
+                                                                               
+     ⏭  19 skipped                                                             
+
+ ❌  Fuzzing (in 2.58s)                                                        
+                                                                               
+     ✅  2 passed  ❌ 17 failed                                                
+
+=================================== FAILURES ===================================
+___________________________ GET /api/correspondents/ ___________________________
+1. Test Case ID: cdO5fV
+
+- Response violates schema
+
+    "last_correspondence" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Correspondent:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "last_correspondence",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 1,
+            "id": 12,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "TV2_Bank_202",
+            "owner": 2,
+            "slug": "tv2_bank_202",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"count":3,"next":null,"previous":null,"results":[{"id":12,"slug":"tv2_bank_202","name":"TV2_Bank_202","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":1,"owner":2,"user_can_change":true},{"id":13,"slug":"tv2_supplier_202","name":"TV2_Supplier_202","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":0,"owner":2,"user_can_change":true},{"id":14,"slug":"tv2_university_202","name":"TV2_University_202","match":"","matching_algorithm":1,"is_insensitive":true,"document // Output truncated...`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/correspondents/
+    
+    st replay cdO5fV
+
+________________________ GET /api/correspondents/{id}/ _________________________
+1. Test Case ID: tj8kJr
+
+- Response violates schema
+
+    "user_can_change" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Correspondent:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "last_correspondence",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 1,
+            "id": 14,
+            "is_insensitive": true,
+            "last_correspondence": "2026-10-16",
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "TV2_University_202",
+            "owner": 2,
+            "permissions": {
+                "change": {
+                    "groups": [],
+                    "users": []
+                },
+                "view": {
+                    "groups": [],
+                    "users": []
+                }
+            },
+            // Output truncated...
+        }
+
+[200] OK:
+
+    `{"id":14,"slug":"tv2_university_202","name":"TV2_University_202","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":1,"last_correspondence":"2026-10-16","owner":2,"permissions":{"view":{"users":[],"groups":[]},"change":{"users":[],"groups":[]}}}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/correspondents/14/?full_perms=true'
+    
+    st replay tj8kJr
+
+___________________________ GET /api/document_types/ ___________________________
+1. Test Case ID: nK8Nhl
+
+- Response violates schema
+
+    "permissions" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/DocumentType:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+                },
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 1,
+            "id": 9,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "TV2_DocType_Contract_202",
+            "owner": 2,
+            "slug": "tv2_doctype_contract_202",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"count":3,"next":null,"previous":null,"results":[{"id":9,"slug":"tv2_doctype_contract_202","name":"TV2_DocType_Contract_202","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":1,"owner":2,"user_can_change":true},{"id":7,"slug":"tv2_doctype_invoice_202","name":"TV2_DocType_Invoice_202","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":1,"owner":2,"user_can_change":true},{"id":8,"slug":"tv2_doctype_receipt_202","name":"TV2_DocType_Receipt_202","match":"","matching // Output truncated...`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/document_types/
+    
+    st replay nK8Nhl
+
+________________________ GET /api/document_types/{id}/ _________________________
+1. Test Case ID: xutuHK
+
+- Response violates schema
+
+    "permissions" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/DocumentType:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+                },
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 0,
+            "id": 8,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "TV2_DocType_Receipt_202",
+            "owner": 2,
+            "slug": "tv2_doctype_receipt_202",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"id":8,"slug":"tv2_doctype_receipt_202","name":"TV2_DocType_Receipt_202","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":0,"owner":2,"user_can_change":true}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/document_types/8/
+    
+    st replay xutuHK
+
+_____________________________ GET /api/documents/ ______________________________
+1. Test Case ID: 9P7k1p
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"added__date__lte":["Enter a valid date."]}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/documents/?checksum__iendswith=&storage_path__name__iendswith=&created__year=-3.921122052237585e%2B16&added__date__lte=%C3%90%07%F2%98%86%80%C2%A8%C2%9E&added__gt=0195-03-02T11%3A30%3A52.4Z&correspondent__name__iexact=%E5%8A%A5&tags__name__iexact=%C2%B2%C3%AF7&correspondent__id=-2384294762060746465954758656&custom_field_query=%C3%A2%3A%3FXQ&owner__isnull=8'
+    
+    st replay 9P7k1p
+
+___________________________ GET /api/documents/{id}/ ___________________________
+1. Test Case ID: MEvt8a
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200, 400
+
+[404] Not Found:
+
+    `{"detail":"No Document matches the given query."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/1/
+    
+    st replay MEvt8a
+
+___________________ GET /api/documents/{id}/ai_suggestions/ ____________________
+1. Test Case ID: EiZTvy
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    <!doctype html>
+    <html lang="en">
+    <head>
+      <title>Server Error (500)</title>
+    </head>
+    <body>
+      <h1>Server Error (500)</h1><p></p>
+    </body>
+    </html>`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/documents/%C2%B6~/ai_suggestions/'
+    
+    st replay EiZTvy
+
+______________________ GET /api/documents/{id}/download/ _______________________
+1. Test Case ID: bg6KKy
+
+- Undocumented Content-Type
+
+    Received: text/plain; charset=utf-8
+    Documented: application/json
+
+[200] OK:
+
+    `HOA DON BAN HANG - SO TIEN 202.000 VND - NGUOI BAN: TV2 TA NHAT NGUYEN - DH DA LAT`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/1/download/
+    
+    st replay bg6KKy
+
+_______________________ GET /api/documents/{id}/history/ _______________________
+1. Test Case ID: S5jdW3
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    <!doctype html>
+    <html lang="en">
+    <head>
+      <title>Server Error (500)</title>
+    </head>
+    <body>
+      <h1>Server Error (500)</h1><p></p>
+    </body>
+    </html>`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/documents/false/history/?page_size=eY%C2%90%2C%C2%8C&page=true'
+    
+    st replay S5jdW3
+
+________________________ GET /api/documents/{id}/notes/ ________________________
+1. Test Case ID: T1pfoN
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    <!doctype html>
+    <html lang="en">
+    <head>
+      <title>Server Error (500)</title>
+    </head>
+    <body>
+      <h1>Server Error (500)</h1><p></p>
+    </body>
+    </html>`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://localhost:8000/api/documents/false/notes/?id=1'
+    
+    st replay T1pfoN
+
+_______________________ GET /api/documents/{id}/preview/ _______________________
+1. Test Case ID: BF4zUM
+
+- Undocumented Content-Type
+
+    Received: text/plain; charset=utf-8
+    Documented: application/json
+
+[200] OK:
+
+    `HOA DON BAN HANG - SO TIEN 202.000 VND - NGUOI BAN: TV2 TA NHAT NGUYEN - DH DA LAT`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/1/preview/
+    
+    st replay BF4zUM
+
+________________________ GET /api/documents/{id}/root/ _________________________
+1. Test Case ID: YRBm9X
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://localhost:8000/api/documents/68429226/root/
+    
+    st replay YRBm9X
+
+_____________________ GET /api/documents/{id}/share_links/ _____________________
+1. Test Case ID: a6SayO
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    <!doctype html>
+    <html lang="en">
+    <head>
+      <title>Server Error (500)</title>
+    </head>
+    <body>
+      <h1>Server Error (500)</h1><p></p>
+    </body>
+    </html>`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/%25%C2%BA/share_links/
+    
+    st replay a6SayO
+
+_____________________ GET /api/documents/{id}/suggestions/ _____________________
+1. Test Case ID: 50Iyhs
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    <!doctype html>
+    <html lang="en">
+    <head>
+      <title>Server Error (500)</title>
+    </head>
+    <body>
+      <h1>Server Error (500)</h1><p></p>
+    </body>
+    </html>`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/%5C%C2%BDa%C2%96%C3%9Ap%F2%A8%92%9C/suggestions/
+    
+    st replay 50Iyhs
+
+________________________ GET /api/documents/{id}/thumb/ ________________________
+1. Test Case ID: D4CvrV
+
+- Undocumented Content-Type
+
+    Received: image/webp
+    Documented: application/json
+
+[200] OK:
+
+    <BINARY>
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://localhost:8000/api/documents/1/thumb/
+    
+    st replay D4CvrV
+
+________________________________ GET /api/tags/ ________________________________
+1. Test Case ID: jF1Rny
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Invalid page."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/tags/?id__in=&=p%F4%82%8F%B9%F1%A6%BA%B6%3F%F2%B0%BA%8B%C2%BE%7B9%F3%AA%8E%B3%5C%C2%85%C2%B4%C3%98%F0%A5%97%94%C2%83&is_root=true&page=-35329&page_size=-14407&name__icontains=%C2%A5%F3%A8%86%92%C2%B3%0A%F3%9C%91%98%C2%9DE%06M%C2%91%C2%94t%F2%9A%A5%85%08%C2%BAn%2C%F3%81%9E%AC%C3%91%F1%9F%86%BD%29%F2%BB%A8%BA%EF%86%9F&%F1%AD%AE%B2%C2%8DW%7B%C2%BC%C3%89%C3%9A=%06%F1%B5%84%84%F0%90%BC%A4&%F1%AD%AE%B2%C2%8DW%7B%C2%BC%C3%89%C3%9A=%F1%AB%B2%9E%C2%B2&%F1%AD%AE%B2%C2%8DW%7B%C2%BC%C3%89%C3%9A=%C3%85lb'
+    
+    st replay jF1Rny
+
+_____________________________ GET /api/tags/{id}/ ______________________________
+1. Test Case ID: M1eaQu
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://localhost:8000/api/tags/%01%C3%B4%C2%9F/?full_perms=-12753873'
+    
+    st replay M1eaQu
+
+=================================== WARNINGS ===================================
+
+Missing test data: 1 operation repeatedly returned 404 Not Found, preventing tests from reaching your API's core logic
+
+  - GET /api/documents/{id}/metadata/
+
+💡 Add a link from GET /api/documents/, or supply the identifiers it returns in your config file
+
+=================================== SUMMARY ====================================
+
+API Operations:
+  Selected: 19/163
+  Tested: 19
+
+Test Phases:
+  ⏭  Examples
+  ⏭  Coverage (disabled)
+  ❌ Fuzzing
+  ⏭  Stateful (disabled)
+
+Failures:
+  ❌ Server error: 5
+  ❌ Response violates schema: 4
+  ❌ Undocumented Content-Type: 3
+  ❌ Undocumented HTTP status code: 10
+
+Warnings:
+  ⚠️ Missing valid test data: 1 operation repeatedly returned 404 responses
+
+Test cases:
+  74 generated, 17 found 22 unique failures
+
+Reports:
+  - JUNIT: results\TV3_round1_seed303_20261016_093736.xml
+  - NDJSON: results\TV3_round1_seed303_20261016_093736.ndjson
+
+Seed: 303
+
+======================= 22 failures, 1 warning in 2.71s ========================
