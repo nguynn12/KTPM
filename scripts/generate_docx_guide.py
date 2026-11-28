@@ -101,7 +101,7 @@ def create_document():
     code_p = doc.add_paragraph()
     run_code = code_p.add_run(
         "cd D:\\Kiem-thu-phan-mem\\KTPM\n"
-        "docker compose -f docker-compose.env.yml up -d\n"
+        "docker compose up -d\n"
         "docker compose ps"
     )
     run_code.font.name = "Consolas"
@@ -110,9 +110,9 @@ def create_document():
     doc.add_heading("1.2. Kiểm tra trạng thái và thông tin xác thực", level=2).runs[0].font.name = "Times New Roman"
     p2 = doc.add_paragraph()
     p2.add_run("• Giao diện Web UI: ").bold = True
-    p2.add_run("http://localhost:8000 (Tài khoản: admin / Mật khẩu: admin)\n")
-    p2.add_run("• Tài liệu OpenAPI Schema (Swagger UI): ").bold = True
-    p2.add_run("http://localhost:8000/api/schema/swagger-ui/\n")
+    p2.add_run("http://localhost:8000 (Thông tin đăng nhập cấu hình trong tệp .env cục bộ, không lưu công khai)\n")
+    p2.add_run("• Tài liệu OpenAPI Schema (UI): ").bold = True
+    p2.add_run("http://localhost:8000/api/schema/view/\n")
 
     doc.add_heading("1.3. Sơ đồ kiến trúc container hệ thống Paperless-ngx (Hình 1)", level=2).runs[0].font.name = "Times New Roman"
     p_img_desc = doc.add_paragraph()
@@ -152,7 +152,7 @@ def create_document():
     c_run = code_token.add_run(
         'curl -X POST http://localhost:8000/api/token/ \\\n'
         '     -H "Content-Type: application/json" \\\n'
-        '     -d \'{"username":"admin","password":"admin"}\''
+        '     -d \'{"username":"<PAPERLESS_ADMIN_USER>","password":"<REDACTED_PASSWORD>"}\''
     )
     c_run.font.name = "Consolas"
     c_run.font.size = Pt(10)

@@ -162,9 +162,20 @@ def draw_erd():
                 arrowprops=dict(arrowstyle="->", lw=1.5, linestyle='--', color='#D97706'))
     ax.text(11.5, 8.0, "owns (1 : N)", fontsize=8.2, fontweight='bold', color='#B45309')
 
-    # [4] User -> Tag (1 : N)
-    ax.annotate("", xy=(0.8, 2.5), xytext=(6.3, 7.8),
-                arrowprops=dict(arrowstyle="->", lw=1.2, linestyle=':', color='#7C3AED'))
+    # [4] User -> Tag (1 : N) — đi vòng qua hành lang giữa tránh cắt qua hộp Correspondent
+    ax.annotate(
+        "",
+        xy=(4.6, 3.65),
+        xytext=(6.3, 7.65),
+        arrowprops=dict(
+            arrowstyle="->",
+            lw=1.3,
+            linestyle=":",
+            color="#7C3AED",
+            connectionstyle="arc3,rad=0.18",
+        ),
+    )
+    ax.text(5.15, 6.25, "owns (1 : N)", fontsize=8.0, fontweight="bold", color="#6D28D9")
 
     # [5] Correspondent -> Document (1 : N, Nullable)
     ax.annotate("", xy=(6.1, 5.0), xytext=(4.4, 5.0),
@@ -211,10 +222,12 @@ def draw_erd():
     ax.text(11.6, 1.35, "4. Tính duy nhất (UniqueConstraint):", fontsize=8.8, fontweight='bold', color='#B91C1C')
     ax.text(11.6, 1.1, "   Tên (name) là duy nhất theo từng Owner.\n   Độ dài tối đa trường name: 128 ký tự.", fontsize=8.2, color='#334155')
 
+    svg_path = output_dir / "so_do_quan_he_du_lieu.svg"
     plt.tight_layout()
     plt.savefig(png_path, dpi=300, facecolor=fig.get_facecolor(), edgecolor='none')
+    plt.savefig(svg_path, format='svg', facecolor=fig.get_facecolor(), edgecolor='none')
     plt.close()
-    print(f"[OK] Đã vẽ và xuất thành công file ảnh ERD: {png_path}")
+    print(f"[OK] Đã vẽ và xuất thành công file ảnh ERD: {png_path} & {svg_path}")
 
 if __name__ == "__main__":
     draw_erd()
