@@ -1,0 +1,120 @@
+# MINH CHỨNG 04 — LUỒNG 2: TẠO THÔNG TIN PHÂN LOẠI VÀ GÁN CHO TÀI LIỆU
+Thời gian ghi nhận: 2026-11-28 11:36:24 UTC+7
+
+## 1. Điều kiện ban đầu (Preconditions)
+- Tài liệu mục tiêu ID=8 (`Hoa Don Dich Vu Luu Tru Dam May Q4-2026`) đã được xử lý hoàn tất ở Luồng 1.
+- Trạng thái phân loại của tài liệu trước khi gán:
+```json
+{
+  "id": 8,
+  "correspondent": null,
+  "document_type": null,
+  "tags": []
+}
+```
+
+## 2. Thao tác 2.1 — Tạo mới 3 đối tượng phân loại qua REST API
+### (a) Tạo Tag (`POST /api/tags/` -> HTTP 201)
+```json
+{
+  "id": 74,
+  "slug": "demo_tag_hoadon_q4",
+  "name": "Demo_Tag_HoaDon_Q4",
+  "color": "#1d4ed8",
+  "text_color": "#ffffff",
+  "match": "",
+  "matching_algorithm": 1,
+  "is_insensitive": true,
+  "is_inbox_tag": false,
+  "owner": 2,
+  "user_can_change": true,
+  "parent": null,
+  "children": []
+}
+```
+
+### (b) Tạo Correspondent (`POST /api/correspondents/` -> HTTP 201)
+```json
+{
+  "id": 117,
+  "slug": "demo_doitac_acme_cloud",
+  "name": "Demo_DoiTac_ACME_Cloud",
+  "match": "",
+  "matching_algorithm": 0,
+  "is_insensitive": true,
+  "owner": 2,
+  "user_can_change": true
+}
+```
+
+### (c) Tạo DocumentType (`POST /api/document_types/` -> HTTP 201)
+```json
+{
+  "id": 103,
+  "slug": "demo_loai_hoadondichvu",
+  "name": "Demo_Loai_HoaDonDichVu",
+  "match": "",
+  "matching_algorithm": 0,
+  "is_insensitive": true,
+  "owner": 2,
+  "user_can_change": true
+}
+```
+
+## 3. Thao tác 2.2 — Gán thông tin phân loại cho tài liệu (`PATCH /api/documents/8/`)
+Request Payload:
+```json
+{
+  "tags": [
+    74
+  ],
+  "correspondent": 117,
+  "document_type": 103
+}
+```
+Response: HTTP 200
+
+## 4. Thao tác 2.3 — Truy vấn lại độc lập xác nhận quan hệ đã lưu bền vững (`GET /api/documents/8/`)
+Response: HTTP 200
+```json
+{
+  "id": 8,
+  "correspondent": 117,
+  "document_type": 103,
+  "storage_path": null,
+  "title": "Hoa Don Dich Vu Luu Tru Dam May Q4-2026",
+  "content": "CHUNG TU KE TOAN SO INV-2026-0404-1795840585\r\nDON VI PHAT HANH: CONG TY DICH VU DAM MAY ACME\r\nKY CUOC: Q4-2026\r\nNOI DUNG: PHI DICH VU LUU TRU TAI LIEU SO VA NHAN DANG OCR\r\nMA DOI SOAT DUY NHAT: KTPM-R08-FLOW-ALPHA\r\nTONG THANH TOAN: 4.500.000 VND\r\n",
+  "tags": [
+    74
+  ],
+  "created": "2026-11-28",
+  "created_date": "2026-11-28",
+  "modified": "2026-11-28T11:36:34.077252+07:00",
+  "added": "2026-11-28T11:36:28.130805+07:00",
+  "deleted_at": null,
+  "archive_serial_number": null,
+  "original_file_name": "Flow1_Invoice_ACME_Q4_2026.txt",
+  "archived_file_name": null,
+  "duplicate_documents": [],
+  "owner": 2,
+  "user_can_change": true,
+  "is_shared_by_requester": false,
+  "notes": [],
+  "custom_fields": [],
+  "page_count": null,
+  "mime_type": "text/plain",
+  "root_document": null,
+  "versions": [
+    {
+      "id": 8,
+      "added": "2026-11-28T04:36:28.130805Z",
+      "version_label": null,
+      "checksum": "6d01e8db66fc20a41ac1768a68e377358aa64926e0569038199dcbf943ae8fd5",
+      "is_root": true
+    }
+  ]
+}
+```
+
+## 5. Đối chiếu số lượng tài liệu trên Correspondent (`GET /api/correspondents/117/`)
+Response: HTTP 200 | `document_count` = 1
