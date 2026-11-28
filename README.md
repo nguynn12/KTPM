@@ -1,5 +1,19 @@
 # KTPM — Paperless-ngx + Schemathesis 
 
+## Bản nộp cuối kỳ
+
+Bản này tập hợp cấu hình Docker Compose, README và các kết quả đã lưu của năm thành viên. Dùng Windows PowerShell và Docker Desktop với WSL2. Paperless-ngx dùng tag 3.1.3 (commit d48663e9ebaadc4b413a6ca3bc88cb5fbc4e468e). Môi trường Python tham chiếu là 3.13.15; dependencies trong requirements.txt ghim Schemathesis 4.30.1 và Requests 2.34.2.
+
+Để kiểm tra vận hành cục bộ, sao chép .env.example thành .env, cấu hình tài khoản thử và chạy docker compose config --quiet, docker compose up -d, docker compose ps theo các mục cài đặt dưới đây. Đợi dịch vụ hoạt động trước khi mở giao diện và OpenAPI. Các ca đọc có thể kiểm tra trực tiếp từ giao diện API bằng dữ liệu mẫu. Xem [kết quả chức năng và giá trị biên đã xác minh](docs/FINAL_FUNCTIONAL_VERIFICATION.md).
+
+Runner tham chiếu là scripts/run_round_TV1.py. Hồ sơ TV1 có bằng chứng chạy sạch với đúng phiên bản đã ghim. Cả hai bản run_round.py của TV2 và TV4 đều dùng tên tệp cố định theo vòng/seed và không phải điểm vào mặc định của bản nộp. Tệp tại đường dẫn cũ giữ bản TV2 để đối chiếu; bản TV4 còn ở commit 65ebf18. Khi thực thi lại, dùng checkout và stack thử nghiệm riêng để đầu ra mới không ghi đè nguồn lịch sử.
+
+- [Đối chiếu seed 202](results/TV2_DOI_CHIEU_SEED202.md)
+- [Đối chiếu seed 303](docs/TV3_DOI_CHIEU_SEED303.md)
+- [Minh chứng vận hành seed 404](docs/TV4_MINH_CHUNG_VAN_HANH.md)
+- [Đối chiếu seed 505](docs/TV5_DOI_CHIEU_SEED505_VA_PHAT_HIEN.md)
+- [Hồ sơ cài sạch seed 101](results/TV1_cleanenv_verify.md)
+
 ## 1. Yêu cầu môi trường
 
 | Hạng mục | Tối thiểu / khuyến nghị | Đã dùng khi xác minh 26/11/2026 |
