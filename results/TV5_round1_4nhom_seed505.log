@@ -1,0 +1,704 @@
+Schemathesis v4.30.1
+━━━━━━━━━━━━━━━━━━━━
+
+
+ ✅  Loaded specification from http://webserver:8000/api/schema/ (in 3.81s)     
+
+     Base URL:         http://webserver:8000/                                   
+     Specification:    Open API 3.0.3                                           
+     Operations:       19 selected / 163 total                                  
+
+
+ ✅  API capabilities:                                                          
+
+     Supports NULL byte in headers:                            ✘                
+     Accepts backslash and control characters in URL paths:    ✓                
+
+ ⏭   Examples (in 0.07s)                                                        
+                                                                                
+     ⏭  19 skipped                                                              
+
+ ❌  Fuzzing (in 11.43s)                                                        
+                                                                                
+     ✅  3 passed  ❌ 16 failed                                                 
+
+=================================== FAILURES ===================================
+___________________________ GET /api/correspondents/ ___________________________
+1. Test Case ID: jOJusG
+
+- Response violates schema
+
+    "last_correspondence" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Correspondent:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "last_correspondence",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 1,
+            "id": 1,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "TV2_Bank_202",
+            "owner": 2,
+            "slug": "tv2_bank_202",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"count":3,"next":null,"previous":null,"results":[{"id":1,"slug":"tv2_bank_202","name":"TV2_Bank_202","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":1,"owner":2,"user_can_change":true},{"id":2,"slug":"tv2_supplier_202","name":"TV2_Supplier_202","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":0,"owner":2,"user_can_change":true},{"id":3,"slug":"tv2_university_202","name":"TV2_University_202","match":"","matching_algorithm":1,"is_insensitive":true,"document_co // Output truncated...`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://webserver:8000/api/correspondents/
+    
+    st replay jOJusG
+
+________________________ GET /api/correspondents/{id}/ _________________________
+1. Test Case ID: UZCYSo
+
+- Response violates schema
+
+    "permissions" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Correspondent:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "last_correspondence",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 1,
+            "id": 1,
+            "is_insensitive": true,
+            "last_correspondence": "2026-10-18",
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "TV2_Bank_202",
+            "owner": 2,
+            "slug": "tv2_bank_202",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"id":1,"slug":"tv2_bank_202","name":"TV2_Bank_202","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":1,"last_correspondence":"2026-10-18","owner":2,"user_can_change":true}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://webserver:8000/api/correspondents/1/
+    
+    st replay UZCYSo
+
+___________________________ GET /api/document_types/ ___________________________
+1. Test Case ID: fjoU5j
+
+- Response violates schema
+
+    "permissions" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/DocumentType:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+                },
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 1,
+            "id": 3,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "TV2_DocType_Contract_202",
+            "owner": 2,
+            "slug": "tv2_doctype_contract_202",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"count":3,"next":null,"previous":null,"results":[{"id":3,"slug":"tv2_doctype_contract_202","name":"TV2_DocType_Contract_202","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":1,"owner":2,"user_can_change":true},{"id":1,"slug":"tv2_doctype_invoice_202","name":"TV2_DocType_Invoice_202","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":1,"owner":2,"user_can_change":true},{"id":2,"slug":"tv2_doctype_receipt_202","name":"TV2_DocType_Receipt_202","match":"","matching // Output truncated...`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://webserver:8000/api/document_types/
+    
+    st replay fjoU5j
+
+________________________ GET /api/document_types/{id}/ _________________________
+1. Test Case ID: qzwBSU
+
+- Response violates schema
+
+    "permissions" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/DocumentType:
+
+        {
+            "required": [
+                "document_count",
+                "id",
+                "name",
+                "permissions",
+                "slug",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+                },
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "document_count": 1,
+            "id": 3,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "TV2_DocType_Contract_202",
+            "owner": 2,
+            "slug": "tv2_doctype_contract_202",
+            "user_can_change": true
+        }
+
+[200] OK:
+
+    `{"id":3,"slug":"tv2_doctype_contract_202","name":"TV2_DocType_Contract_202","match":"","matching_algorithm":1,"is_insensitive":true,"document_count":1,"owner":2,"user_can_change":true}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://webserver:8000/api/document_types/3/
+    
+    st replay qzwBSU
+
+_____________________________ GET /api/documents/ ______________________________
+1. Test Case ID: eUkF20
+
+- Undocumented HTTP status code
+
+    Received: 400
+    Documented: 200
+
+[400] Bad Request:
+
+    `{"custom_field_query":["Value must be valid JSON."]}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://webserver:8000/api/documents/?custom_field_query=%3Bc%C3%9C%C3%A0%E2%9D%99I1&created__gte=2026-10-18&correspondent__id=1&document_type__id=3'
+    
+    st replay eUkF20
+
+___________________________ GET /api/documents/{id}/ ___________________________
+1. Test Case ID: tkK0ZV
+
+- Response violates schema (2 violations)
+
+    "permissions" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Document:
+
+        {
+            "required": [
+                "added",
+                "archived_file_name",
+                "correspondent",
+                "document_type",
+                "duplicate_documents",
+                "id",
+                "is_shared_by_requester",
+                "mime_type",
+                "modified",
+                "notes",
+                "original_file_name",
+                "page_count",
+                "permissions",
+                "root_document",
+                "storage_path",
+                "tags",
+                "user_can_change",
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "added": "2026-10-18T21:33:52.282061+07:00",
+            "archive_serial_number": null,
+            "archived_file_name": null,
+            "content": "HOA DON BAN HANG - SO TIEN 202.000 VND - NGUOI BAN: TV2 TA NH...
+            "correspondent": 1,
+            "created": "2026-10-18",
+            "created_date": "2026-10-18",
+            "custom_fields": [],
+            "deleted_at": null,
+            "document_type": 1,
+            "duplicate_documents": [],
+            "id": 1,
+            "is_shared_by_requester": false,
+            "mime_type": "text/plain",
+            "modified": "2026-10-18T21:33:52.530405+07:00",
+            "notes": [],
+            "original_file_name": "TV2_Sample_Invoice_202.txt",
+            "owner": 2,
+            // Output truncated...
+        }
+
+    null is not of type "integer"
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Document/properties/root_document:
+
+        {
+            "type": "integer",
+            "readOnly": true
+        }
+
+    Value:
+
+        null
+
+[200] OK:
+
+    `{"id":1,"correspondent":1,"document_type":1,"storage_path":null,"title":"Hoa Don Thanh Toan Dich Vu KTPM Seed 202","content":"HOA DON BAN HANG - SO TIEN 202.000 VND - NGUOI BAN: TV2 TA NHAT NGUYEN - DH DA LAT","tags":[1],"created":"2026-10-18","created_date":"2026-10-18","modified":"2026-10-18T21:33:52.530405+07:00","added":"2026-10-18T21:33:52.282061+07:00","deleted_at":null,"archive_serial_number":null,"original_file_name":"TV2_Sample_Invoice_202.txt","archived_file_name":null,"duplicate_documents":[],"ow // Output truncated...`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://webserver:8000/api/documents/1/
+    
+    st replay tkK0ZV
+
+___________________ GET /api/documents/{id}/ai_suggestions/ ____________________
+1. Test Case ID: 2sxbe9
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    <!doctype html>
+    <html lang="en">
+    <head>
+      <title>Server Error (500)</title>
+    </head>
+    <body>
+      <h1>Server Error (500)</h1><p></p>
+    </body>
+    </html>`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://webserver:8000/api/documents/false/ai_suggestions/
+    
+    st replay 2sxbe9
+
+______________________ GET /api/documents/{id}/download/ _______________________
+1. Test Case ID: y8XdMH
+
+- Undocumented Content-Type
+
+    Received: text/plain; charset=utf-8
+    Documented: application/json
+
+[200] OK:
+
+    `HOA DON BAN HANG - SO TIEN 202.000 VND - NGUOI BAN: TV2 TA NHAT NGUYEN - DH DA LAT`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://webserver:8000/api/documents/1/download/
+    
+    st replay y8XdMH
+
+_______________________ GET /api/documents/{id}/history/ _______________________
+1. Test Case ID: ejfqvb
+
+- Response violates schema
+
+    [{"action":"update","actor":null,"changes":{"filename":["None","0000001.txt"]},"id":14,"timestamp":"2026-10-18T14:33:52.519906Z"},{"action":"update","actor":null,"changes":{"correspondent":["None","1"],"created":["2026-10-18","2026-10-18 21:33:51+07:00"],"document_type":["None","1"],"owner":["None","2"]},"id":13,"timestamp":"2026-10-18T14:33:52.315871Z"},{"action":"update","actor":null,"changes":{"tags":{"objects":["TV2_Tag_Invoice_202"],"operation":"add","type":"m2m"}},"id":12,"timestamp":"2026-10-18T14:33:52.310398Z"},{"action":"create","actor":null,"changes":{"added":["None","2026-10-18 14:33:52.282061"],"checksum":["None","fe783bd3d8f41cb46d04c8eeaf9db90f896332162e34103f2283deed8424f104"],"content":["None","HOA DON BAN HANG - SO TIEN 202.000 VND - NGUOI BAN: TV2 TA NHAT NGUYEN - DH DA LAT"],"correspondent":["None","None"],"created":["None","2026-10-18 21:33:51+07:00"],"custom_fields":["None","documents.CustomFieldInstance.None"],"deleted_at":["None","None"],"document_type":["None","None"],"id":["None","1"],"mime_type":["None","text/plain"],"notes":["None","documents.Note.None"],"original_filename":["None","TV2_Sample_Invoice_202.txt"],"owner":["None","None"],"restored_at":["None","None"],"root_document":["None","None"],"share_links":["None","documents.ShareLink.None"],"storage_path":["None","None"],"title":["None","Hoa Don Thanh Toan Dich Vu KTPM Seed 202"],"versions":["None","documents.Document.None"],"workflow_runs":["None","documents.WorkflowRun.None"]},"id":11,"timestamp":"2026-10-18T14:33:52.292415Z"}] is not of type "object"
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/PaginatedLogEntryList:
+
+        {
+            "type": "object",
+            "required": [
+                "count",
+                "results"
+            ],
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "example": 123
+                },
+                "next": {
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "format": "uri",
+                            "example": "http://api.example.org/accounts/?page=4"
+                        },
+                        {
+            // Output truncated...
+        }
+
+    Value:
+
+        [
+            {
+                "action": "update",
+                "actor": null,
+                "changes": {
+                    "filename": [
+                        "None",
+                        "0000001.txt"
+                    ]
+                },
+                "id": 14,
+                "timestamp": "2026-10-18T14:33:52.519906Z"
+            },
+            {
+                "action": "update",
+                "actor": null,
+                "changes": {
+                    "correspondent": [
+                        "None",
+            // Output truncated...
+        ]
+
+[200] OK:
+
+    `[{"id":14,"timestamp":"2026-10-18T14:33:52.519906Z","action":"update","changes":{"filename":["None","0000001.txt"]},"actor":null},{"id":13,"timestamp":"2026-10-18T14:33:52.315871Z","action":"update","changes":{"owner":["None","2"],"created":["2026-10-18","2026-10-18 21:33:51+07:00"],"correspondent":["None","1"],"document_type":["None","1"]},"actor":null},{"id":12,"timestamp":"2026-10-18T14:33:52.310398Z","action":"update","changes":{"tags":{"type":"m2m","objects":["TV2_Tag_Invoice_202"],"operation":"add"}}, // Output truncated...`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://webserver:8000/api/documents/1/history/
+    
+    st replay ejfqvb
+
+_______________________ GET /api/documents/{id}/preview/ _______________________
+1. Test Case ID: F6djAf
+
+- Undocumented Content-Type
+
+    Received: text/plain; charset=utf-8
+    Documented: application/json
+
+[200] OK:
+
+    `HOA DON BAN HANG - SO TIEN 202.000 VND - NGUOI BAN: TV2 TA NHAT NGUYEN - DH DA LAT`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://webserver:8000/api/documents/1/preview/
+    
+    st replay F6djAf
+
+________________________ GET /api/documents/{id}/root/ _________________________
+1. Test Case ID: CiYsNP
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Not found."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' http://webserver:8000/api/documents/288/root/
+    
+    st replay CiYsNP
+
+_____________________ GET /api/documents/{id}/share_links/ _____________________
+1. Test Case ID: DC47i7
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    <!doctype html>
+    <html lang="en">
+    <head>
+      <title>Server Error (500)</title>
+    </head>
+    <body>
+      <h1>Server Error (500)</h1><p></p>
+    </body>
+    </html>`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://webserver:8000/api/documents/%F0%B0%AD%AB%17%F4%83%B8%9E2%12%1FV%C3%8F/share_links/
+    
+    st replay DC47i7
+
+_____________________ GET /api/documents/{id}/suggestions/ _____________________
+1. Test Case ID: s8XG0j
+
+- Server error
+
+- Undocumented HTTP status code
+
+    Received: 500
+    Documented: 200, 400, 403, 404
+
+[500] Internal Server Error:
+
+    `
+    <!doctype html>
+    <html lang="en">
+    <head>
+      <title>Server Error (500)</title>
+    </head>
+    <body>
+      <h1>Server Error (500)</h1><p></p>
+    </body>
+    </html>`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://webserver:8000/api/documents/true/suggestions/
+    
+    st replay s8XG0j
+
+________________________ GET /api/documents/{id}/thumb/ ________________________
+1. Test Case ID: bBSU0S
+
+- Undocumented Content-Type
+
+    Received: image/webp
+    Documented: application/json
+
+[200] OK:
+
+    <BINARY>
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' http://webserver:8000/api/documents/1/thumb/
+    
+    st replay bBSU0S
+
+________________________________ GET /api/tags/ ________________________________
+1. Test Case ID: b8OhaF
+
+- Undocumented HTTP status code
+
+    Received: 404
+    Documented: 200
+
+[404] Not Found:
+
+    `{"detail":"Invalid page."}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' 'http://webserver:8000/api/tags/?id__in=3028333817935626026090496&full_perms=false&name__iendswith=%16%C3%A1%F1%99%95%B8%09&ordering=%CE%A9%E2%89%88%C3%A7%E2%88%9A%E2%88%AB%CB%9C%C2%B5%E2%89%A4%E2%89%A5%C3%B7%C3%A5%C3%9F%E2%88%82%C6%92%C2%A9%CB%99%E2%88%86%CB%9A%C2%AC%E2%80%A6%C3%A6%C5%93%E2%88%91%C2%B4%C2%AE%E2%80%A0%C2%A5%C2%A8%CB%86%C3%B8%CF%80%E2%80%9C%E2%80%98%C2%A1%E2%84%A2%C2%A3%C2%A2%E2%88%9E%C2%A7%C2%B6%E2%80%A2%C2%AA%C2%BA%E2%80%93%E2%89%A0%C2%B8%CB%9B%C3%87%E2%97%8A%C4%B1%CB%9C%C3%82%C2%AF%CB%98%C2%BF%C3%85%C3%8D%C3%8E%C3%8F%CB%9D%C3%93%C3%94%EF%A3%BF%C3%92%C3%9A%C3%86%E2%98%83%C5%92%E2%80%9E%C2%B4%E2%80%B0%CB%87%C3%81%C2%A8%CB%86%C3%98%E2%88%8F%E2%80%9D%E2%80%99%60%E2%81%84%E2%82%AC%E2%80%B9%E2%80%BA%EF%AC%81%EF%AC%82%E2%80%A1%C2%B0%C2%B7%E2%80%9A%E2%80%94%C2%B1&id=415480206&name__istartswith=__main__&page_size=4894623&page=-15648618&name__icontains=&name__iexact=&is_root=true'
+    
+    st replay b8OhaF
+
+_____________________________ GET /api/tags/{id}/ ______________________________
+1. Test Case ID: IBobeo
+
+- Response violates schema
+
+    "user_can_change" is a required property
+
+    Validated against the response schema for status code 200.
+
+    Schema at /components/schemas/Tag:
+
+        {
+            "required": [
+                "children",
+                "document_count",
+                "id",
+                "name",
+                "slug",
+                "text_color",
+                "user_can_change"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "slug": {
+                    "type": "string",
+                    "readOnly": true
+            // Output truncated...
+        }
+
+    Value:
+
+        {
+            "children": [],
+            "color": "#e6194b",
+            "document_count": 1,
+            "id": 1,
+            "is_inbox_tag": false,
+            "is_insensitive": true,
+            "match": "",
+            "matching_algorithm": 1,
+            "name": "TV2_Tag_Invoice_202",
+            "owner": 2,
+            "parent": null,
+            "permissions": {
+                "change": {
+                    "groups": [],
+                    "users": []
+                },
+                "view": {
+                    "groups": [],
+            // Output truncated...
+        }
+
+[200] OK:
+
+    `{"id":1,"slug":"tv2_tag_invoice_202","name":"TV2_Tag_Invoice_202","color":"#e6194b","text_color":"#ffffff","match":"","matching_algorithm":1,"is_insensitive":true,"is_inbox_tag":false,"document_count":1,"owner":2,"permissions":{"view":{"users":[],"groups":[]},"change":{"users":[],"groups":[]}},"parent":null,"children":[]}`
+
+Reproduce with:
+
+    curl -X GET -H 'Authorization: [Filtered]' -H 'Cookie: [Filtered]' 'http://webserver:8000/api/tags/1/?full_perms=true'
+    
+    st replay IBobeo
+
+=================================== SUMMARY ====================================
+
+API Operations:
+  Selected: 19/163
+  Tested: 19
+
+Test Phases:
+  ⏭  Examples
+  ⏭  Coverage (disabled)
+  ❌ Fuzzing
+  ⏭  Stateful (disabled)
+
+Failures:
+  ❌ Server error: 3
+  ❌ Response violates schema: 8
+  ❌ Undocumented Content-Type: 3
+  ❌ Undocumented HTTP status code: 6
+
+_______________________________ Schema Coverage ________________________________
+
+Operations            19/163    11.6%
+Parameters            10/597     1.6%  (22 partial)
+Keywords              13/9285    0.1%  (22 partial)
+Examples               0/72      0.0%
+Responses             22/207    10.6%
+Response Keywords    265/6235    4.2%
+
+HTML report         ./schema-coverage.html
+
+Test cases:
+  112 generated, 16 found 20 unique failures
+
+Reports:
+  - JUNIT: /results/TV5_round1_4nhom_seed505_junit.xml
+  - NDJSON: /results/TV5_round1_4nhom_seed505.ndjson
+
+Seed: 505
+
+============================ 20 failures in 11.65s =============================

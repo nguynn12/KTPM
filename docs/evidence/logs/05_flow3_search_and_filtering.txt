@@ -1,0 +1,180 @@
+# MINH CHỨNG 05 — LUỒNG 3: TÌM KIẾM TOÀN VĂN VÀ LỌC TÀI LIỆU
+Thời gian ghi nhận: 2026-11-28 11:36:24 UTC+7
+
+## 1. Điều kiện ban đầu — Tập dữ liệu mẫu có quan hệ biết trước (Ground Truth)
+- Tài liệu mục tiêu A (ID=8): Tiêu đề `Hoa Don Dich Vu Luu Tru Dam May Q4-2026`, chứa từ khóa riêng `KTPM-R08-FLOW-ALPHA` và từ khóa chung `Q4-2026`; gắn `tag=74`, `correspondent=117`, `document_type=103`.
+- Tài liệu đối chứng B (ID=9): Tiêu đề `Bien Ban Nghiem Thu Ky Thuat Noi Bo Q4-2026`, chứa từ khóa riêng `KTPM-R08-FLOW-BETA` và từ khóa chung `Q4-2026`; gắn `tag=75`, `correspondent=118`, `document_type=104`.
+
+## 2. Thao tác 3.1 — Tìm kiếm toàn văn nội dung trích xuất (`?query=KTPM-R08-FLOW-ALPHA`)
+Request:  GET http://localhost:8000/api/documents/?query=KTPM-R08-FLOW-ALPHA
+Response: HTTP 200 | count=1 | Returned IDs=[8]
+Search Hit Metadata: {
+  "score": 1.9041181802749634,
+  "highlights": "SO VA NHAN DANG OCR\r\nMA DOI SOAT DUY NHAT: <b>KTPM</b>-<b>R08</b>-<b>FLOW</b>-<b>ALPHA</b>\r\nTONG THANH TOAN: 4.500.000 VND",
+  "note_highlights": null,
+  "rank": 1
+}
+Full Response JSON:
+```json
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 8,
+      "correspondent": 117,
+      "document_type": 103,
+      "storage_path": null,
+      "title": "Hoa Don Dich Vu Luu Tru Dam May Q4-2026",
+      "content": "CHUNG TU KE TOAN SO INV-2026-0404-1795840585\r\nDON VI PHAT HANH: CONG TY DICH VU DAM MAY ACME\r\nKY CUOC: Q4-2026\r\nNOI DUNG: PHI DICH VU LUU TRU TAI LIEU SO VA NHAN DANG OCR\r\nMA DOI SOAT DUY NHAT: KTPM-R08-FLOW-ALPHA\r\nTONG THANH TOAN: 4.500.000 VND\r\n",
+      "tags": [
+        74
+      ],
+      "created": "2026-11-28",
+      "created_date": "2026-11-28",
+      "modified": "2026-11-28T11:36:34.077252+07:00",
+      "added": "2026-11-28T11:36:28.130805+07:00",
+      "deleted_at": null,
+      "archive_serial_number": null,
+      "original_file_name": "Flow1_Invoice_ACME_Q4_2026.txt",
+      "archived_file_name": null,
+      "duplicate_documents": [],
+      "owner": 2,
+      "user_can_change": true,
+      "is_shared_by_requester": false,
+      "notes": [],
+      "custom_fields": [],
+      "page_count": null,
+      "mime_type": "text/plain",
+      "root_document": null,
+      "versions": [
+        {
+          "id": 8,
+          "added": "2026-11-28T04:36:28.130805Z",
+          "version_label": null,
+          "checksum": "6d01e8db66fc20a41ac1768a68e377358aa64926e0569038199dcbf943ae8fd5",
+          "is_root": true
+        }
+      ],
+      "__search_hit__": {
+        "score": 1.9041181802749634,
+        "highlights": "SO VA NHAN DANG OCR\r\nMA DOI SOAT DUY NHAT: <b>KTPM</b>-<b>R08</b>-<b>FLOW</b>-<b>ALPHA</b>\r\nTONG THANH TOAN: 4.500.000 VND",
+        "note_highlights": null,
+        "rank": 1
+      }
+    }
+  ],
+  "corrected_query": null
+}
+```
+
+## 3. Thao tác 3.2 — Lọc đa tiêu chí theo Metadata phân loại
+Request:  GET http://localhost:8000/api/documents/?tags__id__all=74&correspondent__id=117&document_type__id=103
+Response: HTTP 200 | count=1 | Returned IDs=[8] (Đã loại trừ chính xác tài liệu đối chứng ID=9)
+Full Response JSON:
+```json
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 8,
+      "correspondent": 117,
+      "document_type": 103,
+      "storage_path": null,
+      "title": "Hoa Don Dich Vu Luu Tru Dam May Q4-2026",
+      "content": "CHUNG TU KE TOAN SO INV-2026-0404-1795840585\r\nDON VI PHAT HANH: CONG TY DICH VU DAM MAY ACME\r\nKY CUOC: Q4-2026\r\nNOI DUNG: PHI DICH VU LUU TRU TAI LIEU SO VA NHAN DANG OCR\r\nMA DOI SOAT DUY NHAT: KTPM-R08-FLOW-ALPHA\r\nTONG THANH TOAN: 4.500.000 VND\r\n",
+      "tags": [
+        74
+      ],
+      "created": "2026-11-28",
+      "created_date": "2026-11-28",
+      "modified": "2026-11-28T11:36:34.077252+07:00",
+      "added": "2026-11-28T11:36:28.130805+07:00",
+      "deleted_at": null,
+      "archive_serial_number": null,
+      "original_file_name": "Flow1_Invoice_ACME_Q4_2026.txt",
+      "archived_file_name": null,
+      "duplicate_documents": [],
+      "owner": 2,
+      "user_can_change": true,
+      "is_shared_by_requester": false,
+      "notes": [],
+      "custom_fields": [],
+      "page_count": null,
+      "mime_type": "text/plain",
+      "root_document": null,
+      "versions": [
+        {
+          "id": 8,
+          "added": "2026-11-28T04:36:28.130805Z",
+          "version_label": null,
+          "checksum": "6d01e8db66fc20a41ac1768a68e377358aa64926e0569038199dcbf943ae8fd5",
+          "is_root": true
+        }
+      ]
+    }
+  ]
+}
+```
+
+## 4. Thao tác 3.3 — Kiểm chứng giao thoa giữa Tìm kiếm toàn văn + Lọc phân loại + Phân trang
+- Truy vấn nền chỉ tìm từ khóa chung `?query=Q4-2026`: HTTP 200, count=2, IDs=[9, 8] (trả về cả tài liệu A và B).
+- Truy vấn kết hợp `GET http://localhost:8000/api/documents/?query=Q4-2026&correspondent__id=117&ordering=-created&page=1&page_size=10`:
+  Response: HTTP 200 | count=1 | Returned IDs=[8] (chỉ giữ lại đúng tài liệu A thỏa đồng thời nội dung và Correspondent).
+Full Response JSON:
+```json
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 8,
+      "correspondent": 117,
+      "document_type": 103,
+      "storage_path": null,
+      "title": "Hoa Don Dich Vu Luu Tru Dam May Q4-2026",
+      "content": "CHUNG TU KE TOAN SO INV-2026-0404-1795840585\r\nDON VI PHAT HANH: CONG TY DICH VU DAM MAY ACME\r\nKY CUOC: Q4-2026\r\nNOI DUNG: PHI DICH VU LUU TRU TAI LIEU SO VA NHAN DANG OCR\r\nMA DOI SOAT DUY NHAT: KTPM-R08-FLOW-ALPHA\r\nTONG THANH TOAN: 4.500.000 VND\r\n",
+      "tags": [
+        74
+      ],
+      "created": "2026-11-28",
+      "created_date": "2026-11-28",
+      "modified": "2026-11-28T11:36:34.077252+07:00",
+      "added": "2026-11-28T11:36:28.130805+07:00",
+      "deleted_at": null,
+      "archive_serial_number": null,
+      "original_file_name": "Flow1_Invoice_ACME_Q4_2026.txt",
+      "archived_file_name": null,
+      "duplicate_documents": [],
+      "owner": 2,
+      "user_can_change": true,
+      "is_shared_by_requester": false,
+      "notes": [],
+      "custom_fields": [],
+      "page_count": null,
+      "mime_type": "text/plain",
+      "root_document": null,
+      "versions": [
+        {
+          "id": 8,
+          "added": "2026-11-28T04:36:28.130805Z",
+          "version_label": null,
+          "checksum": "6d01e8db66fc20a41ac1768a68e377358aa64926e0569038199dcbf943ae8fd5",
+          "is_root": true
+        }
+      ],
+      "__search_hit__": {
+        "score": 1.778508186340332,
+        "highlights": "CHUNG TU KE TOAN SO INV-<b>2026</b>-0404-1795840585\r\nDON VI PHAT HANH: CONG TY DICH VU DAM MAY ACME\r\nKY CUOC: <b>Q4</b>-<b>2026</b>\r\nNOI DUNG: PHI DICH VU LUU TRU TAI LIEU",
+        "note_highlights": null,
+        "rank": 1
+      }
+    }
+  ],
+  "corrected_query": null
+}
+```
