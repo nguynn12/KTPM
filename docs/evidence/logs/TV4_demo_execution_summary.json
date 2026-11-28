@@ -1,0 +1,55 @@
+{
+  "executed_at": "2026-11-28 11:36:24 UTC+7",
+  "target_url": "http://localhost:8000",
+  "paperless_version": "v3.1.3 (commit d48663e9ebaadc4b413a6ca3bc88cb5fbc4e468e)",
+  "openapi_operations_total": 163,
+  "credentials_redacted": true,
+  "flows": {
+    "flow1_upload_and_processing": {
+      "status": "PASS",
+      "upload_http_status": 200,
+      "task_uuid": "57b4f69e-d598-47fe-b525-9c72370a823b",
+      "task_final_status": "success",
+      "processing_seconds": 2.53,
+      "created_document_id": 8,
+      "control_document_id": 9,
+      "retrieved_http_status": 200,
+      "download_http_status": 200
+    },
+    "flow2_classification_assignment": {
+      "status": "PASS",
+      "tag_created": {
+        "id": 74,
+        "name": "Demo_Tag_HoaDon_Q4"
+      },
+      "correspondent_created": {
+        "id": 117,
+        "name": "Demo_DoiTac_ACME_Cloud"
+      },
+      "document_type_created": {
+        "id": 103,
+        "name": "Demo_Loai_HoaDonDichVu"
+      },
+      "patch_http_status": 200,
+      "recheck_persisted": true,
+      "correspondent_document_count": 1
+    },
+    "flow3_search_and_filtering": {
+      "status": "PASS",
+      "fulltext_query_ids": [
+        8
+      ],
+      "fulltext_score": 1.9041181802749634,
+      "metadata_filter_ids": [
+        8
+      ],
+      "shared_keyword_unfiltered_ids": [
+        9,
+        8
+      ],
+      "combined_search_and_filter_ids": [
+        8
+      ]
+    }
+  }
+}

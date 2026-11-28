@@ -1,0 +1,130 @@
+# MINH CHỨNG 03 — LUỒNG 1: TẢI LÊN VÀ XỬ LÝ TÀI LIỆU BẤT ĐỒNG BỘ
+Thời gian ghi nhận: 2026-11-28 11:36:24 UTC+7
+
+## 1. Điều kiện ban đầu (Preconditions)
+- 3 container (`paperless-webserver`, `paperless-db`, `paperless-broker`) đang ở trạng thái Up / Healthy.
+- Xác thực API hợp lệ qua Header `Authorization: Token <REDACTED_TOKEN>`.
+- Số lượng tài liệu trong hệ thống trước khi tải lên: 0.
+- Tệp đầu vào: `scripts/sample_docs/Flow1_Invoice_ACME_Q4_2026.txt` (`text/plain`, mã đối soát `KTPM-R08-FLOW-ALPHA`).
+
+## 2. Thao tác 1.1 — Gửi yêu cầu tải lên tài liệu (Thời điểm tiếp nhận)
+Request:  POST http://localhost:8000/api/documents/post_document/ (multipart/form-data)
+Header:   Authorization: Token <REDACTED_TOKEN>
+FormData: title="Hoa Don Dich Vu Luu Tru Dam May Q4-2026", document=@Flow1_Invoice_ACME_Q4_2026.txt
+Response: HTTP 200
+Body (Task UUID): "57b4f69e-d598-47fe-b525-9c72370a823b"
+
+## 3. Thao tác 1.2 — Truy vấn trạng thái xử lý nền hoàn tất (`GET /api/tasks/`)
+Request:  GET http://localhost:8000/api/tasks/?task_id=57b4f69e-d598-47fe-b525-9c72370a823b
+Thời gian xử lý nền: 2.53 giây
+Response JSON:
+```json
+{
+  "id": 469,
+  "task_id": "57b4f69e-d598-47fe-b525-9c72370a823b",
+  "task_type": "consume_file",
+  "task_type_display": "Consume File",
+  "trigger_source": "api_upload",
+  "trigger_source_display": "API Upload",
+  "status": "success",
+  "status_display": "Success",
+  "date_created": "2026-11-28T11:36:26.018402+07:00",
+  "date_started": "2026-11-28T11:36:26.031354+07:00",
+  "date_done": "2026-11-28T11:36:28.273061+07:00",
+  "duration_seconds": 2.241707,
+  "wait_time_seconds": 0.012952,
+  "input_data": {
+    "filename": "Flow1_Invoice_ACME_Q4_2026.txt",
+    "mime_type": "text/plain",
+    "overrides": {
+      "title": "Hoa Don Dich Vu Luu Tru Dam May Q4-2026",
+      "filename": "Flow1_Invoice_ACME_Q4_2026.txt",
+      "owner_id": 2,
+      "remote_ocr": false,
+      "skip_asn_if_exists": false
+    }
+  },
+  "result_data": {
+    "document_id": 8
+  },
+  "related_document_ids": [
+    8
+  ],
+  "acknowledged": false,
+  "owner": 2
+}
+```
+
+## 4. Thao tác 1.3 — Truy xuất tài liệu sau xử lý (`GET /api/documents/8/`)
+Request:  GET http://localhost:8000/api/documents/8/
+Response: HTTP 200
+Response JSON:
+```json
+{
+  "id": 8,
+  "correspondent": null,
+  "document_type": null,
+  "storage_path": null,
+  "title": "Hoa Don Dich Vu Luu Tru Dam May Q4-2026",
+  "content": "CHUNG TU KE TOAN SO INV-2026-0404-1795840585\r\nDON VI PHAT HANH: CONG TY DICH VU DAM MAY ACME\r\nKY CUOC: Q4-2026\r\nNOI DUNG: PHI DICH VU LUU TRU TAI LIEU SO VA NHAN DANG OCR\r\nMA DOI SOAT DUY NHAT: KTPM-R08-FLOW-ALPHA\r\nTONG THANH TOAN: 4.500.000 VND\r\n",
+  "tags": [],
+  "created": "2026-11-28",
+  "created_date": "2026-11-28",
+  "modified": "2026-11-28T11:36:28.263918+07:00",
+  "added": "2026-11-28T11:36:28.130805+07:00",
+  "deleted_at": null,
+  "archive_serial_number": null,
+  "original_file_name": "Flow1_Invoice_ACME_Q4_2026.txt",
+  "archived_file_name": null,
+  "duplicate_documents": [],
+  "owner": 2,
+  "user_can_change": true,
+  "is_shared_by_requester": false,
+  "notes": [],
+  "custom_fields": [],
+  "page_count": null,
+  "mime_type": "text/plain",
+  "root_document": null,
+  "versions": [
+    {
+      "id": 8,
+      "added": "2026-11-28T04:36:28.130805Z",
+      "version_label": null,
+      "checksum": "6d01e8db66fc20a41ac1768a68e377358aa64926e0569038199dcbf943ae8fd5",
+      "is_root": true
+    }
+  ]
+}
+```
+
+## 5. Kiểm tra tải tệp lưu trữ vật lý (`GET /api/documents/8/download/`)
+Response: HTTP 200 | Content-Type: text/plain; charset=utf-8 | Size: 247 bytes
+
+## 6. Trích xuất log xử lý của Celery Worker / Consumer trong `paperless-webserver`
+```text
+paperless-webserver  | [2026-11-28 11:35:00,000] [INFO] [celery.beat] Scheduler: Sending due task Check all e-mail accounts (paperless_mail.tasks.process_mail_accounts)
+paperless-webserver  | [2026-11-28 11:35:00,011] [INFO] [celery.worker.strategy] Task paperless_mail.tasks.process_mail_accounts[158928f1-9514-4add-8e45-97da4bab8ade] received
+paperless-webserver  | [2026-11-28 11:35:00,032] [INFO] [celery.app.trace] Task paperless_mail.tasks.process_mail_accounts[158928f1-9514-4add-8e45-97da4bab8ade] succeeded in 0.019218153999986498s: 'No new documents were added.'
+paperless-webserver  | [2026-11-28 11:36:24,968] [INFO] [paperless.tasks] Deleted 2 documents from trash
+paperless-webserver  | [2026-11-28 11:36:25,441] [WARNING] [django.request] Unauthorized: /api/documents/
+paperless-webserver  | [2026-11-28 11:36:26,028] [INFO] [celery.worker.strategy] Task documents.tasks.consume_file[57b4f69e-d598-47fe-b525-9c72370a823b] received
+paperless-webserver  | [2026-11-28 11:36:26,066] [INFO] [paperless.tasks] [57b4f69e] ConsumerPreflightPlugin completed with no message
+paperless-webserver  | [2026-11-28 11:36:26,066] [INFO] [paperless.tasks] [57b4f69e] AsnCheckPlugin completed with no message
+paperless-webserver  | [2026-11-28 11:36:26,070] [INFO] [paperless.tasks] [57b4f69e] AsnCheckPlugin completed with no message
+paperless-webserver  | [2026-11-28 11:36:26,075] [INFO] [paperless.tasks] [57b4f69e] WorkflowTriggerPlugin completed with: 
+paperless-webserver  | [2026-11-28 11:36:26,075] [INFO] [paperless.consumer] [57b4f69e] Consuming Flow1_Invoice_ACME_Q4_2026.txt
+paperless-webserver  | [2026-11-28 11:36:26,077] [INFO] [celery.worker.strategy] Task documents.tasks.consume_file[ce992a6b-a2f0-40df-b518-9279142f55d1] received
+paperless-webserver  | [2026-11-28 11:36:28,268] [INFO] [paperless.consumer] [57b4f69e] Document 2026-11-28 Hoa Don Dich Vu Luu Tru Dam May Q4-2026 consumption finished
+paperless-webserver  | [2026-11-28 11:36:28,271] [INFO] [paperless.tasks] [57b4f69e] ConsumeTaskPlugin completed with: {'document_id': 8}
+paperless-webserver  | [2026-11-28 11:36:28,272] [INFO] [celery.app.trace] Task documents.tasks.consume_file[57b4f69e-d598-47fe-b525-9c72370a823b] succeeded in 2.241987455999947s: {'document_id': 8}
+paperless-webserver  | [2026-11-28 11:36:31,124] [INFO] [paperless.tasks] [ce992a6b] ConsumerPreflightPlugin completed with no message
+paperless-webserver  | [2026-11-28 11:36:31,124] [INFO] [paperless.tasks] [ce992a6b] AsnCheckPlugin completed with no message
+paperless-webserver  | [2026-11-28 11:36:31,127] [INFO] [paperless.tasks] [ce992a6b] AsnCheckPlugin completed with no message
+paperless-webserver  | [2026-11-28 11:36:31,133] [INFO] [paperless.tasks] [ce992a6b] WorkflowTriggerPlugin completed with: 
+paperless-webserver  | [2026-11-28 11:36:31,133] [INFO] [paperless.consumer] [ce992a6b] Consuming Flow3_Control_Report_Q4_2026.txt
+paperless-webserver  | [2026-11-28 11:36:32,808] [INFO] [paperless.consumer] [ce992a6b] Document 2026-11-28 Bien Ban Nghiem Thu Ky Thuat Noi Bo Q4-2026 consumption finished
+paperless-webserver  | [2026-11-28 11:36:32,811] [INFO] [paperless.tasks] [ce992a6b] ConsumeTaskPlugin completed with: {'document_id': 9}
+paperless-webserver  | [2026-11-28 11:36:32,811] [INFO] [celery.app.trace] Task documents.tasks.consume_file[ce992a6b-a2f0-40df-b518-9279142f55d1] succeeded in 1.7205094120000695s: {'document_id': 9}
+paperless-webserver  | /usr/local/lib/python3.14/site-packages/django/core/handlers/asgi.py:336: Warning: StreamingHttpResponse must consume synchronous iterators in order to serve them asynchronously. Use an asynchronous iterator instead.
+paperless-webserver  |   async for part in content:
+```

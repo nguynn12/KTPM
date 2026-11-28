@@ -1,0 +1,24 @@
+# MINH CHỨNG 02: KIỂM TRA XÁC THỰC API VÀ ĐẶC TẢ OPENAPI
+Thời gian ghi nhận: 2026-11-28 11:36:24 UTC+7
+
+## 1. Kiểm tra truy cập không kèm Token (Kỳ vọng: HTTP 401 Unauthorized)
+Request:  GET http://localhost:8000/api/documents/
+Response: HTTP 401
+Body:     {"detail":"Authentication credentials were not provided."}
+
+## 2. Yêu cầu cấp Token xác thực (Đã che tài khoản & mật khẩu)
+Request:  POST http://localhost:8000/api/token/
+Payload:  {"username": "<REDACTED_USER>", "password": "<REDACTED_PASSWORD>"}
+Response: HTTP 200
+Body:     {"token": "<REDACTED_TOKEN>"}
+
+## 3. Kiểm tra đặc tả OpenAPI Schema
+Request:  GET http://localhost:8000/api/schema/?format=json
+Header:   Authorization: Token <REDACTED_TOKEN>
+Response: HTTP 200
+OpenAPI Info: {
+  "title": "Paperless-ngx REST API",
+  "version": "6.0.0 (10)",
+  "description": "OpenAPI Spec for Paperless-ngx"
+}
+Tổng số API operations trích xuất từ Schema: 163

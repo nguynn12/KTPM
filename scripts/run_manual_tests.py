@@ -10,6 +10,7 @@ import os
 import sys
 import time
 import argparse
+from pathlib import Path
 import requests
 
 if sys.platform == "win32":
@@ -19,7 +20,14 @@ if sys.platform == "win32":
     except Exception:
         pass
 
-BASE_URL = os.getenv("PAPERLESS_URL", "http://localhost:8000")
+if Path(".env").exists():
+    for _line in Path(".env").read_text(encoding="utf-8", errors="ignore").splitlines():
+        _s = _line.strip()
+        if _s and not _s.startswith("#") and "=" in _s:
+            _k, _v = _s.split("=", 1)
+            os.environ.setdefault(_k.strip(), _v.strip().strip('"').strip("'"))
+
+BASE_URL = os.getenv("PAPERLESS_URL", "http://localhost:8000").rstrip("/")
 ADMIN_USER = os.getenv("PAPERLESS_ADMIN_USER", "admin")
 ADMIN_PASS = os.getenv("PAPERLESS_ADMIN_PASSWORD", "admin")
 
@@ -243,7 +251,7 @@ def main():
         "Authorization": f"Token {token}",
         "Content-Type": "application/json",
     }
-    print(f"[OK] Đã xác thực thành công qua API token: {token[:8]}...")
+    print("[OK] Đã xác thực thành công qua API (Token: <REDACTED_TOKEN>)")
     run_correspondent_tests(headers)
 
 
