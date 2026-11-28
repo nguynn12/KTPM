@@ -58,7 +58,7 @@ ValueError: year must be in 1..9999, not 0
 ## 6. Lệnh tái hiện (Curl)
 ```bash
 curl -X GET "http://localhost:8000/api/documents/?modified__year=-1.17e-38" \
-  -H "Authorization: Token 3716828bfd21075a2fb68f1b959d02d2756f8d7a"
+  -H "Authorization: Token <TOKEN>"
 ```
 
 ## 7. Đề xuất khắc phục

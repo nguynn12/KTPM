@@ -77,7 +77,7 @@ Payload gửi đi:
 ## 6. Lệnh tái hiện (Curl)
 ```bash
 curl -X POST http://localhost:8000/api/correspondents/ \
-  -H "Authorization: Token 3716828bfd21075a2fb68f1b959d02d2756f8d7a" \
+  -H "Authorization: Token <TOKEN>" \
   -H "Content-Type: application/json" \
   -d '{"name": "Test_Schema_Violation_Correspondent"}'
 ```
