@@ -35,3 +35,6 @@ results/*.token
 Thumbs.db
 .DS_Store
 !results/TV1_cleanenv_verify.log
+*.docx
+~$*.docx
+*.bak
