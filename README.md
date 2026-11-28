@@ -106,7 +106,8 @@ Cấu hình Docker: [`docker-compose.yml`](docker-compose.yml) và [`.env.exampl
 ```powershell
 git clone https://github.com/nguynn12/KTPM.git
 cd KTPM
-git checkout TV1_TranGiaHuy
+git switch release/final-submission
+git rev-parse HEAD
 git log --oneline -5
 ```
 
@@ -264,7 +265,31 @@ tự thay token bằng `[REDACTED]` trong mọi file kết quả.
 
 ---
 
-## 7. Chuẩn bị dữ liệu mẫu
+## 7. Tạo môi trường Python và cài dependencies
+
+```powershell
+py -3.13 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\schemathesis.exe --version
+.\.venv\Scripts\python.exe -c "from importlib.metadata import version; print(version('requests'))"
+```
+
+Kỳ vọng:
+
+```text
+schemathesis, version 4.30.1
+```
+
+Nguồn cài đặt đúng phiên bản: PyPI `schemathesis==4.30.1`
+(https://pypi.org/project/schemathesis/4.30.1/). Không cài từ bản `latest` hoặc fork.
+
+> Nếu gọi trực tiếp `schemathesis` trong PowerShell và gặp `UnicodeEncodeError: 'charmap'`,
+> đặt `$env:PYTHONUTF8="1"` trước khi chạy. Runner `scripts/run_round_TV1.py` đã tự ép UTF-8
+> cho tiến trình con, nên không cần đặt tay khi dùng runner.
+
+---
+
+## 8. Chuẩn bị dữ liệu mẫu
 
 Bộ seed của TV1: **seed 101** — 6 PDF trong `scripts/sample_docs/`, 3 tag, 2 correspondent,
 2 document type. Chi tiết: [`docs/SEED_DATA_TV1.md`](docs/SEED_DATA_TV1.md).
@@ -313,32 +338,9 @@ Sau đó tạo metadata (script này **không** reset, chỉ tạo nếu chưa c
 
 ---
 
-## 8. Cài Schemathesis
-
-```powershell
-py -3.13 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\schemathesis.exe --version
-```
-
-Kỳ vọng:
-
-```text
-schemathesis, version 4.30.1
-```
-
-Nguồn cài đặt đúng phiên bản: PyPI `schemathesis==4.30.1`
-(https://pypi.org/project/schemathesis/4.30.1/). Không cài từ bản `latest` hoặc fork.
-
-> Nếu gọi trực tiếp `schemathesis` trong PowerShell và gặp `UnicodeEncodeError: 'charmap'`,
-> đặt `$env:PYTHONUTF8="1"` trước khi chạy. Runner `scripts/run_round_TV1.py` đã tự ép UTF-8
-> cho tiến trình con, nên không cần đặt tay khi dùng runner.
-
----
-
 ## 9. Chạy bộ kiểm thử 3 vòng
 
-Quy trình nhóm: **reset → seed → xác nhận baseline → chạy vòng**.
+Quy trình nhóm: **reset → seed → xác nhận baseline → chạy vòng**. Dùng checkout và stack thử nghiệm riêng. Giữ thư mục kết quả mới tách với 15 lượt lịch sử.
 
 | Vòng | Phạm vi | Operation | Ghi chú |
 |---|---|---|---|

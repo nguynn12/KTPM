@@ -254,6 +254,10 @@ def parse_cli(log_text: str) -> dict:
     m = re.search(r"(\d+)\s+generated,\s*(\d+)\s+found\s+(\d+)\s+unique failures", log_text)
     if m:
         out["generated"], out["found"], out["unique"] = int(m.group(1)), int(m.group(2)), int(m.group(3))
+    else:
+        passed = re.search(r"^\s*(\d+)\s+generated,\s*\d+\s+passed\s*$", log_text, re.MULTILINE)
+        if passed:
+            out["generated"], out["found"], out["unique"] = int(passed.group(1)), 0, 0
     m = re.search(r"(\d+)\s+failures?,\s*(\d+)\s+warnings?\s+in\s+([\d.]+)s", log_text)
     if m:
         out["total_failures"], out["warnings"], out["time"] = int(m.group(1)), int(m.group(2)), float(m.group(3))
