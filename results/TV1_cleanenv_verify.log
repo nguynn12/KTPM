@@ -1,0 +1,346 @@
+# TV1 — LOG XÁC MINH MÔI TRƯỜNG SẠCH (26/11/2026)
+# Mọi mật khẩu/secret/token đã được che. Đường dẫn tạm thay bằng <VERIFY_DIR>.
+# Môi trường: project/volume riêng `tv1verify`, port 8013 (port 8000 đang bị stack cũ chiếm).
+
+
+==============================================================================
+0. KIỂM TRA MÔI TRƯỜNG TRƯỚC KHI CÀI
+==============================================================================
+$ powershell -ExecutionPolicy Bypass -File scripts/check_env_TV1.ps1
+=== TV1 env check ===
+OS: Microsoft Windows 11 Home Single Language
+[OK]   Docker: Docker version 29.8.0, build 88096ef
+[OK]   Docker Compose: Docker Compose version v5.5.1
+[OK]   Docker daemon: RUNNING
+[OK]   Python 3.13: Python 3.13.15
+INFO  Python mac dinh: Python 3.13.15
+[WARN] venv: CHUA CO -> py -3.13 -m venv .venv
+[WARN] Schemathesis: CHUA CAI -> pip install "schemathesis==4.30.1"
+[OK]   O dia C trong: 109.2 GB (can >= 10 GB)
+[OK]   O dia D trong: 118.6 GB (can >= 10 GB)
+[OK]   RAM: 15.7 GB (can >= 8 GB)
+[WARN] Port 8000: DANG BI CHIEM -> doi ports + PAPERLESS_URL hoac dung port khac
+
+
+==============================================================================
+1. TAG / COMMIT / IMAGE ĐÃ GHIM
+==============================================================================
+=== TAG/COMMIT PAPERLESS-NGX ===
+$ git ls-remote --tags https://github.com/paperless-ngx/paperless-ngx.git refs/tags/v3.1.3 refs/tags/v3.1.3^{}
+cbd6b56c9f0eb7261c903cf5ccdbe124d433e995	refs/tags/v3.1.3
+d48663e9ebaadc4b413a6ca3bc88cb5fbc4e468e	refs/tags/v3.1.3^{}
+
+=== IMAGE ===
+$ docker image inspect ghcr.io/paperless-ngx/paperless-ngx:3.1.3 --format '{{json .Config.Labels}}'
+===
+$ docker image inspect ghcr.io/paperless-ngx/paperless-ngx:3.1.3 --format '{{json .RepoDigests}}'
+{"org.opencontainers.image.authors":"paperless-ngx team <hello@paperless-ngx.com>","org.opencontainers.image.created":"2026-09-04T02:53:35.979Z","org.opencontainers.image.description":"A community-supported supercharged document management system: scan, index and archive all your documents","org.opencontainers.image.documentation":"https://docs.paperless-ngx.com/","org.opencontainers.image.licenses":"GPL-3.0","org.opencontainers.image.revision":"d48663e9ebaadc4b413a6ca3bc88cb5fbc4e468e","org.opencontainers.image.source":"https://github.com/paperless-ngx/paperless-ngx","org.opencontainers.image.title":"paperless-ngx","org.opencontainers.image.url":"https://github.com/paperless-ngx/paperless-ngx","org.opencontainers.image.version":"3.1.3"}
+["ghcr.io/paperless-ngx/paperless-ngx@sha256:aa810a36942c63d4ee70d00eda7236cd3d6acfb7eb3f7987fb568ed14df8817a"]
+
+
+==============================================================================
+2. PULL IMAGE
+==============================================================================
+$ docker compose --project-name tv1verify pull
+[... output đầy đủ trong file gốc; trích 12 dòng cuối ...]
+ ad83137ff0b2 Pull complete 0B
+ 0e50696bc150 Pull complete 0B
+ f55179448640 Pull complete 0B
+ 4f4fb700ef54 Pull complete 0B
+ 4a603bc2424c Pull complete 0B
+ Image redis:7-alpine Pulled 
+ 576cb8ef4643 Pull complete 0B
+ 98e9a0326760 Pull complete 0B
+ b9f6a8f632b2 Pull complete 0B
+ 8e5860b895ab Pull complete 0B
+ 47714f1b82c2 Pull complete 0B
+ Image postgres:16-alpine Pulled
+
+
+==============================================================================
+3. DỰNG HỆ THỐNG
+==============================================================================
+$ docker compose --project-name tv1verify up -d
+ Container tv1verify-db Creating 
+ Container tv1verify-broker Created 
+ Container tv1verify-db Created 
+ Container tv1verify-webserver Creating 
+ Container tv1verify-webserver Created 
+ Container tv1verify-db Starting 
+ Container tv1verify-broker Starting 
+ Container tv1verify-db Started 
+ Container tv1verify-broker Started 
+ Container tv1verify-webserver Starting 
+ Container tv1verify-webserver Started
+
+
+==============================================================================
+4. TRẠNG THÁI CONTAINER
+==============================================================================
+$ docker compose --project-name tv1verify ps
+NAME IMAGE COMMAND SERVICE CREATED STATUS PORTS
+tv1verify-broker redis:7-alpine "docker-entrypoint.s…" broker About a minute ago Up About a minute 6379/tcp
+tv1verify-db postgres:16-alpine "docker-entrypoint.s…" db About a minute ago Up About a minute 5432/tcp
+tv1verify-webserver ghcr.io/paperless-ngx/paperless-ngx:3.1.3 "/init" webserver About a minute ago Up About a minute (healthy) 0.0.0.0:8013->8000/tcp, [::]:8013->8000/tcp
+
+
+==============================================================================
+5. KIỂM TRA OPENAPI + PHIÊN BẢN
+==============================================================================
+$ curl http://localhost:8013/api/schema/  -> 200, 340696 bytes, application/vnd.oai.openapi
+$ curl http://localhost:8013/api/schema/view/ -> 200
+$ docker compose ... exec -T webserver cat /usr/src/paperless/src/paperless/version.py
+  __version__: Final[tuple[int, int, int]] = (3, 1, 3)
+
+$ .venv\Scripts\python.exe 11_schema_check.py
+openapi= 3.0.3
+info_version= 6.0.0 (10)
+paths= 93
+operations= 163
+round1_GET_4resources=19
+round2_all_3metadata=18
+round3_all_4resources=53
+
+
+==============================================================================
+6. CÀI SCHEMATHESIS TỪ PYPI
+==============================================================================
+$ py -3.13 -m venv .venv
+$ .venv\Scripts\python.exe -m pip install requests "schemathesis==4.30.1"
+[... trích các dòng kết thúc ...]
+Using cached pygments-2.21.0-py3-none-any.whl (1.3 MB)
+Using cached rich-15.0.0-py3-none-any.whl (310 kB)
+Downloading markdown_it_py-4.3.0-py3-none-any.whl (96 kB)
+Using cached mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Using cached typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+Installing collected packages: sortedcontainers, urllib3, typing-extensions, pyyaml, pyrate-limiter, pygments, pluggy, packaging, mdurl, markupsafe, jsonschema-rs, iniconfig, idna, hypothesis, harfile, graphql-core, colorama, click, charset_normalizer, certifi, werkzeug, requests, pytest, markdown-it-py, hypothesis-graphql, anyio, rich, schemathesis
+
+Successfully installed anyio-4.16.0 certifi-2026.11.20 charset_normalizer-3.5.3 click-8.5.1 colorama-0.4.6 graphql-core-3.3.2 harfile-0.7.1 hypothesis-6.170.17 hypothesis-graphql-0.13.7 idna-3.20 iniconfig-2.3.1 jsonschema-rs-0.58.6 markdown-it-py-4.3.0 markupsafe-3.0.4 mdurl-0.1.2 packaging-26.4 pluggy-1.7.0 pygments-2.21.0 pyrate-limiter-4.6.0 pytest-9.2.0 pyyaml-6.0.4 requests-2.34.2 rich-15.0.0 schemathesis-4.30.1 sortedcontainers-2.4.0 typing-extensions-4.16.0 urllib3-2.8.0 werkzeug-3.1.9
+
+$ .venv\Scripts\python.exe -m pip show schemathesis
+Name: schemathesis
+Version: 4.30.1
+Summary: Adaptive API testing for OpenAPI and GraphQL
+Home-page: 
+Author: 
+Author-email: Dmitry Dygalo <dmitry@dygalo.dev>
+License-Expression: MIT
+Location: <VERIFY_DIR>\.venv\Lib\site-packages
+Requires: anyio, click, harfile, hypothesis, hypothesis-graphql, jsonschema-rs, pyrate-limiter, pytest, pyyaml, requests, rich, typing-extensions, werkzeug
+Required-by: 
+$ .venv\Scripts\schemathesis.exe --version
+schemathesis, version 4.30.1
+
+
+==============================================================================
+7. BASELINE TRƯỚC VÒNG 1
+==============================================================================
+$ .venv\Scripts\python.exe scripts\prepare_baseline_TV1.py
+### prepare_baseline_TV1.py — http://localhost:8013 (user=<ADMIN>) ###
+=== 1. RESET dữ liệu ===
+  [ok] documents: đã xoá 0 bản ghi
+  [ok] tags: đã xoá 0 bản ghi
+  [ok] correspondents: đã xoá 0 bản ghi
+  [ok] document_types: đã xoá 0 bản ghi
+  [--] documents còn lại: 0
+  [--] tags còn lại: 0
+  [--] correspondents còn lại: 0
+  [--] document_types còn lại: 0
+=== 2. SEED: upload PDF ===
+  [ok] TV1_Sample_01_HoaDon_101.pdf (title='Hoa don dien T9/2026') -> HTTP 200 task="4ddeb303-c869-4df6-bcf2-f58c7418854
+  [ok] TV1_Sample_03_BaoCao_101.pdf (title='Bao cao tuan 41') -> HTTP 200 task="839d2782-19db-4849-9510-7b436dcdafe
+=== 3. Chờ OCR xong (2 tài liệu) ===
+  ... 0/2 tài liệu, 0 đã có chữ OCR
+  ... 2/2 tài liệu, 2 đã có chữ OCR
+=== 4. SEED: tag / correspondent / document type ===
+  [ok] tag 'hoa-don' -> HTTP 201
+  [ok] tag 'can-xu-ly' -> HTTP 201
+  [ok] tag 'luu-tru-lau-dai' -> HTTP 201
+  [ok] correspondent 'Dien Luc Da Lat' -> HTTP 201
+  [ok] correspondent 'Phong Ke Toan' -> HTTP 201
+  [ok] document type 'Hoa don' -> HTTP 201
+  [ok] document type 'Bao cao' -> HTTP 201
+=== 5. PATCH tài liệu 'Hoa don dien T9/2026' (id=1) -> HTTP 200
+
+=== 6. XÁC NHẬN BASELINE ===
+  documents=2 tags=3 correspondents=2 document_types=2
+    - id=2 title='Bao cao tuan 41' tags=[] corr=None dtype=None len(content)=85
+    - id=1 title='Hoa don dien T9/2026' tags=[1] corr=1 dtype=1 len(content)=85
+  search 'dien'      -> count=1 ids=[1]
+  lọc tag 'hoa-don'  -> count=1 ids=[1]
+
+Baseline xong. Giờ có thể chạy: scripts/run_round_TV1.py --round 1
+
+
+==============================================================================
+8. CHẠY VÒNG 1
+==============================================================================
+$ .venv\Scripts\python.exe scripts\run_round_TV1.py --round 1
+=== TV1 / Schemathesis — VÒNG 1 (seed 101) ===
+    chỉ đọc (GET), trên 4 nhóm tài nguyên
+[OK] Xác thực thành công (token không in ra màn hình).
+    Số operation mong đợi (đếm từ schema): 19
+[XONG] Exit code CLI: 1
+       operation chọn được = 19 (mong đợi 19)
+       JUnit: tests=19 failures=15 errors=0
+       CLI: 130 testcase sinh ra, 18 lỗi khác nhau, 7.78s
+       log: TV1_round1_seed101.log
+       summary: TV1_round1_seed101_summary.md
+
+
+==============================================================================
+9. RESET + BASELINE TRƯỚC VÒNG 2
+==============================================================================
+$ .venv\Scripts\python.exe scripts\prepare_baseline_TV1.py
+### prepare_baseline_TV1.py — http://localhost:8013 (user=<ADMIN>) ###
+=== 1. RESET dữ liệu ===
+  [ok] documents: đã xoá 2 bản ghi
+  [ok] tags: đã xoá 3 bản ghi
+  [ok] correspondents: đã xoá 2 bản ghi
+  [ok] document_types: đã xoá 2 bản ghi
+  [--] documents còn lại: 0
+  [--] tags còn lại: 0
+  [--] correspondents còn lại: 0
+  [--] document_types còn lại: 0
+=== 2. SEED: upload PDF ===
+  [ok] TV1_Sample_01_HoaDon_101.pdf (title='Hoa don dien T9/2026') -> HTTP 200 task="e2439b6b-859f-47c4-9e25-f7112ad8a47
+  [ok] TV1_Sample_03_BaoCao_101.pdf (title='Bao cao tuan 41') -> HTTP 200 task="7be874cf-7be3-43b5-8cf3-9cbe4bbd963
+=== 3. Chờ OCR xong (2 tài liệu) ===
+  ... 0/2 tài liệu, 0 đã có chữ OCR
+  ... 2/2 tài liệu, 2 đã có chữ OCR
+=== 4. SEED: tag / correspondent / document type ===
+  [ok] tag 'hoa-don' -> HTTP 201
+  [ok] tag 'can-xu-ly' -> HTTP 201
+  [ok] tag 'luu-tru-lau-dai' -> HTTP 201
+  [ok] correspondent 'Dien Luc Da Lat' -> HTTP 201
+  [ok] correspondent 'Phong Ke Toan' -> HTTP 201
+  [ok] document type 'Hoa don' -> HTTP 201
+  [ok] document type 'Bao cao' -> HTTP 201
+=== 5. PATCH tài liệu 'Hoa don dien T9/2026' (id=3) -> HTTP 200
+
+=== 6. XÁC NHẬN BASELINE ===
+  documents=2 tags=3 correspondents=2 document_types=2
+    - id=4 title='Bao cao tuan 41' tags=[] corr=None dtype=None len(content)=85
+    - id=3 title='Hoa don dien T9/2026' tags=[4] corr=3 dtype=3 len(content)=85
+  search 'dien'      -> count=1 ids=[3]
+  lọc tag 'hoa-don'  -> count=1 ids=[3]
+
+Baseline xong. Giờ có thể chạy: scripts/run_round_TV1.py --round 1
+
+
+==============================================================================
+10. CHẠY VÒNG 2
+==============================================================================
+$ .venv\Scripts\python.exe scripts\run_round_TV1.py --round 2
+=== TV1 / Schemathesis — VÒNG 2 (seed 101) ===
+    mọi method, chỉ trên 3 nhóm metadata
+[OK] Xác thực thành công (token không in ra màn hình).
+    Số operation mong đợi (đếm từ schema): 18
+[XONG] Exit code CLI: 1
+       operation chọn được = 18 (mong đợi 18)
+       JUnit: tests=19 failures=19 errors=0
+       CLI: 1288 testcase sinh ra, 53 lỗi khác nhau, 86.61s
+       log: TV1_round2_seed101.log
+       summary: TV1_round2_seed101_summary.md
+
+
+==============================================================================
+11. RESET + BASELINE TRƯỚC VÒNG 3
+==============================================================================
+$ .venv\Scripts\python.exe scripts\prepare_baseline_TV1.py
+### prepare_baseline_TV1.py — http://localhost:8013 (user=<ADMIN>) ###
+=== 1. RESET dữ liệu ===
+  [ok] documents: đã xoá 2 bản ghi
+  [ok] tags: đã xoá 11 bản ghi
+  [ok] correspondents: đã xoá 10 bản ghi
+  [ok] document_types: đã xoá 25 bản ghi
+  [--] documents còn lại: 0
+  [--] tags còn lại: 0
+  [--] correspondents còn lại: 0
+  [--] document_types còn lại: 0
+=== 2. SEED: upload PDF ===
+  [ok] TV1_Sample_01_HoaDon_101.pdf (title='Hoa don dien T9/2026') -> HTTP 200 task="62017140-5511-4f2f-9ac8-96804d9b020
+  [ok] TV1_Sample_03_BaoCao_101.pdf (title='Bao cao tuan 41') -> HTTP 200 task="0991288f-b3c1-4e2c-b16d-f84095d38fe
+=== 3. Chờ OCR xong (2 tài liệu) ===
+  ... 0/2 tài liệu, 0 đã có chữ OCR
+  ... 2/2 tài liệu, 2 đã có chữ OCR
+=== 4. SEED: tag / correspondent / document type ===
+  [ok] tag 'hoa-don' -> HTTP 201
+  [ok] tag 'can-xu-ly' -> HTTP 201
+  [ok] tag 'luu-tru-lau-dai' -> HTTP 201
+  [ok] correspondent 'Dien Luc Da Lat' -> HTTP 201
+  [ok] correspondent 'Phong Ke Toan' -> HTTP 201
+  [ok] document type 'Hoa don' -> HTTP 201
+  [ok] document type 'Bao cao' -> HTTP 201
+=== 5. PATCH tài liệu 'Hoa don dien T9/2026' (id=5) -> HTTP 200
+
+=== 6. XÁC NHẬN BASELINE ===
+  documents=2 tags=3 correspondents=2 document_types=2
+    - id=6 title='Bao cao tuan 41' tags=[] corr=None dtype=None len(content)=85
+    - id=5 title='Hoa don dien T9/2026' tags=[39] corr=52 dtype=47 len(content)=85
+  search 'dien'      -> count=1 ids=[5]
+  lọc tag 'hoa-don'  -> count=1 ids=[5]
+
+Baseline xong. Giờ có thể chạy: scripts/run_round_TV1.py --round 1
+
+
+==============================================================================
+12. CHẠY VÒNG 3
+==============================================================================
+$ .venv\Scripts\python.exe scripts\run_round_TV1.py --round 3
+=== TV1 / Schemathesis — VÒNG 3 (seed 101) ===
+    mọi method, trên cả 4 nhóm tài nguyên
+[OK] Xác thực thành công (token không in ra màn hình).
+    Số operation mong đợi (đếm từ schema): 53
+[XONG] Exit code CLI: 1
+       operation chọn được = 53 (mong đợi 53)
+       JUnit: tests=54 failures=53 errors=0
+       CLI: 3146 testcase sinh ra, 139 lỗi khác nhau, 183.19s
+       log: TV1_round3_seed101.log
+       summary: TV1_round3_seed101_summary.md
+
+
+==============================================================================
+13. KIỂM TRA RÒ RỈ THÔNG TIN ĐĂNG NHẬP
+==============================================================================
+Đã quét toàn bộ .log/.xml/.ndjson/.md/.txt:
+- Mật khẩu/secret: chỉ xuất hiện trong file tạm chứa credential (không đưa vào repo).
+- Token dạng `Token <chuỗi dài>`: 0 kết quả.
+- Username admin trong log baseline tạm đã được thay bằng `<ADMIN>` trước khi công bố.
+
+
+==============================================================================
+14. DỌN MÔI TRƯỜNG THỬ NGHIỆM (XÓA VOLUME TEST)
+==============================================================================
+Volume trước khi xóa:
+tv1verify_data
+tv1verify_media
+tv1verify_pgdata
+tv1verify_redisdata
+
+$ docker compose --project-name tv1verify down -v
+ Container tv1verify-webserver Stopped 
+ Container tv1verify-webserver Removing 
+ Container tv1verify-webserver Removed 
+ Container tv1verify-db Stopping 
+ Container tv1verify-broker Stopping 
+ Container tv1verify-broker Stopped 
+ Container tv1verify-broker Removing 
+ Container tv1verify-broker Removed 
+ Container tv1verify-db Stopped 
+ Container tv1verify-db Removing 
+ Container tv1verify-db Removed 
+ Volume tv1verify_media Removing 
+ Network tv1verify_default Removing 
+ Volume tv1verify_data Removing 
+ Volume tv1verify_redisdata Removing 
+ Volume tv1verify_pgdata Removing 
+ Volume tv1verify_data Removed 
+ Volume tv1verify_media Removed 
+ Volume tv1verify_redisdata Removed 
+ Volume tv1verify_pgdata Removed 
+ Network tv1verify_default Removed 
+Volume còn lại sau khi xóa:
+(không còn volume tv1verify_*)
+
+# HẾT LOG
