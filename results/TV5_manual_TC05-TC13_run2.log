@@ -1,0 +1,72 @@
+==============================================================================================================
+KIỂM THỬ THỦ CÔNG BIÊN: TC05-TC13 cho /api/tags/ - http://localhost:8000
+Thời điểm: 2026-10-18 14:06:35 | mã lượt chạy: 1018140635 | nhãn: run2
+==============================================================================================================
+[TOKEN] Lấy mới qua POST /api/token/ (f29904...3053)
+[TRẠNG THÁI] Số tag trước khi chạy: 4
+
+--- TC05: POST /api/tags/ name = 128 ký tự ---
+    payload: TC05_1018140635AAAAAAAAAAAAAAAAAAAAAAAAA...AAAAAAAAAA
+    -> 201 Created (71 ms) {"id":42,"slug":"tc05_1018140635aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","na...
+TC05  | kỳ vọng: 201                           | thực tế: 201 Created                  | PASS
+      Tên đúng 128 ký tự được tạo thành công.
+
+--- TC06: POST /api/tags/ name = 129 ký tự ---
+    -> 400 Bad Request (36 ms) {"name":["Ensure this field has no more than 128 characters."]}
+TC06  | kỳ vọng: 400                           | thực tế: 400 Bad Request              | PASS
+      Thông báo lỗi đúng như mong đợi (max 128).
+
+--- TC07: POST /api/tags/ name = tiếng Việt có dấu + emoji ---
+    -> 201 Created (81 ms) {"id":43,"slug":"hoa-on-thang-10-a-lat-1018140635","name":"Hóa đơn tháng 10 🧾 – Đà Lạt 1018140635","color":"#a6cee3","text_color":"#000000","match":""...
+TC07  | kỳ vọng: 201, không 500                | thực tế: 201 Created                  | PASS
+      Tạo thành công, `slug` = 'hoa-on-thang-10-a-lat-1018140635'.
+
+--- TC08: POST /api/tags/ name = ký tự đặc biệt ---
+    -> 201 Created (76 ms) {"id":44,"slug":"scriptalertxssscript_1018140635","name":"<script>alert('XSS')</script>_1018140635","color":"#a6cee3","text_color":"#000000","match":"...
+TC08  | kỳ vọng: không 500                     | thực tế: 201 Created                  | PASS
+      Chuỗi được lưu nguyên văn (JSON escape), không có 5xx.
+
+--- TC09: GET /api/tags/999999/ ---
+    -> 404 Not Found (37 ms) {"detail":"No Tag matches the given query."}
+TC09  | kỳ vọng: 404                           | thực tế: 404 Not Found                | PASS
+
+--- TC10: DELETE /api/tags/{id}/ hai lần ---
+    tạo tag tạm: 201 Created (id=45)
+    lần 1 -> 204 No Content (91 ms) 
+    lần 2 -> 404 Not Found (36 ms) {"detail":"No Tag matches the given query."}
+TC10  | kỳ vọng: lần 2: 404                    | thực tế: lần 1: 204 No Content; lần 2: 404 Not Found | PASS
+      id dùng để thử: 45 (đã bị xóa ở lần 1)
+
+--- TC12: GET /api/tags/ với token sai 1 ký tự ---
+    -> 401 Unauthorized (26 ms) {"detail":"Invalid token."}
+    token rác  -> 401 Unauthorized {"detail":"Invalid token."}
+TC12  | kỳ vọng: 401                           | thực tế: 401 Unauthorized             | PASS
+      token rác cũng trả 401 Unauthorized
+
+--- TC13: GET /api/tags/ với page_size bất thường ---
+    page_size=0          -> 200 OK (58 ms) {"count":7,"next":null,"previous":null,"results":[{"id":44,"slug":"scr...
+    page_size=-1         -> 200 OK (56 ms) {"count":7,"next":null,"previous":null,"results":[{"id":44,"slug":"scr...
+    page_size=100000     -> 200 OK (63 ms) {"count":7,"next":null,"previous":null,"results":[{"id":44,"slug":"scr...
+    page_size=999999999  -> 200 OK (56 ms) {"count":7,"next":null,"previous":null,"results":[{"id":44,"slug":"scr...
+    page_size=abc        -> 200 OK (57 ms) {"count":7,"next":null,"previous":null,"results":[{"id":44,"slug":"scr...
+    page=0               -> 404 Not Found {"detail":"Invalid page."}
+TC13  | kỳ vọng: không 500                     | thực tế: page_size=0→200; page_size=-1→200; page_size=100000→200; page_size=999999999→200; page_size=abc→200; page=0→404 | PASS
+      page_size bất thường bị bỏ qua, dùng kích thước trang mặc định; riêng page=0 bị từ chối 404 "Invalid page."
+
+--- Dọn tag tạm đã tạo trong lượt chạy này ---
+    xóa id=42 -> 204 No Content
+    xóa id=43 -> 204 No Content
+    xóa id=44 -> 204 No Content
+
+| ID | Loại | Tiêu đề | Dữ liệu | Kết quả mong đợi | Thực tế | Pass/Fail |
+|---|---|---|---|---|---|---|
+| TC05 | Biên | Tên đúng giới hạn độ dài tối đa | `name` = 128 ký tự (`TC05_<mã lượt>` + đệm `A`) | 201 | 201 Created | **PASS** |
+| TC06 | Biên | Tên vượt giới hạn 1 ký tự | `name` = 129 ký tự (`TC06_<mã lượt>` + đệm `B`) | 400 | 400 Bad Request | **PASS** |
+| TC07 | Positive | Tên tiếng Việt có dấu, emoji | `name` = `"Hóa đơn tháng 10 🧾 – Đà Lạt <mã lượt>"` | 201, không 500 | 201 Created | **PASS** |
+| TC08 | Negative | Ký tự đặc biệt `<script>`, dấu nháy đơn | `name` = `"<script>alert('XSS')</script>_<mã lượt>"` | không 500 | 201 Created | **PASS** |
+| TC09 | Negative | ID không tồn tại | `GET /api/tags/999999/` | 404 | 404 Not Found | **PASS** |
+| TC10 | Negative | Xóa hai lần cùng ID | `DELETE /api/tags/{id}/` hai lần | lần 2: 404 | lần 1: 204 No Content; lần 2: 404 Not Found | **PASS** |
+| TC12 | Bảo mật | Token sai | đổi 1 ký tự token (và thử thêm token rác) | 401 | 401 Unauthorized | **PASS** |
+| TC13 | Biên | Tham số phân trang bất thường | `page_size` = 0, -1, rất lớn (thêm `page=0`) | không 500 | page_size=0→200; page_size=-1→200; page_size=100000→200; page_size=999999999→200; page_size=abc→200; page=0→404 | **PASS** |
+
+TỔNG KẾT: 8/8 ca PASS
